@@ -5,10 +5,14 @@
     <title></title>
 </head>
 <body>
-
+    <canvas id="test"></canvas>
 </body>
 </html>
-<script src="engine/Entrance.js"></script>
+<script src="core-src/launcher.js"></script>
 <script>
-
+    harbors.run(function(){
+        console.log("run");
+    }, {
+        id: 'test'
+    })
 </script>
