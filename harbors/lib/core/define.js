@@ -29,17 +29,12 @@ define(function(require, exports, module){
             case ".":
                 break;
             default:
-                return create(selector);
+                return elements.create(selector);
         }
     };
 
-    var create = function(name){
-        var elem = elements.define[name];
-        return elem ? new elem : null;
-    };
-
     /**
-     * 设置
+     * 重置设置选项等
      * @param opt
      */
     harbors.options = function(opt){

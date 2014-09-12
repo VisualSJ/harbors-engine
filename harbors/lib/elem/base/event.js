@@ -1,14 +1,18 @@
 define(function(require, exports, module){
 
     /**
-     *
      * @class
      * @property {Function} on 绑定事件
+     * @property {Function} off 解绑事件
      *
      * @property {Function} touchBegin
      * @property {Array} touchBeginEventList
      *
-     * todo
+     * @property {Function} touchMove
+     * @property {Array} touchMoveEventList
+     *
+     * @property {Function} touchEnd
+     * @property {Array} touchEndEventList
      */
     var event = function(){};
 

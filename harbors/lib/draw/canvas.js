@@ -2,28 +2,72 @@ define(function(require, exports, module){
 
     const options = require("../core/options");
 
+    /**
+     * 执行canvas初始化
+     */
     exports.init = function(){
 
     };
 
+    /**
+     * 获取一个画布元素的上下文
+     * @param canvas
+     * @returns {CanvasRenderingContext2D}
+     */
     exports.ctx = function(canvas){
         return canvas.getContext('2d');
     };
 
+    /**
+     * 绘制一个实体的正方形
+     * @param color
+     * @param left
+     * @param top
+     * @param width
+     * @param height
+     * @param ctx
+     */
     exports.drawRect = function(color, left, top, width, height, ctx){
         ctx.fillStyle = color;
         ctx.fillRect(left, top, width, height);
     };
 
+    /**
+     * 绘制一条指向
+     * @param color
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     * @param ctx
+     */
     exports.drawLine = function(color, startX, startY, endX, endY, ctx){
 
     };
 
+    /**
+     * 绘制一张图片
+     * @param image
+     * @param x
+     * @param y
+     * @param ctx
+     */
     exports.drawImage = function(image, x, y, ctx){
         ctx.drawImage(image, x, y)
     };
 
-    exports.drawFont = function(){
+    /**
+     * 绘制部分文字
+     * @param font
+     * @param size
+     * @param name
+     * @param align
+     * @param color
+     * @param string
+     * @param x
+     * @param y
+     */
+    exports.drawFont = function(font, size, name, align, color, string, x, y){
         // 设置字体
         ctx.font = "Bold 20px Arial";
         // 设置对齐方式

@@ -3,23 +3,43 @@ define(function(require, exports, module){
     const canvas = require('./canvas');
     canvas.init();
 
-    var drawBG = function(style, c){
-        canvas.drawRect(style.backgroundColor, style.left, style.top, style.width, style.height, c);
+    /**
+     * 绘制背景颜色
+     * @param style
+     * @param ctx
+     */
+    var drawBG = function(style, ctx){
+        canvas.drawRect(style.backgroundColor, style.left, style.top, style.width, style.height, ctx);
     };
 
-    var drawBGIMG = function(style, c){
-        canvas.drawImage(style.backgroundImage, style.left, style.top, c);
+    /**
+     * 绘制背景图片
+     * @param style
+     * @param ctx
+     */
+    var drawBGIMG = function(style, ctx){
+        canvas.drawImage(style.backgroundImage.image, style.left, style.top, ctx);
     };
 
-    var drawAll = function(style, c){
+    /**
+     * 绘制过程集合
+     * @param style
+     * @param ctx
+     */
+    var drawAll = function(style, ctx){
         if(!style)
             return;
         if(style.backgroundImage)
-            drawBGIMG(style, c);
+            drawBGIMG(style, ctx);
         else
-            drawBG(style, c);
+            drawBG(style, ctx);
     };
 
+    /**
+     * 循环解析node元素
+     * @param node
+     * @param ctx
+     */
     exports.parse = function(node, ctx){
         if(node.cache){//block类型的元素
             if(node.waitDrawing){//等待重新绘制
