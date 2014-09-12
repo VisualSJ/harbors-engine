@@ -5,10 +5,58 @@
     <title></title>
 </head>
 <body>
-    <canvas id="test"></canvas>
+    <canvas style="border: 1px solid #000;" id="gameCanvas" width="800" height="400"></canvas>
+    <img id="img" src="http://fanyi.baidu.com/static/i18n/zh/widget/translate/head/logo/logo_2802ebcf.png" />
 </body>
 </html>
 <script src="./harbors/sea.js"></script>
 <script>
-    seajs.use("./harbors/Entrance");
+    seajs.use("./harbors/Entrance", function(){
+        var tmp;
+        var list = [];
+        var img = new Image();
+//        setTimeout(function(){
+            img.src = "http://fanyi.baidu.com/static/i18n/zh/widget/translate/head/logo/logo_2802ebcf.png";
+//        }, 3000);
+
+        var a = h("block");
+        var b = h("block");
+
+        h.canvas.append(a);
+        h.canvas.append(b);
+        a.css({
+            width: 800,
+            height: 400
+        });
+        b.css({
+            width: 800,
+            height: 400
+        });
+img.addEventListener("load", function(){
+    for(var i=0; i<3000; i++){
+        tmp = h("node");
+        list.push(tmp);
+        tmp.css({
+            width: 10,
+            height: 10,
+            left: (i%80) * 10,
+            top: (i/80 | 0) * 10
+        });
+        if( !(i%2)){
+            a.append(tmp);
+            tmp.css("backgroundImage", img);
+        }else{
+            b.append(tmp);
+            tmp.css("backgroundColor", "#" + (Math.random()*999999|0));
+        }
+    }
+
+    setInterval(function(){
+        for(var i=0; i<3000; i++){
+            if(i%2)
+                list[i].css("backgroundColor", "#" + (Math.random()*999999|0));
+        }
+    }, 50);
+});
+    });
 </script>

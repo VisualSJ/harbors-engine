@@ -7,6 +7,12 @@ define(function(require, exports, module){
     };
 
     //元素管理器
-    //插入canvas后的元素将被存放在这里
-    exports.elemTrees = [];
+    //id对应的元素
+    exports.idToElem = {};
+
+    //class对应的元素
+    exports.classToElem = {};
+
+    //所有在canvas中的元素
+    exports.elem = {};
 });

@@ -1,6 +1,11 @@
 define(function(require, exports, module){
 
-    var elements = require("./elements");
+    const elements = require("./elements");
+    const options = require("./options");
+    const canvas = require('../draw/canvas');
+    const loop = require("./loop");
+
+    const drawManager = require("../draw/manager");
 
     /**
      * 定义基础选择以及创建器
@@ -12,9 +17,9 @@ define(function(require, exports, module){
      *
      * @param {string} selector
      *
-     * @return {array|elem}
+     * @return {*}
      */
-    module.exports = function(selector){
+    var harbors = function(selector){
 
         var str = selector.substr(0, 1);
 
@@ -33,8 +38,24 @@ define(function(require, exports, module){
         return elem ? new elem : null;
     };
 
-    var getId = function(){
-
+    /**
+     * 设置
+     * @param opt
+     */
+    harbors.options = function(opt){
+        opt.id && ( options.id = opt.id );
     };
+
+    var gameCanvas = document.getElementById(options.id);
+    harbors.canvas = harbors("block");
+    harbors.canvas.style.width = gameCanvas.width;
+    harbors.canvas.style.height = gameCanvas.height;
+    harbors.canvas.cache = gameCanvas;
+
+    loop.start(function(dt){
+        drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
+    });
+
+    module.exports = harbors;
 
 });

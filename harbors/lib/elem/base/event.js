@@ -1,65 +1,128 @@
 define(function(require, exports, module){
 
+    /**
+     *
+     * @class
+     * @property {Function} on 绑定事件
+     *
+     * @property {Function} touchBegin
+     * @property {Array} touchBeginEventList
+     *
+     * todo
+     */
     var event = function(){};
 
     event.prototype.accessEvent = {
-        "onTouchBegin": true,
-        "touchBegin": true,
-
-        "onTouchMove": true,
-        "touchMove": true,
-
-        "onTouchEnd": true,
-        "touchEnd": true
+        "touchBegin": function(event, on){
+            if(!this.touchBeginEventList){
+                this.touchBeginEventList = [];
+            }
+            if(on){
+                this.touchBeginEventList.push(event);
+            }else{
+                for(var i=0; i<this.touchBeginEventList.length; i++){
+                    if(this.touchBeginEventList[i] === event){
+                        this.touchBeginEventList.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        },
+        "touchMove": function(event, on){
+            if(!this.touchMoveEventList){
+                this.touchMoveEventList = [];
+            }
+            if(on){
+                this.touchMoveEventList.push(event);
+            }else{
+                for(var i=0; i<this.touchMoveEventList.length; i++){
+                    if(this.touchMoveEventList[i] === event){
+                        this.touchMoveEventList.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        },
+        "touchEnd": function(event, on){
+            if(!this.touchEndEventList){
+                this.touchEndEventList = [];
+            }
+            if(on){
+                this.touchEndEventList.push(event);
+            }else{
+                for(var i=0; i<this.touchEndEventList.length; i++){
+                    if(this.touchEndEventList[i] === event){
+                        this.touchEndEventList.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
     };
 
-    /**
-     * 绑定事件方法
-     * @param {string} event
-     * @param {function} callback
-     */
-    event.prototype.addEventListener = function(event, callback){
-
+    event.prototype.on = function(event, callback){
+        if(typeof event !== 'string'){
+            console.error("传入事件名错误");
+            return this;
+        }
+        if(this.accessEvent[event]){
+            this.accessEvent[event].call(this, callback, true);
+        }
+        return this;
     };
 
-    //触摸开始事件
-    event.prototype.touchBegin = function(){
-
-        this.onTouchBegin && this.onTouchBegin();
+    event.prototype.off = function(event, callback){
+        if(typeof event !== 'string'){
+            console.error("传入事件名错误");
+            return this;
+        }
+        if(this.accessEvent[event]){
+            this.accessEvent[event].call(this, callback, false);
+        }
+        return this;
     };
-    event.prototype.onTouchBegin = null;
 
-    //触摸移动事件
-    event.prototype.touchMove = function(){
 
-        this.onTouchMove && this.onTouchMove();
+    event.prototype.touchBegin = function(callback){
+        if(callback){
+            this.on('touchBegin', callback);
+            return this;
+        }
+
+        this.touchBeginEventList && this.touchBeginEventList.forEach(function(eventItem){
+            eventItem();
+        });
+        return this;
     };
-    event.prototype.onTouchMove = null;
+    event.prototype.touchBeginEventList = null;
 
-    //触摸结束事件
-    event.prototype.touchEnd = function(){
 
-        this.onTouchEnd && this.onTouchEnd();
+    event.prototype.touchMove = function(callback){
+        if(callback){
+            this.on('touchMove', callback);
+            return this;
+        }
+
+        this.touchMoveEventList && this.touchMoveEventList.forEach(function(eventItem){
+            eventItem();
+        });
+        return this;
     };
-    event.prototype.onTouchEnd = null;
+    event.prototype.touchMoveEventList = null;
 
-    //点击事件
-    event.prototype.click = function(){
 
-        this.touchBegin();
-        this.touchEnd();
+    event.prototype.touchEnd = function(callback){
+        if(callback){
+            this.on('touchEnd', callback);
+            return this;
+        }
 
-        this.onClick && this.onClick();
+        this.touchMoveEventList && this.touchMoveEventList.forEach(function(eventItem){
+            eventItem();
+        });
+        return this;
     };
-    event.prototype.onClick = null;
-
-    //获得焦点
-    event.prototype.focus = function(){
-
-        this.onFocus && this.onFocus();
-    };
-    event.prototype.onFocus = null;
-
+    event.prototype.touchEndEventList = null;
 
 
     module.exports = event;

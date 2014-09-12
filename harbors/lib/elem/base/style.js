@@ -1,12 +1,30 @@
 define(function(require, exports, module){
 
-    var style = function(){};
+    var style = function(node){
+        this.node = node;
+    };
 
     style.prototype = {
         constructor: style,
 
-        width: 0,
-        height: 0,
+        _width: 0,
+        get width(){return this._width;},
+        set width(a){
+            this._width = a;
+            if(this.node.cache){
+                this.node.cache.width = a;
+                this.node.waitDrawing = true;
+            }
+        },
+        _height: 0,
+        get height(){return this._height;},
+        set height(a){
+            this._height = a;
+            if(this.node.cache){
+                this.node.cache.height = a;
+                this.node.waitDrawing = true;
+            }
+        },
 
         left: 0,
         top: 0,
