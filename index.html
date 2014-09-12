@@ -14,10 +14,6 @@
     seajs.use("./harbors/Entrance", function(){
         var tmp;
         var list = [];
-        var img = new Image();
-//        setTimeout(function(){
-            img.src = "http://fanyi.baidu.com/static/i18n/zh/widget/translate/head/logo/logo_2802ebcf.png";
-//        }, 3000);
 
         var a = h("block");
         var b = h("block");
@@ -32,31 +28,31 @@
             width: 800,
             height: 400
         });
-img.addEventListener("load", function(){
-    for(var i=0; i<3000; i++){
-        tmp = h("node");
-        list.push(tmp);
-        tmp.css({
-            width: 10,
-            height: 10,
-            left: (i%80) * 10,
-            top: (i/80 | 0) * 10
-        });
-        if( !(i%2)){
-            a.append(tmp);
-            tmp.css("backgroundImage", img);
-        }else{
-            b.append(tmp);
-            tmp.css("backgroundColor", "#" + (Math.random()*999999|0));
-        }
-    }
 
-    setInterval(function(){
         for(var i=0; i<3000; i++){
-            if(i%2)
-                list[i].css("backgroundColor", "#" + (Math.random()*999999|0));
+            tmp = h("node");
+            list.push(tmp);
+            tmp.css({
+                width: 10,
+                height: 10,
+                left: (i%80) * 10,
+                top: (i/80 | 0) * 10
+            });
+            if( !(i%2)){
+                a.append(tmp);
+                tmp.css("backgroundImage", "http://fanyi.baidu.com/static/i18n/zh/widget/translate/head/logo/logo_2802ebcf.png");
+            }else{
+                b.append(tmp);
+                tmp.css("backgroundColor", "#" + (Math.random()*999999|0));
+            }
         }
-    }, 50);
-});
+
+        setInterval(function(){
+            for(var i=0; i<3000; i++){
+                if(i%2)
+                    list[i].css("backgroundColor", "#" + (Math.random()*999999|0));
+            }
+        }, 50);
+
     });
 </script>
