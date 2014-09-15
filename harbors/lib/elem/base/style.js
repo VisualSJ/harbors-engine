@@ -1,6 +1,6 @@
 define(function(require, exports, module){
 
-    const texture = require('../../texture/manager');
+    const texture = require('../../core/texture');
 
     /**
      * @param node
@@ -21,9 +21,8 @@ define(function(require, exports, module){
          * @property {number} bottom 元素的下边距
          *
          *
-         * @property {string} backgroundColor 元素的背景颜色（纯色块）
-         * @property {string} backgroundSize 元素的背景大小（当背景图片存在时起作用）
-         * @property {string} backgroundImage 元素的背景图片
+         * @property {string} color 元素的背景颜色（纯色块）
+         * @property {string} image 元素的背景图片
          */
         this.storage = {};
     };
@@ -55,7 +54,14 @@ define(function(require, exports, module){
             this.storage.bottom = a;
         },
 
-        get width(){return this.storage.width || 0;},
+        get width(){
+            if(this.storage.width)
+                return this.storage.width;
+            if(this.storage.image)
+                return this.storage.image.width;
+
+            return 0;
+        },
         set width(a){
             this.storage.width = a;
             //如果为block对象，则一起更改cache画布的大小
@@ -67,7 +73,14 @@ define(function(require, exports, module){
         },
 
 
-        get height(){return this.storage.height;},
+        get height(){
+            if(this.storage.height)
+                return this.storage.height;
+            if(this.storage.image)
+                return this.storage.image.height;
+
+            return 0;
+        },
         set height(a){
             this.storage.height = a;
             //如果为block对象，则一起更改cache画布的大小
@@ -79,18 +92,19 @@ define(function(require, exports, module){
         },
 
 
-        get backgroundColor(){return this.storage.backgroundColor || "#FFF";},
-        set backgroundColor(a){
-            this.storage.backgroundColor = a;
+        get color(){return this.storage.color || "#FFF";},
+        set color(a){
+            this.storage.color = a;
         },
 
-        get backgroundImage(){return this.storage.backgroundImage;},
-        set backgroundImage(a){
+        get image(){return this.storage.image;},
+        set image(a){
             if(typeof a === 'string'){
                 a = texture.createImageTexture(a, this.node);
             }
+
             a.nodeList.push(this.node);
-            this.storage.backgroundImage = a;
+            this.storage.image = a;
         }
 
     };

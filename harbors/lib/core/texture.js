@@ -1,6 +1,6 @@
 define(function(require, exports, module){
 
-    const image = require("./image");
+    const texture = require("../elem/texture");
 
     /**
      * image管理对象
@@ -26,25 +26,19 @@ define(function(require, exports, module){
         }
     };
 
+    /**
+     * 从一个地址，创建一个新的texture
+     * @param path
+     * @returns {*}
+     */
     exports.createImageTexture = function(path){
         if(imageManager[path]){
             return imageManager[path];
         }else{
-            var texture = new image(path);
-            imageManager[path] = texture;
-            return texture;
+            var tex = new texture(path);
+            imageManager[path] = tex;
+            return tex;
         }
     };
-
-    /**
-     * 缓存管理对象
-     * 当image被node元素更改了颜色等值后，则会创建一个单独的新的texture，存放在这里
-     * @namespace
-     *
-     * {
-     *   uniqueNumber: {node}
-     * }
-     */
-    var cacheManager = {};
 
 });

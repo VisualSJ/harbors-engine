@@ -48,12 +48,18 @@ define(function(require, exports, module){
     /**
      * 绘制一张图片
      * @param image
+     * @param sx
+     * @param sy
+     * @param swidth
+     * @param sheight
      * @param x
      * @param y
+     * @param width
+     * @param height
      * @param ctx
      */
-    exports.drawImage = function(image, x, y, ctx){
-        ctx.drawImage(image, x, y)
+    exports.drawImage = function(image, sx, sy, swidth, sheight, x, y, width, height, ctx){
+        ctx.drawImage(image, sx, sy, swidth, sheight, x, y, width, height);
     };
 
     /**

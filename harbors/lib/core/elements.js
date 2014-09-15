@@ -4,7 +4,7 @@ define(function(require, exports, module){
     var define = {
         node: require('../elem/node'),
         block: require('../elem/block'),
-        texture: require('../texture/image')
+        texture: require('../elem/texture')
     };
 
     //元素管理器

@@ -37,9 +37,10 @@ define(function(require, exports, module){
      * 重置设置选项等
      * @param opt
      */
-    harbors.options = function(opt){
+    harbors.setOption = function(opt){
         opt.id && ( options.id = opt.id );
     };
+    harbors.option = options;
 
     var gameCanvas = document.getElementById(options.id);
     harbors.canvas = harbors("block");

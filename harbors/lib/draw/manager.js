@@ -8,8 +8,8 @@ define(function(require, exports, module){
      * @param style
      * @param ctx
      */
-    var drawBG = function(style, ctx){
-        canvas.drawRect(style.backgroundColor, style.left, style.top, style.width, style.height, ctx);
+    var drawColor = function(style, ctx){
+        canvas.drawRect(style.color, style.left, style.top, style.width, style.height, ctx);
     };
 
     /**
@@ -17,8 +17,14 @@ define(function(require, exports, module){
      * @param style
      * @param ctx
      */
-    var drawBGIMG = function(style, ctx){
-        canvas.drawImage(style.backgroundImage.image, style.left, style.top, ctx);
+    var drawImage = function(style, ctx){
+        if(style.image.canvas){
+            //从canvasTexture绘制图形
+            canvas.drawImage(style.image.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+        }else{
+            //从imageTexture绘制图形
+            canvas.drawImage(style.image.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+        }
     };
 
     /**
@@ -29,10 +35,14 @@ define(function(require, exports, module){
     var drawAll = function(style, ctx){
         if(!style)
             return;
-        if(style.backgroundImage)
-            drawBGIMG(style, ctx);
-        else
-            drawBG(style, ctx);
+
+        if(style.image){
+            //style中图形存在
+            drawImage(style, ctx);
+        }else{
+            //仅绘制颜色
+            drawColor(style, ctx);
+        }
     };
 
     /**
@@ -50,10 +60,26 @@ define(function(require, exports, module){
                 }
                 node.waitDrawing = false;
             }
-            canvas.drawImage(node.cache, node.style.left, node.style.top, ctx);
+            node.parent && canvas.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
         }else{//node类型元素
             drawAll(node.style, ctx);
         }
     };
 
+    /**
+     * 返回绘制的上下文对象
+     * @param canvas
+     * @returns {*|CanvasRenderingContext2D}
+     */
+    exports.ctx = function(canvas){
+        return canvas.ctx(canvas);
+    };
+
+    /**
+     * 返回绘制封装
+     * @returns {*|exports}
+     */
+    exports.drawCTX = function(){
+        return canvas;
+    };
 });

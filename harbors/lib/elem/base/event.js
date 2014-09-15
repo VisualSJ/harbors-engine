@@ -61,6 +61,21 @@ define(function(require, exports, module){
                     }
                 }
             }
+        },
+        "load": function(event, on){
+            if(!this.loadEventList){
+                this.loadEventList = [];
+            }
+            if(on){
+                this.loadEventList.push(event);
+            }else{
+                for(var i=0; i<this.loadEventList.length; i++){
+                    if(this.loadEventList[i] === event){
+                        this.loadEventList.splice(i, 1);
+                        break;
+                    }
+                }
+            }
         }
     };
 
@@ -121,12 +136,26 @@ define(function(require, exports, module){
             return this;
         }
 
-        this.touchMoveEventList && this.touchMoveEventList.forEach(function(eventItem){
+        this.touchEndEventList && this.touchEndEventList.forEach(function(eventItem){
             eventItem();
         });
         return this;
     };
     event.prototype.touchEndEventList = null;
+
+
+    event.prototype.load = function(callback){
+        if(callback){
+            this.on('load', callback);
+            return this;
+        }
+
+        this.loadEventList && this.loadEventList.forEach(function(eventItem){
+            eventItem();
+        });
+        return this;
+    };
+    event.prototype.loadEventList = null;
 
 
     module.exports = event;

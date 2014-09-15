@@ -73,6 +73,10 @@ define(function(require, exports, module){
         }
     };
 
+    node.prototype.setColor = function(){
+
+    };
+
     inherit(node, event);
 
     module.exports = node;
