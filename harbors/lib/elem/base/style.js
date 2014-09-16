@@ -78,8 +78,8 @@ define(function(require, exports, module){
         get width(){
             if(this.storage.width)
                 return this.storage.width;
-            if(this.storage.image)
-                return this.storage.image.width;
+            if(this.storage.backgroundImage)
+                return this.storage.backgroundImage.width;
 
             return 0;
         },
@@ -97,8 +97,8 @@ define(function(require, exports, module){
         get height(){
             if(this.storage.height)
                 return this.storage.height;
-            if(this.storage.image)
-                return this.storage.image.height;
+            if(this.storage.backgroundImage)
+                return this.storage.backgroundImage.height;
 
             return 0;
         },
@@ -126,6 +126,33 @@ define(function(require, exports, module){
 
             a.nodeList.push(this.node);
             this.storage.backgroundImage = a;
+        },
+
+        get backgroundSize(){
+
+        },
+        set backgroundSize(a){
+            var arg = a.split(" ");
+            if(arg.length === 1){
+                this.backgroundSizeWidth = this.backgroundSizeHeight = arg[0];
+            }else if(arg.length === 2){
+                this.backgroundSizeWidth = arg[0];
+                this.backgroundSizeHeight = arg[1];
+            }
+        },
+
+        get backgroundSizeWidth(){
+            return this.storage.backgroundSizeWidth || this.width;
+        },
+        set backgroundSizeWidth(a){
+            this.storage.backgroundSizeWidth = parseInt(a);
+        },
+
+        get backgroundSizeHeight(){
+            return this.storage.backgroundSizeHeight || this.height;
+        },
+        set backgroundSizeHeight(a){
+            this.storage.backgroundSizeHeight = parseInt(a);
         },
 
         get color(){return this.storage.color || "#000";},

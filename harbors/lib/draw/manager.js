@@ -20,10 +20,10 @@ define(function(require, exports, module){
     var drawBGImage = function(style, ctx){
         if(style.storage.backgroundImage.canvas){
             //从canvasTexture绘制图形
-            canvas.drawImage(style.storage.backgroundImage.canvas, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+            canvas.drawImage(style.storage.backgroundImage.canvas, 0, 0, style.width, style.height,  style.left, style.top, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
         }else{
             //从imageTexture绘制图形
-            canvas.drawImage(style.storage.backgroundImage.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+            canvas.drawImage(style.storage.backgroundImage.image, 0, 0, style.width, style.height,  style.left, style.top, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
         }
     };
 
@@ -61,6 +61,10 @@ define(function(require, exports, module){
     exports.parse = function(node, ctx){
         if(node.cache){//block类型的元素
             if(node.waitDrawing){//等待重新绘制
+                //清除画板
+                canvas.ctx(node.cache).clearRect(0, 0, node.style.width, node.style.height);
+
+                //循环子元素
                 var children = node.children;
                 var length = children.length;
                 for(var i=0; i<length; i++){

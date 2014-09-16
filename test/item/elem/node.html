@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>node测试</title>
+    <link href="../../css/public.css" rel="stylesheet" />
+</head>
+<body>
+<canvas  id="gameCanvas"></canvas>
+<div class="info">
+    <p>
+        你能在左边看见一个网站logo，没有文字。<br />
+        右边则有一个缩小的logo。
+    </p>
+</div>
+</body>
+</html>
+<script src="../../../harbors/sea.js"></script>
+<script>
+    seajs.use("../../../harbors/Entrance", function(){
+        var node = h("node");
+        node.css({
+            left: 20,
+            top: 50,
+            width: 60
+        });
+        node.css("backgroundImage", "../../image/logo.png");
+        var node2 = h("node");
+        node2.css({
+            left: 200,
+            top: 50,
+            width: 60,
+            backgroundSize: "20px 20px"
+        });
+        node2.css("backgroundImage", "../../image/logo.png");
+        h.canvas.append(node);
+        h.canvas.append(node2);
+    });
+</script>
