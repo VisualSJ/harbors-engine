@@ -64,24 +64,25 @@ define(function(require, exports, module){
 
     /**
      * 绘制部分文字
-     * @param font
+     * @param style
      * @param size
-     * @param name
+     * @param family
      * @param align
      * @param color
      * @param string
      * @param x
      * @param y
+     * @param ctx
      */
-    exports.drawFont = function(font, size, name, align, color, string, x, y){
+    exports.drawFont = function(style, size, family, align, color, string, x, y, ctx){
         // 设置字体
-        ctx.font = "Bold 20px Arial";
+        ctx.font = (style || "normal") + " " + (size || 14) + "px " + (family || "Arial");//"Bold 20px Arial"
         // 设置对齐方式
-        ctx.textAlign = "left";
+        ctx.textAlign = align || "left";
         // 设置填充颜色
-        ctx.fillStyle = "#008600";
+        ctx.fillStyle = color || "#000";
         // 设置字体内容，以及在画布上的位置
-        ctx.fillText("Hello!", 10, 50);
+        ctx.fillText(string, x, y + (size || 14));
         // 绘制空心字
         //ctx.strokeText("Hello!", 10, 100);
     };

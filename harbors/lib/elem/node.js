@@ -19,6 +19,8 @@ define(function(require, exports, module){
      * @property {function} update 更新block节点的绘制属性
      * @property {function} css 更改style的快捷方法
      *
+     * @property {string} innerText node中包含的文字
+     *
      */
     var node = function(){
 
@@ -51,6 +53,8 @@ define(function(require, exports, module){
         node.style[key] = value;
     };
 
+    node.prototype.innerText = "";
+
     node.prototype.update = function(){
         //更新需要重新绘制的block状态
         var prevBlock = this.parent;
@@ -61,8 +65,6 @@ define(function(require, exports, module){
     };
 
     node.prototype.css = function(a, b){
-        this.update();
-
         switch(arguments.length){
             case 2:
                 css2Argument(this, a, b);
@@ -71,10 +73,15 @@ define(function(require, exports, module){
                 css1Argument(this, a);
                 break;
         }
+
+        this.update();
     };
 
-    node.prototype.setColor = function(){
+    node.prototype.text = function(str){
+        str = str.toString();
+        this.innerText = str;
 
+        this.update();
     };
 
     inherit(node, event);

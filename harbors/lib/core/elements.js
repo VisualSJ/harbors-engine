@@ -7,10 +7,19 @@ define(function(require, exports, module){
         texture: require('../elem/texture')
     };
 
-    //元素管理器
-    //id对应的元素
+    /**
+     * 元素管理器
+     * key = id, value = elem
+     * 存放id到元素的对应列表，id应该是唯一的，如果重复，则会替换先前的对应关系。
+     * @namespace
+     */
     exports.idToElem = {};
 
+    /**
+     * 创建一个元素
+     * @param {string} name
+     * @returns {*}
+     */
     exports.create = function(name){
         var elem = define[name];
 
@@ -20,11 +29,15 @@ define(function(require, exports, module){
         });
         elem.__defineSetter__("id", function(a){
             a = a.toString();
+
+            //原id存在，则删除管理对象内的元素
+            if(id != "" && exports.idToElem[a]){
+                delete exports.idToElem[a];
+            }
+
+            //传入id存在，则在对象内新增id对应元素
             if(a !== ""){
                 exports.idToElem[a] = elem;
-            }else{
-                if(exports.idToElem[a])
-                    delete exports.idToElem[a];
             }
             id = a;
         });

@@ -8,8 +8,8 @@ define(function(require, exports, module){
      * @param style
      * @param ctx
      */
-    var drawColor = function(style, ctx){
-        canvas.drawRect(style.color, style.left, style.top, style.width, style.height, ctx);
+    var drawBGColor = function(style, ctx){
+        canvas.drawRect(style.storage.backgroundColor, style.left, style.top, style.width, style.height, ctx);
     };
 
     /**
@@ -17,14 +17,18 @@ define(function(require, exports, module){
      * @param style
      * @param ctx
      */
-    var drawImage = function(style, ctx){
-        if(style.image.canvas){
+    var drawBGImage = function(style, ctx){
+        if(style.storage.backgroundImage.canvas){
             //从canvasTexture绘制图形
-            canvas.drawImage(style.image.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+            canvas.drawImage(style.storage.backgroundImage.canvas, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
         }else{
             //从imageTexture绘制图形
-            canvas.drawImage(style.image.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
+            canvas.drawImage(style.storage.backgroundImage.image, 0, 0, style.width, style.height,  style.left, style.top, style.width, style.height,  ctx);
         }
+    };
+
+    var drawText  = function(style, ctx){
+        canvas.drawFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, style.color, style.node.innerText, style.left, style.top, ctx);
     };
 
     /**
@@ -36,12 +40,16 @@ define(function(require, exports, module){
         if(!style)
             return;
 
-        if(style.image){
-            //style中图形存在
-            drawImage(style, ctx);
+        //绘制背景
+        if(style.storage.backgroundImage){
+            drawBGImage(style, ctx);
         }else{
-            //仅绘制颜色
-            drawColor(style, ctx);
+            drawBGColor(style, ctx);
+        }
+
+        //绘制文字
+        if(style.node.innerText){
+            drawText(style, ctx);
         }
     };
 

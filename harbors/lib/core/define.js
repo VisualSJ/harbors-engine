@@ -40,14 +40,17 @@ define(function(require, exports, module){
     harbors.setOption = function(opt){
         opt.id && ( options.id = opt.id );
     };
+    //暴露配置信息
     harbors.option = options;
 
+    //定义h.canvas画板对象
     var gameCanvas = document.getElementById(options.id);
     harbors.canvas = harbors("block");
     harbors.canvas.style.width = gameCanvas.width;
     harbors.canvas.style.height = gameCanvas.height;
     harbors.canvas.cache = gameCanvas;
 
+    //主循环
     loop.start(function(dt){
         drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
     });

@@ -13,32 +13,35 @@ define(function(require, exports, module){
         ANDROID: "android",
         WINDOWS: "windows",
         MAC: "mac",
-        LINUX: "linux"
+        LINUX: "linux",
+        UNIX: "unix"
     };
 
     /**
+     * 所有配置的常量
      * @namespace
      */
     module.exports = {
         id: "gameCanvas",
         fps: 60,
 
-        browser: {
+        system: {
             name: "",
             version: "",
             language: "",
             isMobile: undefined,
-            system: undefined
+            os: undefined
         }
 
-};
+    };
 
-    var bwr = module.exports.browser;
+    var bwr = module.exports.system;
     var ua = navigator.userAgent.toLowerCase();
+    var up = navigator.appVersion.toLowerCase();
+    var uf = navigator.platform.toLowerCase();
     //判断浏览器类型
     var tmp = "";
     if (ua.indexOf("msie") > -1 || ua.indexOf("trident") > -1){
-        /****IE****/
         bwr.name = browser.ie;
         tmp = ua.match(/msie ([\d.]+)/);
         if(tmp){
@@ -48,19 +51,15 @@ define(function(require, exports, module){
             bwr.version = tmp ? tmp[1] : undefined;
         }
     }else if (document.getBoxObjectFor){
-        /****FIREFOX****/
         bwr.name = browser.firefox;
         bwr.version = ua.match(/firefox\/([\d.]+)/)[1];
     }else if (window.MessageEvent && !document.getBoxObjectFor){
-        /****CHROME****/
         bwr.name = browser.chrome;
         bwr.version =  ua.match(/chrome\/([\d.]+)/)[1];
     }else if (window.opera) {
-        /****OPERA****/
         bwr.name = browser.opera;
         bwr.version = ua.match(/opera.([\d.]+)/)[1];
     }else if (window.openDatabase) {
-        /****SAFARI****/
         bwr.name = browser.safari;
         bwr.version = ua.match(/version\/([\d.]+)/)[1];
     }
@@ -69,19 +68,29 @@ define(function(require, exports, module){
     bwr.language = (navigator.browserLanguage || navigator.language).toLowerCase();
 
     //移动浏览器判断
-    bwr.isMobile = !!ua.match(/AppleWebKit.*Mobile.*/)||!!ua.match(/AppleWebKit/);
+    bwr.isMobile = (ua.indexOf('mobile') > -1) || (ua.indexOf('applewebkit') > -1) || (ua.indexOf('android') > -1);
 
     //操作系统判断
-    if(!!ua.match(/\(i[^;]+;( u;)? cpu.+mac os x/)){
-        bwr.system = system.IOS;
-    }else if(ua.indexOf('android') > -1 || ua.indexOf('linux') > -1){
-        //todo android终端或者UC浏览器（其他平台上的UC会被误认为android）;
-        bwr.system = system.ANDROID;
-    }else if(ua.indexOf('windows') > -1){
-        bwr.system = system.WINDOWS;
+    if(ua.match(/(ipad|iphone|ipod)/)){
+        bwr.os = system.IOS;
+    }else if(ua.indexOf('android') > -1 || uf.indexOf('android') > -1){
+        bwr.os = system.ANDROID;
+    }else if(up.indexOf('win') > -1){
+        bwr.os = system.WINDOWS;
+    }else if(up.indexOf('mac') > -1){
+        bwr.os = system.MAC;
+    }else if(up.indexOf('x11') > -1){
+        bwr.os = system.UNIX;
+    }else if(up.indexOf('linux')){
+        bwr.os = system.LINUX;
     }
-    //todo window mac linux
 
+    //判断页面上可用的区域大小
+    const getter = require('./compatible/normal');
+    bwr.visibleSize = {
+        width: getter.visibleWidth(),
+        height: getter.visibleHeight()
+    };
 
 
 });
