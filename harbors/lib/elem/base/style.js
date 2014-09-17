@@ -20,6 +20,8 @@ define(function(require, exports, module){
          * @property {number} right 元素的右边距
          * @property {number} bottom 元素的下边距
          *
+         * @property {number} rotate 元素的旋转角度
+         *
          * @property {string} backgroundColor 元素的背景颜色
          * @property {string|texture} backgroundImage 元素的背景图片
          * @property {number} backgroundSizeWidth 元素的背景图片缩放宽度
@@ -73,6 +75,13 @@ define(function(require, exports, module){
         get bottom(){return this.storage.bottom || 0;},
         set bottom(a){
             this.storage.bottom = a;
+        },
+
+        get rotate(){
+            return this.storage.rotate || 0;
+        },
+        set rotate(a){
+            this.storage.rotate = parseFloat(a);
         },
 
         get width(){

@@ -5,30 +5,36 @@ define(function(require, exports, module){
 
     /**
      * 绘制背景颜色
+     * @param x
+     * @param y
      * @param style
      * @param ctx
      */
-    var drawBGColor = function(style, ctx){
-        canvas.drawRect(style.storage.backgroundColor, style.left, style.top, style.width, style.height, ctx);
+    var drawBGColor = function(x, y, style, ctx){
+        canvas.drawRect(style.storage.backgroundColor, x, y, style.width, style.height, ctx);
     };
 
     /**
      * 绘制背景图片
+     * @param x
+     * @param y
      * @param style
      * @param ctx
      */
-    var drawBGImage = function(style, ctx){
-        if(style.storage.backgroundImage.canvas){
-            //从canvasTexture绘制图形
-            canvas.drawImage(style.storage.backgroundImage.canvas, 0, 0, style.width, style.height,  style.left, style.top, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
-        }else{
-            //从imageTexture绘制图形
-            canvas.drawImage(style.storage.backgroundImage.image, 0, 0, style.width, style.height,  style.left, style.top, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
-        }
+    var drawBGImage = function(x, y, style, ctx){
+        var drawElem = style.storage.backgroundImage.canvas || style.storage.backgroundImage.image;
+        canvas.drawImage(drawElem, 0, 0, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
     };
 
-    var drawText  = function(style, ctx){
-        canvas.drawFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, style.color, style.node.innerText, style.left, style.top, ctx);
+    /**
+     * 绘制文字
+     * @param x
+     * @param y
+     * @param style
+     * @param ctx
+     */
+    var drawText  = function(x, y, style, ctx){
+        canvas.drawFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, style.color, style.node.innerText, x, y, ctx);
     };
 
     /**
@@ -40,16 +46,35 @@ define(function(require, exports, module){
         if(!style)
             return;
 
+        var x, y;
+        var Cos = 1, Sin = 0;
+        if(style.rotate){
+            ctx.save();
+            x = -style.width/2;
+            y = -style.height/2;
+            Cos = Math.cos(style.rotate * Math.PI / 180);
+            Sin = Math.sin(style.rotate * Math.PI / 180);
+            ctx.transform(Cos, Sin, -Sin, Cos, style.left + style.width/2, style.top + style.height/2);
+        }else{
+            x = style.left;
+            y = style.top;
+        }
+
         //绘制背景
         if(style.storage.backgroundImage){
-            drawBGImage(style, ctx);
+            drawBGImage(x, y, style, ctx);
         }else{
-            drawBGColor(style, ctx);
+            drawBGColor(x, y, style, ctx);
         }
 
         //绘制文字
         if(style.node.innerText){
             drawText(style, ctx);
+        }
+
+
+        if(style.rotate){
+            ctx.restore();
         }
     };
 

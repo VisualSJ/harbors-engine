@@ -68,7 +68,7 @@ define(function(require, exports, module){
     bwr.language = (navigator.browserLanguage || navigator.language).toLowerCase();
 
     //移动浏览器判断
-    bwr.isMobile = (ua.indexOf('mobile') > -1) || (ua.indexOf('applewebkit') > -1) || (ua.indexOf('android') > -1);
+    bwr.isMobile = (ua.indexOf('mobile') > -1) || (ua.indexOf('android') > -1);
 
     //操作系统判断
     if(ua.match(/(ipad|iphone|ipod)/)){
@@ -92,5 +92,13 @@ define(function(require, exports, module){
         height: getter.visibleHeight()
     };
 
+    //判断canvas大小
+    var canvas = document.getElementById(module.exports.id);
+    bwr.canvasSize = {
+        width: canvas.width,
+        height: canvas.height
+    };
+
+    //获取画布元素左上角定点距离页面的
 
 });
