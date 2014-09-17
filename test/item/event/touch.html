@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>node测试</title>
+    <link href="../../css/public.css" rel="stylesheet" />
+</head>
+<body>
+<canvas  id="gameCanvas"></canvas>
+<div class="info">
+    <p>
+        move事件请看控制台
+    </p>
+</div>
+</body>
+</html>
+<script src="../../../harbors/sea.js"></script>
+<script>
+    seajs.use("../../../harbors/Entrance", function(){
+        var node = h("node");
+        node.css({
+            left: 80,
+            top: 65,
+            width: 60,
+            height: 20,
+            fontFamily: "微软雅黑",
+            fontSize: 14
+        });
+        node.text("戳我试试");
+        h.canvas.append(node);
+
+        var n1= h("node");
+        n1.css({
+            left: 200,
+            top: 35
+        });
+        n1.text("touchDown");
+        var n3= h("node");
+        n3.css({
+            left: 200,
+            top: 100
+        });
+        n3.text("touchUp");
+
+        node.on("touchDown", function(e){
+            console.log(e);
+            h.canvas.append(n1);
+            h.delay(function(){
+                h.canvas.remove(n1);
+            }, 1000);
+        });
+        node.on("touchMove", function(e){
+            console.log(e);
+        });
+        node.on("touchUp", function(e){
+            console.log(e);
+            h.canvas.append(n3);
+            h.delay(function(){
+                h.canvas.remove(n3);
+            }, 1000)
+        });
+    });
+</script>
