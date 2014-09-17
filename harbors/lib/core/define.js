@@ -33,6 +33,42 @@ define(function(require, exports, module){
         }
     };
 
+    //延迟运行的数组
+    var task = [];
+
+    /**
+     * 延迟运行函数，传入单位为毫秒
+     * @param {Function} callback
+     * @param {Number} delayTime
+     */
+    harbors.delay = function(callback, delayTime){
+        var delayItem = {
+            time: loop.getLine() + delayTime,
+            callback: callback
+        };
+        var length = task.length;
+        for(var i=0; i<length; i++){
+            if(task[i].time > delayItem.time){
+                task.splice(i, 0, delayItem);
+                break;
+            }
+        }
+        task.push(delayItem);
+    };
+
+    /**
+     * 间隔执行函数，传入单位为毫秒
+     * @param {Function} callback
+     * @param {Number} delayTime
+     */
+    harbors.interval = function(callback, delayTime){
+        var fn = function(){
+            callback();
+            harbors.interval(callback, delayTime);
+        };
+        harbors.delay(fn, delayTime);
+    };
+
     /**
      * 重置设置选项等
      * @param opt
@@ -52,6 +88,10 @@ define(function(require, exports, module){
 
     //主循环
     loop.start(function(dt){
+        //查找任务队列
+        if(task[0] && task[0].time < loop.getLine()){
+            task.shift().callback();
+        }
         drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
     });
 

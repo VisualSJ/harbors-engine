@@ -4,7 +4,11 @@ define(function(require, exports){
 
     var timer = null;
 
+    //引擎启动以来的时间轴
+    var line = 0;
+
     var frameTime,//每一帧的间隔时间
+        delayTime,//当前帧与上一帧的间隔时间
         prevTime,//上一帧的开始绘制时间
         thisTime;//当前帧的开始绘制时间
 
@@ -13,6 +17,7 @@ define(function(require, exports){
      * @function
      */
     exports.init = function(){
+        delayTime = 0;
         frameTime = 1000 / options.fps;
     };
     //执行初始化（以后如需更改配置等，需要手动执行一次）
@@ -31,8 +36,11 @@ define(function(require, exports){
         var loop = function(){
             //记录当前时间
             thisTime = new Date();
+            delayTime = thisTime - prevTime;
+            //更新时间轴
+            line += delayTime;
             //计算当前帧与上一帧的间隔与正常间隔的比例
-            var dt = (thisTime - prevTime) / frameTime;
+            var dt = delayTime / frameTime;
             //时间交替
             prevTime = thisTime;
             //执行循环任务
@@ -53,6 +61,14 @@ define(function(require, exports){
 
         //启动循环
         loop();
+    };
+
+    /**
+     * 获取引擎运行时间轴
+     * @returns {number}
+     */
+    exports.getLine = function(){
+        return line;
     };
 
 });
