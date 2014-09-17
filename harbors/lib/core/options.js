@@ -17,14 +17,19 @@ define(function(require, exports, module){
         UNIX: "unix"
     };
 
+    const getter = require('./compatible/normal');
+
+
     /**
      * 所有配置的常量
      * @namespace
      */
     module.exports = {
-        id: "gameCanvas",
-        fps: 60,
 
+        id: "gameCanvas",
+        canvas: null,
+        fps: 60,
+        getter: getter,
         system: {
             name: "",
             version: "",
@@ -40,6 +45,7 @@ define(function(require, exports, module){
     var up = navigator.appVersion.toLowerCase();
     var uf = navigator.platform.toLowerCase();
     //判断浏览器类型
+    //todo 判断有问题
     var tmp = "";
     if (ua.indexOf("msie") > -1 || ua.indexOf("trident") > -1){
         bwr.name = browser.ie;
@@ -85,20 +91,36 @@ define(function(require, exports, module){
         bwr.os = system.LINUX;
     }
 
-    //判断页面上可用的区域大小
-    const getter = require('./compatible/normal');
+    //绑定页面屏幕变化重新计算
+    window.addEventListener("resize", function(){
+        initParam();
+    });
+
     bwr.visibleSize = {
         width: getter.visibleWidth(),
         height: getter.visibleHeight()
     };
 
-    //判断canvas大小
     var canvas = document.getElementById(module.exports.id);
-    bwr.canvasSize = {
-        width: canvas.width,
-        height: canvas.height
+
+    /**
+     * canvas大小
+     * @namespace
+     */
+    bwr.canvasSize = {};
+
+    /**
+     * 画布元素距离页面边框的距离
+     * @namespace
+     */
+    bwr.margin = {};
+
+    var initParam = function(){
+        bwr.canvasSize.width = canvas.width;
+        bwr.canvasSize.height = canvas.height;
+        bwr.margin.left = getter.marginLeft(canvas);
+        bwr.margin.top = getter.marginTop(canvas);
     };
 
-    //获取画布元素左上角定点距离页面的
-
+    initParam();
 });

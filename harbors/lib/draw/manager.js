@@ -63,15 +63,14 @@ define(function(require, exports, module){
         //绘制背景
         if(style.storage.backgroundImage){
             drawBGImage(x, y, style, ctx);
-        }else{
+        }else if(style.storage.backgroundColor){
             drawBGColor(x, y, style, ctx);
         }
 
         //绘制文字
         if(style.node.innerText){
-            drawText(style, ctx);
+            drawText(x, y, style, ctx);
         }
-
 
         if(style.rotate){
             ctx.restore();

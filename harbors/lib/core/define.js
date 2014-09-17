@@ -2,6 +2,7 @@ define(function(require, exports, module){
 
     const elements = require("./elements");
     const options = require("./options");
+    const event = require("./event");
     const canvas = require('../draw/canvas');
     const loop = require("./loop");
 
@@ -50,7 +51,7 @@ define(function(require, exports, module){
         for(var i=0; i<length; i++){
             if(task[i].time > delayItem.time){
                 task.splice(i, 0, delayItem);
-                break;
+                return;
             }
         }
         task.push(delayItem);
@@ -95,6 +96,7 @@ define(function(require, exports, module){
         drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
     });
 
+    event.init();
     module.exports = harbors;
 
 });

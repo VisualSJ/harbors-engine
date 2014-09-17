@@ -1,34 +1,45 @@
 define(function(require, exports, module){
 
     /**
+     * TODO
+     * 检查元素是否在node树中，不存在则删除。
+     * 插入树的同时在添加回来
+     */
+    const ev = require("../../core/event");
+
+    /**
      * @class
      * @property {Function} on 绑定事件
      * @property {Function} off 解绑事件
      *
-     * @property {Function} touchBegin
-     * @property {Array} touchBeginEventList
+     * @property {Function} touchDown
+     * @property {Array} touchDownEventList
      *
      * @property {Function} touchMove
      * @property {Array} touchMoveEventList
      *
-     * @property {Function} touchEnd
-     * @property {Array} touchEndEventList
+     * @property {Function} touchUp
+     * @property {Array} touchUpEventList
      */
     var event = function(){};
 
     event.prototype.accessEvent = {
-        "touchBegin": function(event, on){
-            if(!this.touchBeginEventList){
-                this.touchBeginEventList = [];
+        "touchDown": function(event, on){
+            if(!this.touchDownEventList){
+                this.touchDownEventList = [];
             }
             if(on){
-                this.touchBeginEventList.push(event);
+                ev.addTouchDown(this);
+                this.touchDownEventList.push(event);
             }else{
-                for(var i=0; i<this.touchBeginEventList.length; i++){
-                    if(this.touchBeginEventList[i] === event){
-                        this.touchBeginEventList.splice(i, 1);
+                for(var i=0; i<this.touchDownEventList.length; i++){
+                    if(this.touchDownEventList[i] === event){
+                        this.touchDownEventList.splice(i, 1);
                         break;
                     }
+                }
+                if(this.touchDownEventList.length === 0){
+                    ev.removeTouchDown(this);
                 }
             }
         },
@@ -37,6 +48,7 @@ define(function(require, exports, module){
                 this.touchMoveEventList = [];
             }
             if(on){
+                ev.addTouchMove(this);
                 this.touchMoveEventList.push(event);
             }else{
                 for(var i=0; i<this.touchMoveEventList.length; i++){
@@ -45,20 +57,27 @@ define(function(require, exports, module){
                         break;
                     }
                 }
+                if(this.touchMoveEventList.length === 0){
+                    ev.removeTouchMove(this);
+                }
             }
         },
-        "touchEnd": function(event, on){
-            if(!this.touchEndEventList){
-                this.touchEndEventList = [];
+        "touchUp": function(event, on){
+            if(!this.touchUpEventList){
+                this.touchUpEventList = [];
             }
             if(on){
-                this.touchEndEventList.push(event);
+                ev.addTouchUp(this);
+                this.touchUpEventList.push(event);
             }else{
-                for(var i=0; i<this.touchEndEventList.length; i++){
-                    if(this.touchEndEventList[i] === event){
-                        this.touchEndEventList.splice(i, 1);
+                for(var i=0; i<this.touchUpEventList.length; i++){
+                    if(this.touchUpEventList[i] === event){
+                        this.touchUpEventList.splice(i, 1);
                         break;
                     }
+                }
+                if(this.touchUpEventList.length === 0){
+                    ev.removeTouchUp(this);
                 }
             }
         },
@@ -102,46 +121,46 @@ define(function(require, exports, module){
     };
 
 
-    event.prototype.touchBegin = function(callback){
+    event.prototype.touchDown = function(callback, ev){
         if(callback){
-            this.on('touchBegin', callback);
+            this.on('touchDown', callback);
             return this;
         }
 
-        this.touchBeginEventList && this.touchBeginEventList.forEach(function(eventItem){
-            eventItem();
+        this.touchDownEventList && this.touchDownEventList.forEach(function(eventItem){
+            eventItem(ev);
         });
         return this;
     };
-    event.prototype.touchBeginEventList = null;
+    event.prototype.touchDownEventList = null;
 
 
-    event.prototype.touchMove = function(callback){
+    event.prototype.touchMove = function(callback, ev){
         if(callback){
             this.on('touchMove', callback);
             return this;
         }
 
         this.touchMoveEventList && this.touchMoveEventList.forEach(function(eventItem){
-            eventItem();
+            eventItem(ev);
         });
         return this;
     };
     event.prototype.touchMoveEventList = null;
 
 
-    event.prototype.touchEnd = function(callback){
+    event.prototype.touchUp = function(callback, ev){
         if(callback){
-            this.on('touchEnd', callback);
+            this.on('touchUp', callback);
             return this;
         }
 
-        this.touchEndEventList && this.touchEndEventList.forEach(function(eventItem){
-            eventItem();
+        this.touchUpEventList && this.touchUpEventList.forEach(function(eventItem){
+            eventItem(ev);
         });
         return this;
     };
-    event.prototype.touchEndEventList = null;
+    event.prototype.touchUpEventList = null;
 
 
     event.prototype.load = function(callback){

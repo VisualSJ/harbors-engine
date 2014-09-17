@@ -77,6 +77,11 @@ define(function(require, exports, module){
         this.update();
     };
 
+    /**
+     * 设置node中的文字对象
+     * @param str
+     * todo node应该根据文字自动撑大元素，居中排列应该在元素正中间，而不是以开头为原点
+     */
     node.prototype.text = function(str){
         str = str.toString();
         this.innerText = str;

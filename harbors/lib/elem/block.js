@@ -25,6 +25,11 @@ define(function(require, exports, module){
      */
     block.prototype.append = function(node){
         node.parent = this;
+        for(var i=0; i<this.children.length; i++){
+            if(this.children[i] === node){
+                return;
+            }
+        }
         this.children.push(node);
         this.waitDrawing = true;
     };
