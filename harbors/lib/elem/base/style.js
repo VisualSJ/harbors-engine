@@ -21,6 +21,8 @@ define(function(require, exports, module){
          * @property {number} bottom 元素的下边距
          *
          * @property {number} rotate 元素的旋转角度
+         * @property {number} scaleX 元素的缩放比例
+         * @property {number} scaleY 元素的缩放比例
          *
          * @property {string} backgroundColor 元素的背景颜色
          * @property {string|texture} backgroundImage 元素的背景图片
@@ -84,6 +86,37 @@ define(function(require, exports, module){
             this.storage.rotate = parseFloat(a);
         },
 
+        get scale(){
+            if(this.storage.scaleX === this.storage.scaleY){
+                return this.storage.scaleX || 1;
+            }else{
+                return this.storage.scaleX || 1 + " " + this.storage.scaleY || 1;
+            }
+        },
+        set scale(a){
+            var arg = a.toString().split(" ");
+            if(arg.length === 1){
+                this.storage.scaleX = this.storage.scaleY = arg[0];
+            }else{
+                this.storage.scaleX  = arg[0];
+                this.storage.scaleY  = arg[1];
+            }
+        },
+
+        get scaleX (){
+            return this.storage.scaleX || 1;
+        },
+        set scaleX(a){
+            this.storage.scaleX = parseFloat(a);
+        },
+
+        get scaleY(){
+            return this.storage.scaleY || 1;
+        },
+        set scaleY(a){
+            this.storage.scaleY = parseFloat(a);
+        },
+
         get width(){
             if(this.storage.width)
                 return this.storage.width;
@@ -138,7 +171,7 @@ define(function(require, exports, module){
         },
 
         get backgroundSize(){
-
+            return this.storage.backgroundSizeWidth + " " + this.storage.backgroundSizeHeight;
         },
         set backgroundSize(a){
             var arg = a.split(" ");

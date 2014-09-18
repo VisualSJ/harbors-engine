@@ -52,8 +52,8 @@ define(function(require, exports, module){
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
-            Cos = Math.cos(style.rotate * Math.PI / 180);
-            Sin = Math.sin(style.rotate * Math.PI / 180);
+            Cos = Math.cos(style.rotate * Math.PI / 180) * style.scaleX;
+            Sin = Math.sin(style.rotate * Math.PI / 180) * style.scaleY;
             ctx.transform(Cos, Sin, -Sin, Cos, style.left + style.width/2, style.top + style.height/2);
         }else{
             x = style.left;
