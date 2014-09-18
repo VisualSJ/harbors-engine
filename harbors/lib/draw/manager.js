@@ -34,7 +34,16 @@ define(function(require, exports, module){
      * @param ctx
      */
     var drawText  = function(x, y, style, ctx){
-        canvas.drawFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, style.color, style.node.innerText, x, y, ctx);
+        canvas.drawFont(style.node.innerText, style.fontSize, style.color, x, y, ctx);
+    };
+
+    /**
+     * 設置文本樣式
+     * @param style
+     * @param ctx
+     */
+    var setFont = function(style, ctx){
+        canvas.setFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, ctx);
     };
 
     /**
@@ -45,6 +54,12 @@ define(function(require, exports, module){
     var drawAll = function(style, ctx){
         if(!style)
             return;
+
+        //文字存在，判斷是否需要重置width和height
+        if(style.node.innerText){
+            setFont(style, ctx);
+            style.storage.innerTextWidth = ctx.measureText(style.node.innerText).width;
+        }
 
         var x, y;
         var Cos = 1, Sin = 0;

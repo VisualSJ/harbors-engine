@@ -63,26 +63,33 @@ define(function(require, exports, module){
     };
 
     /**
-     * 绘制部分文字
+     * 設置文字樣式
      * @param style
      * @param size
      * @param family
      * @param align
-     * @param color
-     * @param string
-     * @param x
-     * @param y
      * @param ctx
      */
-    exports.drawFont = function(style, size, family, align, color, string, x, y, ctx){
+    exports.setFont = function(style, size, family, align, ctx){
         // 设置字体
         ctx.font = (style || "normal") + " " + (size || 14) + "px " + (family || "Arial");//"Bold 20px Arial"
         // 设置对齐方式
         ctx.textAlign = align || "left";
+    };
+    /**
+     * 绘制部分文字
+     * @param string
+     * @param size
+     * @param color
+     * @param x
+     * @param y
+     * @param ctx
+     */
+    exports.drawFont = function(string, size, color, x, y, ctx){
         // 设置填充颜色
         ctx.fillStyle = color || "#000";
         // 设置字体内容，以及在画布上的位置
-        ctx.fillText(string, x, y + (size || 14));
+        string && ctx.fillText(string, x, y + (size || 14));
         // 绘制空心字
         //ctx.strokeText("Hello!", 10, 100);
     };

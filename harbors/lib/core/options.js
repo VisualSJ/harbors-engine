@@ -145,8 +145,13 @@ define(function(require, exports, module){
         bwr.margin.top = getter.marginTop(canvas);
         bwr.visibleSize.width = getter.visibleWidth();
         bwr.visibleSize.height = getter.visibleHeight();
-        bwr.scale.x = bwr.visibleSize.width / bwr.canvasSize.width;
-        bwr.scale.y = bwr.visibleSize.height / bwr.canvasSize.height;
+        if(module.exports.adaptive){
+            bwr.scale.x = bwr.visibleSize.width / bwr.canvasSize.width;
+            bwr.scale.y = bwr.visibleSize.height / bwr.canvasSize.height;
+        }else{
+            bwr.scale.x = 1;
+            bwr.scale.y = 1;
+        }
     };
     canvas.changeInit = initParam;
 
