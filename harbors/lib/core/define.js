@@ -41,11 +41,13 @@ define(function(require, exports, module){
      * 延迟运行函数，传入单位为毫秒
      * @param {Function} callback
      * @param {Number} delayTime
+     * @param {Function|Null} stcb
      */
-    harbors.delay = function(callback, delayTime){
+    harbors.delay = function(callback, delayTime, stcb){
         var delayItem = {
             time: loop.getLine() + delayTime,
-            callback: callback
+            callback: callback,
+            stcb: stcb
         };
         var length = task.length;
         for(var i=0; i<length; i++){
@@ -67,7 +69,21 @@ define(function(require, exports, module){
             callback();
             harbors.interval(callback, delayTime);
         };
-        harbors.delay(fn, delayTime);
+        harbors.delay(fn, delayTime, callback);
+    };
+
+    /**
+     * 傳入正在隊列中的callback函數
+     * 將他從隊列中刪除
+     * @param {Function} callback
+     */
+    harbors.clearDelay = function(callback){
+        for(var i=0; i<task.length; i++){
+            if((task[i].stcb || task[i].callback) === callback){
+                task.splice(i, 1);
+                break;
+            }
+        }
     };
 
     /**
@@ -90,7 +106,7 @@ define(function(require, exports, module){
     //主循环
     loop.start(function(dt){
         //查找任务队列
-        if(task[0] && task[0].time < loop.getLine()){
+        while(task[0] && task[0].time < loop.getLine()){
             task.shift().callback();
         }
         drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
