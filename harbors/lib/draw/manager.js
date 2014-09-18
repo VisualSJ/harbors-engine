@@ -48,7 +48,7 @@ define(function(require, exports, module){
 
         var x, y;
         var Cos = 1, Sin = 0;
-        if(style.rotate){
+        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
@@ -72,7 +72,7 @@ define(function(require, exports, module){
             drawText(x, y, style, ctx);
         }
 
-        if(style.rotate){
+        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
             ctx.restore();
         }
     };
