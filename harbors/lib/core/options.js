@@ -23,20 +23,31 @@ define(function(require, exports, module){
     /**
      * 所有配置的常量
      * @namespace
+     *
+     * @property {string} [id=gameCanvas]
+     * @property {HTMLCanvasElement} canvas
+     * @property {Number} [fps=60]
+     * @property {Object} getter
+     * @property {Object} system
+     * @property {Number} adaptive 自適應屏幕方案 0 - 普通狀態 1 - 縮放填滿全屏
      */
     module.exports = {
 
         id: "gameCanvas",
-        canvas: null,
         fps: 60,
         getter: getter,
-        system: {
-            name: "",
-            version: "",
-            language: "",
-            isMobile: undefined,
-            os: undefined
-        }
+
+        /**
+         * 引擎系統相關的參數
+         * @namespace
+         *
+         * @property {String} name
+         * @property {String} version
+         * @property {String} language
+         * @property {Boolean} isMobile
+         * @property {String} os
+         */
+        system: {}
 
     };
 
@@ -92,14 +103,20 @@ define(function(require, exports, module){
     }
 
     //绑定页面屏幕变化重新计算
+    var delayTimer = null;
     window.addEventListener("resize", function(){
         initParam();
+        if(module.exports.adaptive){
+            clearTimeout(delayTimer);
+            delayTimer = setTimeout(h.adaptive, 200);
+        }
     });
 
-    bwr.visibleSize = {
-        width: getter.visibleWidth(),
-        height: getter.visibleHeight()
-    };
+    /**
+     * 屏幕可見區域大小
+     * @namespace
+     */
+    bwr.visibleSize = {};
 
     var canvas = document.getElementById(module.exports.id);
 
@@ -108,6 +125,12 @@ define(function(require, exports, module){
      * @namespace
      */
     bwr.canvasSize = {};
+
+    /**
+     * canvas在x\y軸上的縮放比例
+     * @namespace
+     */
+    bwr.scale = {};
 
     /**
      * 画布元素距离页面边框的距离
@@ -120,7 +143,12 @@ define(function(require, exports, module){
         bwr.canvasSize.height = canvas.height;
         bwr.margin.left = getter.marginLeft(canvas);
         bwr.margin.top = getter.marginTop(canvas);
+        bwr.visibleSize.width = getter.visibleWidth();
+        bwr.visibleSize.height = getter.visibleHeight();
+        bwr.scale.x = bwr.visibleSize.width / bwr.canvasSize.width;
+        bwr.scale.y = bwr.visibleSize.height / bwr.canvasSize.height;
     };
+    canvas.changeInit = initParam;
 
     initParam();
 });

@@ -41,7 +41,7 @@ define(function(require, exports, module){
      * 延迟运行函数，传入单位为毫秒
      * @param {Function} callback
      * @param {Number} delayTime
-     * @param {Function|Null} stcb
+     * @param {Function|Null} [stcb=]
      */
     harbors.delay = function(callback, delayTime, stcb){
         var delayItem = {
@@ -102,6 +102,30 @@ define(function(require, exports, module){
     harbors.canvas.style.width = gameCanvas.width;
     harbors.canvas.style.height = gameCanvas.height;
     harbors.canvas.cache = gameCanvas;
+
+    /**
+     * 自適應屏幕
+     * @param {Number} mode
+     */
+    harbors.adaptive = function(mode){
+        if(mode != null)
+            options.adaptive = mode;
+        var style = {
+            padding: 0,
+            margin: 0,
+            overflow: "hidden",
+            height: options.system.visibleSize.height + "px",
+            width: options.system.visibleSize.width + "px"
+        };
+        for(var p in style){
+            document.body.style[p] = style[p];
+        }
+        if(options.adaptive === 1){
+            gameCanvas.style.width =  options.system.visibleSize.width + "px";
+            gameCanvas.style.height =  options.system.visibleSize.height + "px";
+        }
+        gameCanvas.changeInit && gameCanvas.changeInit();
+    };
 
     //主循环
     loop.start(function(dt){

@@ -14,8 +14,8 @@ define(function(require, exports, module){
 
     var event = function(p, type){
         this.type = type || "unknown";
-        this.x = p.x - options.system.margin.left;
-        this.y = p.y - options.system.margin.top;
+        this.x = (p.x - options.system.margin.left) / options.system.scale.x;
+        this.y = (p.y - options.system.margin.top) / options.system.scale.y;
     };
 
     //todo 过滤隐藏元素
