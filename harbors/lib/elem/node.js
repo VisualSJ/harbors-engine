@@ -4,7 +4,7 @@ define(function(require, exports, module){
 
     const event = require("./base/event");
     const style = require("./base/style");
-
+    const loop = require("../core/loop");
 
     var unique = 0;
 
@@ -88,6 +88,58 @@ define(function(require, exports, module){
         this.update();
     };
 
+    /**
+     * 动画支持
+     * @param {Object} style 更改的样式参数
+     * @param {Number} duration 持续时间
+     * @param {Function} [easing=] 缓动处理函数
+     */
+    node.prototype.to = function(style, duration, easing){
+        var t, p,
+            s = this.style;
+
+        var cache = {};
+
+        for(p in style){
+            t = style[p] - s[p];
+            if(isNaN(t)){
+                console.log("动画不支持设置 " + p + " 属性");
+            }else{
+                style[p] = t;
+                cache[p] = s[p];
+            }
+        }
+        var node = this;
+        //记录起始时间
+        var start = loop.getLine();
+        //添加运动任务
+        var anim = function(){
+            //间隔的时间
+            var time = loop.getLine() - start;
+            //间隔的比例（运动进行的百分比）
+            var proportion = time / duration;
+
+            //缓动处理
+            if(easing){
+                proportion = easing(proportion);
+            }
+
+            if(proportion >= 1){
+                proportion = 1;
+            }else{
+                h.delay(anim, 1);
+            }
+            for(p in style){
+                node.style[p] = cache[p] + style[p] * proportion;
+            }
+            node.update();
+        };
+        h.delay(anim, 1);
+    };
+
+    /*
+    文字支持
+     */
     node.prototype.__defineGetter__("innerText", function(){
         var text = this.style.storage.innerTextArray;
         if(text)

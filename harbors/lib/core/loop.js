@@ -23,6 +23,12 @@ define(function(require, exports){
     //执行初始化（以后如需更改配置等，需要手动执行一次）
     exports.init();
 
+    var fps = document.getElementById("fps");
+    var num = 0;
+    setInterval(function(){
+       fps.innerHTML = num;
+        num = 0;
+    }, 1000);
     /**
      * 主循环
      * 负责计算当前帧与下一帧的时间，以及计算时间比率、调度回调函数等
@@ -34,6 +40,7 @@ define(function(require, exports){
         prevTime = new Date();
 
         var loop = function(){
+            num++;
             //记录当前时间
             thisTime = new Date();
             delayTime = thisTime - prevTime;

@@ -3,6 +3,7 @@ define(function(require, exports, module){
     const texture = require('../../core/texture');
 
     /**
+     * node元素中自带的style构造方法
      * @param node
      *
      * @property {node} node 包含这个style的元素
@@ -12,6 +13,7 @@ define(function(require, exports, module){
         this.node = node;
 
         /**
+         * 样式支持列表
          * @namespace
          * @property {number} width 元素的宽度
          * @property {number} height 元素的高度
