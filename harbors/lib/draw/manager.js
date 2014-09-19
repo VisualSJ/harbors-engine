@@ -58,7 +58,9 @@ define(function(require, exports, module){
         //文字存在，判斷是否需要重置width和height
         if(style.node.innerText){
             setFont(style, ctx);
-            style.storage.innerTextWidth = ctx.measureText(style.node.innerText).width;
+            if(!style.storage.innerTextWidth){
+                style.storage.innerTextWidth = ctx.measureText(style.node.innerText).width;
+            }
         }
 
         var x, y;

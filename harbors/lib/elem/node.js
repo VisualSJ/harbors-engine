@@ -29,6 +29,7 @@ define(function(require, exports, module){
         this.parent = null;
         this.style = new style(this);
     };
+    inherit(node, event);
 
     /**
      * 设置style的方法
@@ -52,8 +53,6 @@ define(function(require, exports, module){
     var css2Argument = function(node, key, value){
         node.style[key] = value;
     };
-
-    node.prototype.innerText = "";
 
     node.prototype.update = function(){
         //更新需要重新绘制的block状态
@@ -89,7 +88,13 @@ define(function(require, exports, module){
         this.update();
     };
 
-    inherit(node, event);
+    node.prototype.__defineGetter__("innerText", function(){
+        return this.style.storage.innerText;
+    });
+    node.prototype.__defineSetter__("innerText", function(a){
+        this.style.storage.innerText = a.toString();
+        this.style.storage.innerTextWidth = 0;
+    });
 
     module.exports = node;
 

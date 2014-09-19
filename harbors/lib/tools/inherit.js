@@ -1,13 +1,16 @@
 define(function(require, exports, module){
 
-    module.exports = function(ctor){
-        var prototypes = Array.prototype.slice.call(arguments, 1);
-        prototypes.forEach(function(proto){
-            for(var p in proto.prototype){
-                if(!ctor.prototype[p]){
-                    ctor.prototype[p] = proto.prototype[p];
-                }
+    module.exports = function(ctor, superCtor){
+
+        ctor.super_ = superCtor;
+        ctor.prototype = Object.create(superCtor.prototype, {
+            constructor: {
+                value: ctor,
+                enumerable: false,
+                writable: true,
+                configurable: true
             }
         });
+
     };
 });

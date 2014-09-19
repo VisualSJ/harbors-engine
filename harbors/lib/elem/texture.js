@@ -36,6 +36,7 @@ define(function(require, exports, module){
             });
         });
     };
+    inherit(imageTexture, event);
 
     imageTexture.prototype.loaded = false;
     imageTexture.prototype.imagePath = "";
@@ -53,8 +54,6 @@ define(function(require, exports, module){
         this.image.src = imagePath;
         return this;
     };
-
-    inherit(imageTexture, event);
 
     module.exports = imageTexture;
 });

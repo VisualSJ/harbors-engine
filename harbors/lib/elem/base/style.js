@@ -35,6 +35,7 @@ define(function(require, exports, module){
          * @property {string} fontStyle 文字的样式
          * @property {number} fontSize 文字的大小
          * @property {number} innerTextWidth 文字的寬度（在draw的時候自動填充的值）
+         * @property {number} innerText 文字的寬度（在draw的時候自動填充的值）
          *
          * @property {number} borderLeftWidth 左边框宽度
          * @property {string} borderLeftStyle 左边框样式

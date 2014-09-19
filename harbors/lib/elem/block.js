@@ -18,6 +18,7 @@ define(function(require, exports, module){
         this.waitDrawing = false;
         this.children = [];
     };
+    inherit(block, node);
 
     /**
      * 在block内部插入一个元素
@@ -48,8 +49,6 @@ define(function(require, exports, module){
         }
         this.waitDrawing = true;
     };
-
-    inherit(block, node);
 
     module.exports = block;
 });
