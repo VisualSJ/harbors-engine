@@ -60,7 +60,14 @@ define(function(require, exports, module){
         constructor: style,
 
 
-        get left(){return this.storage.left || 0;},
+        get left(){
+            if(this.storage.align === "center"){
+                return this.storage.left - this.storage.innerTextWidth / 2;
+            }else if(this.storage.align === "right"){
+                return this.storage.left - this.storage.innerTextWidth;
+            }
+            return this.storage.left || 0;
+        },
         set left(a){
             this.storage.left = a;
         },
@@ -72,15 +79,15 @@ define(function(require, exports, module){
         },
 
 
-        get right(){return this.storage.right || 0;},
-        set right(a){
-            this.storage.right = a;
+        get x(){return this.storage.left || 0;},
+        set x(a){
+            return this.storage.left = a;
         },
 
 
-        get bottom(){return this.storage.bottom || 0;},
-        set bottom(a){
-            this.storage.bottom = a;
+        get y(){return this.storage.top || 0;},
+        set y(a){
+            this.storage.top = a;
         },
 
         get rotate(){

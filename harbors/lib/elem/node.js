@@ -63,7 +63,7 @@ define(function(require, exports, module){
         }
     };
 
-    node.prototype.css = function(a, b){
+    node.prototype.set = function(a, b){
         switch(arguments.length){
             case 2:
                 css2Argument(this, a, b);

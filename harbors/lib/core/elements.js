@@ -23,25 +23,28 @@ define(function(require, exports, module){
     exports.create = function(name){
         var elem = define[name];
 
-        var id = "";
-        elem.__defineGetter__("id", function(){
-            return id;
-        });
-        elem.__defineSetter__("id", function(a){
-            a = a.toString();
+        if(elem){
+            var id = "";
+            elem = new elem();
+            elem.__defineGetter__("id", function(){
+                return id;
+            });
+            elem.__defineSetter__("id", function(a){
+                a = a.toString();
 
-            //原id存在，则删除管理对象内的元素
-            if(id != "" && exports.idToElem[a]){
-                delete exports.idToElem[a];
-            }
+                //原id存在，则删除管理对象内的元素
+                if(id != "" && exports.idToElem[a]){
+                    delete exports.idToElem[a];
+                }
 
-            //传入id存在，则在对象内新增id对应元素
-            if(a !== ""){
-                exports.idToElem[a] = elem;
-            }
-            id = a;
-        });
-
-        return elem ? new elem : null;
+                //传入id存在，则在对象内新增id对应元素
+                if(a !== ""){
+                    exports.idToElem[a] = elem;
+                }
+                id = a;
+            });
+            return elem;
+        }
+        return null;
     }
 });

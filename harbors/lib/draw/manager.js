@@ -34,6 +34,10 @@ define(function(require, exports, module){
      * @param ctx
      */
     var drawText  = function(x, y, style, ctx){
+        if(style.storage.align === "right")
+            x += style.storage.innerTextWidth;
+        if(style.storage.align === "center")
+            x += style.storage.innerTextWidth / 2;
         style.storage.innerTextArray.forEach(function(text, index){
             canvas.drawFont(text, style.fontSize, style.color, x, y + index * style.fontSize, ctx);
         });

@@ -25,12 +25,19 @@ define(function(require, exports, module){
         var str = selector.substr(0, 1);
 
         switch(str){
-            case "#":
+            case "#"://id选择器
+                return elements.idToElem[selector.substr(1)];
                 break;
-            case ".":
+
+            case "."://class选择器
                 break;
-            default:
-                return elements.create(selector);
+
+            case "@"://创建元素
+                return elements.create(selector.substr(1));
+                break;
+
+            case "$": //name选择器
+                break;
         }
     };
 
@@ -98,10 +105,11 @@ define(function(require, exports, module){
 
     //定义h.canvas画板对象
     var gameCanvas = document.getElementById(options.id);
-    harbors.canvas = harbors("block");
+    harbors.canvas = harbors("@block");
     harbors.canvas.style.width = gameCanvas.width;
     harbors.canvas.style.height = gameCanvas.height;
     harbors.canvas.cache = gameCanvas;
+    harbors.canvas.id = "canvas";
 
     /**
      * 自適應屏幕
