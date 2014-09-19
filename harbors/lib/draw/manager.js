@@ -34,7 +34,9 @@ define(function(require, exports, module){
      * @param ctx
      */
     var drawText  = function(x, y, style, ctx){
-        canvas.drawFont(style.node.innerText, style.fontSize, style.color, x, y, ctx);
+        style.storage.innerTextArray.forEach(function(text, index){
+            canvas.drawFont(text, style.fontSize, style.color, x, y + index * style.fontSize, ctx);
+        });
     };
 
     /**
@@ -56,10 +58,16 @@ define(function(require, exports, module){
             return;
 
         //文字存在，判斷是否需要重置width和height
-        if(style.node.innerText){
+        if(style.storage.innerTextArray){
             setFont(style, ctx);
             if(!style.storage.innerTextWidth){
-                style.storage.innerTextWidth = ctx.measureText(style.node.innerText).width;
+                var tmpWidth = 0;
+                style.storage.innerTextArray.forEach(function(text){
+                    var t = ctx.measureText(text).width;
+                    if(t > tmpWidth)
+                        tmpWidth = t;
+                });
+                style.storage.innerTextWidth = tmpWidth;
             }
         }
 
@@ -85,7 +93,7 @@ define(function(require, exports, module){
         }
 
         //绘制文字
-        if(style.node.innerText){
+        if(style.storage.innerTextArray){
             drawText(x, y, style, ctx);
         }
 

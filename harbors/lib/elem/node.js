@@ -89,10 +89,17 @@ define(function(require, exports, module){
     };
 
     node.prototype.__defineGetter__("innerText", function(){
-        return this.style.storage.innerText;
+        var text = this.style.storage.innerTextArray;
+        if(text)
+            return text.split("\n");
+        else
+            return "";
     });
     node.prototype.__defineSetter__("innerText", function(a){
-        this.style.storage.innerText = a.toString();
+        if(a)
+            this.style.storage.innerTextArray = a.toString().split("\n");
+        else
+            this.style.storage.innerTextArray = undefined;
         this.style.storage.innerTextWidth = 0;
     });
 

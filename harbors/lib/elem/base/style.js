@@ -34,8 +34,8 @@ define(function(require, exports, module){
          * @property {string} fontFamily 文字的字体名
          * @property {string} fontStyle 文字的样式
          * @property {number} fontSize 文字的大小
-         * @property {number} innerTextWidth 文字的寬度（在draw的時候自動填充的值）
-         * @property {number} innerText 文字的寬度（在draw的時候自動填充的值）
+         * @property {number} innerTextWidth 文字的寬度（在draw的時候自動填充的值）(没有接口调用)
+         * @property {Array} innerTextArray 需要绘制的文字（按行为单位存放）(没有接口调用)
          *
          * @property {number} borderLeftWidth 左边框宽度
          * @property {string} borderLeftStyle 左边框样式
@@ -145,7 +145,7 @@ define(function(require, exports, module){
             if(this.storage.backgroundImage)
                 return this.storage.backgroundImage.height;
             if(this.storage.fontSize)
-                return this.storage.fontSize + 4;
+                return this.storage.fontSize * this.storage.innerTextArray.length + 4;
 
             return 0;
         },
