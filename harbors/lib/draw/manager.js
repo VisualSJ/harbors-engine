@@ -105,11 +105,13 @@ define(function(require, exports, module){
                         currentWidth = ctx.measureText(tmpTxt).width;//文字总长度
 
                         //按比例缩小文字长度
-                        while(currentWidth > width){
+                        while(currentWidth > width && strIndex > 1){
                             var tmpIndex = width / currentWidth * strIndex | 0;
                             //预防进入死循环
                             if(tmpIndex === strIndex){
                                 strIndex -= 1;
+                            }else if(tmpIndex === 0){
+                                strIndex = 1;
                             }else{
                                 strIndex = tmpIndex;
                             }
