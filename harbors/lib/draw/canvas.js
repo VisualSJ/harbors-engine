@@ -72,7 +72,7 @@ define(function(require, exports, module){
      */
     exports.setFont = function(style, size, family, align, ctx){
         // 设置字体
-        ctx.font = (style || "normal") + " " + (size || 14) + "px " + (family || "Arial");//"Bold 20px Arial"
+        ctx.font = style + " " + size + "px " + family;//"Bold 20px Arial"
         // 设置对齐方式
         ctx.textAlign = align || "left";
     };
@@ -87,9 +87,9 @@ define(function(require, exports, module){
      */
     exports.drawFont = function(string, size, color, x, y, ctx){
         // 设置填充颜色
-        ctx.fillStyle = color || "#000";
+        ctx.fillStyle = color;
         // 设置字体内容，以及在画布上的位置
-        string && ctx.fillText(string, x, y + (size || 14));
+        string && ctx.fillText(string, x, y + size);
         // 绘制空心字
         //ctx.strokeText("Hello!", 10, 100);
     };

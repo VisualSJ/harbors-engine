@@ -23,22 +23,24 @@ define(function(require, exports, module){
     var harbors = function(selector){
 
         var str = selector.substr(0, 1);
+        var name = selector.substr(1);
 
         switch(str){
             case "#"://id选择器
-                return elements.idToElem[selector.substr(1)];
+                return elements.idToElem[name];
                 break;
 
             case "."://class选择器
                 break;
 
             case "@"://创建元素
-                return elements.create(selector.substr(1));
+                return elements.create(name);
                 break;
 
             case "$": //name选择器
                 break;
         }
+        return null;
     };
 
     //延迟运行的数组
@@ -48,13 +50,11 @@ define(function(require, exports, module){
      * 延迟运行函数，传入单位为毫秒
      * @param {Function} callback
      * @param {Number} delayTime
-     * @param {Function|Null} [stcb=]
      */
-    harbors.delay = function(callback, delayTime, stcb){
+    harbors.delay = function(callback, delayTime){
         var delayItem = {
             time: loop.getLine() + delayTime,
-            callback: callback,
-            stcb: stcb
+            callback: callback
         };
         var length = task.length;
         for(var i=0; i<length; i++){
@@ -76,7 +76,8 @@ define(function(require, exports, module){
             callback();
             harbors.interval(callback, delayTime);
         };
-        harbors.delay(fn, delayTime, callback);
+        fn.ctor = callback;
+        harbors.delay(fn, delayTime);
     };
 
     /**
@@ -86,7 +87,7 @@ define(function(require, exports, module){
      */
     harbors.clearDelay = function(callback){
         for(var i=0; i<task.length; i++){
-            if((task[i].stcb || task[i].callback) === callback){
+            if((task[i].callback.ctor || task[i].callback) === callback){
                 task.splice(i, 1);
                 break;
             }

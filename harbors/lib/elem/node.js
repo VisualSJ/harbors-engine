@@ -74,6 +74,7 @@ define(function(require, exports, module){
         }
 
         this.update();
+        return this;
     };
 
     /**
@@ -86,6 +87,7 @@ define(function(require, exports, module){
         this.innerText = str;
 
         this.update();
+        return this;
     };
 
     /**
@@ -135,6 +137,7 @@ define(function(require, exports, module){
             node.update();
         };
         h.delay(anim, 1);
+        return this;
     };
 
     /*

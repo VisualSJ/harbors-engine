@@ -28,19 +28,41 @@ define(function(require, exports, module){
 
     /**
      * 绘制文字
+     * @param txtArr
      * @param x
      * @param y
      * @param style
      * @param ctx
      */
-    var drawText  = function(x, y, style, ctx){
-        if(style.storage.align === "right")
-            x += style.storage.innerTextWidth;
-        if(style.storage.align === "center")
-            x += style.storage.innerTextWidth / 2;
-        style.storage.innerTextArray.forEach(function(text, index){
-            canvas.drawFont(text, style.fontSize, style.color, x, y + index * style.fontSize, ctx);
-        });
+    var drawText  = function(txtArr, x, y, style, ctx){
+        var i, j, txt,
+            len = txtArr.length,
+
+            width = style.width,
+            size = style.fontSize,
+            align = style.storage.align;
+
+        var tmp = (style.lineHeight - style.fontSize) / 2;
+
+        if(style.storage.width){
+            var currentWidth, totalIndex, strIndex;
+            //宽度被限定，自动换行
+            if(align === "right")
+                x += width;
+            if(align === "center")
+                x += width / 2;
+        }else{
+            //宽度自动撑大
+            if(align === "right")
+                x += style.storage.innerTextWidth;
+            if(align === "center")
+                x += style.storage.innerTextWidth / 2;
+        }
+
+        for(i = 0; i < len; i ++){
+            txt = txtArr[i];
+            canvas.drawFont(txt, size, style.color, x, y + i * style.lineHeight + tmp, ctx);
+        }
     };
 
     /**
@@ -61,17 +83,64 @@ define(function(require, exports, module){
         if(!style)
             return;
 
+        var txt, len;
+        var txtArr = style.storage.innerTextArray;
+
         //文字存在，判斷是否需要重置width和height
         if(style.storage.innerTextArray){
+            txt = [];
+            len = txtArr.length;
             setFont(style, ctx);
-            if(!style.storage.innerTextWidth){
-                var tmpWidth = 0;
-                style.storage.innerTextArray.forEach(function(text){
-                    var t = ctx.measureText(text).width;
-                    if(t > tmpWidth)
-                        tmpWidth = t;
-                });
-                style.storage.innerTextWidth = tmpWidth;
+
+            if(style.storage.width){
+                //限定宽度
+                var i, j, tmpTxt, totalIndex, currentWidth, strIndex,
+                    width = style.storage.width;
+                for(i = 0, j = 0; i < len; i ++){
+                    tmpTxt = txtArr[i];//需要分段的文字
+                    totalIndex = 0;
+
+                    do{
+                        strIndex = tmpTxt.length;
+                        currentWidth = ctx.measureText(tmpTxt).width;//文字总长度
+
+                        //按比例缩小文字长度
+                        while(currentWidth > width){
+                            var tmpIndex = width / currentWidth * strIndex | 0;
+                            //预防进入死循环
+                            if(tmpIndex === strIndex){
+                                strIndex -= 1;
+                            }else{
+                                strIndex = tmpIndex;
+                            }
+                            tmpTxt = tmpTxt.substr(0, strIndex);
+                            currentWidth = ctx.measureText(tmpTxt).width;
+                        }
+
+                        j++;
+                        txt.push(tmpTxt);
+                        totalIndex += strIndex;
+                        tmpTxt = txtArr[i].substr(totalIndex);
+                        strIndex = 0;
+                    }while(tmpTxt && tmpTxt !== "");
+
+                }
+
+                if(style.storage.innerTextRow !== j){
+                    style.storage.innerTextRow = j;
+                }
+            }else{
+                //没有限定宽度
+                if(!style.storage.innerTextWidth){
+                    var tmpWidth = 0;
+                    style.storage.innerTextArray.forEach(function(text){
+                        var t = ctx.measureText(text).width;
+                        if(t > tmpWidth)
+                            tmpWidth = t;
+                    });
+                    style.storage.innerTextWidth = tmpWidth;
+                    txt = style.storage.innerTextArray;
+                }
             }
         }
 
@@ -98,7 +167,7 @@ define(function(require, exports, module){
 
         //绘制文字
         if(style.storage.innerTextArray){
-            drawText(x, y, style, ctx);
+            drawText(txt, x, y, style, ctx);
         }
 
         if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){

@@ -41,10 +41,10 @@ define(function(require, exports){
             line += delayTime;
             //计算当前帧与上一帧的间隔与正常间隔的比例
             var dt = delayTime / frameTime;
-            //时间交替
-            prevTime = thisTime;
             //执行循环任务
             callback(dt);
+            //时间交替
+            prevTime = thisTime;
             //计算下一帧任务的开始时间
             var time = new Date();
             var interval = time - thisTime;

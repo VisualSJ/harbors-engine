@@ -32,12 +32,14 @@ define(function(require, exports, module){
          * @property {number} backgroundSizeHeight 元素的背景图片缩放高度
          *
          * @property {string} align 对齐方式
+         * @property {number} lineHeight 对齐方式
          * @property {string} color 颜色值
          * @property {string} fontFamily 文字的字体名
          * @property {string} fontStyle 文字的样式
          * @property {number} fontSize 文字的大小
          * @property {number} innerTextWidth 文字的寬度（在draw的時候自動填充的值）(没有接口调用)
          * @property {Array} innerTextArray 需要绘制的文字（按行为单位存放）(没有接口调用)
+         * @property {Array} innerTextRow 文字的行数（在限定宽度的情况下自动填写）(没有接口调用)
          *
          * @property {number} borderLeftWidth 左边框宽度
          * @property {string} borderLeftStyle 左边框样式
@@ -153,8 +155,8 @@ define(function(require, exports, module){
                 return this.storage.height;
             if(this.storage.backgroundImage)
                 return this.storage.backgroundImage.height;
-            if(this.storage.fontSize)
-                return this.storage.fontSize * this.storage.innerTextArray.length + 4;
+            if(this.storage.innerTextArray)
+                return this.lineHeight * (this.storage.innerTextRow || this.storage.innerTextArray.length) + 4;
 
             return 0;
         },
@@ -185,7 +187,7 @@ define(function(require, exports, module){
         },
 
         get backgroundSize(){
-            return this.storage.backgroundSizeWidth + " " + this.storage.backgroundSizeHeight;
+            return this.backgroundSizeWidth + "px " + this.backgroundSizeHeight + "px";
         },
         set backgroundSize(a){
             var arg = a.split(" ");
@@ -221,8 +223,15 @@ define(function(require, exports, module){
             this.storage.align = a;
         },
 
+        get lineHeight(){
+            return this.storage.lineHeight || this.fontSize;
+        },
+        set lineHeight(a){
+            this.storage.lineHeight = parseInt(a);
+        },
+
         get font(){
-            return this.fontStyle + " " + this.fontSize + " " + this.fontFamily;
+            return this.fontStyle + " " + this.fontSize + "px " + this.fontFamily;
         },
         set font(a){
             var arg = a.split(" ");
@@ -243,17 +252,23 @@ define(function(require, exports, module){
             }
         },
 
-        get fontStyle(){return this.storage.fontStyle || "Normal";},
+        get fontStyle(){
+            return this.storage.fontStyle || "Normal";
+        },
         set fontStyle(a){
             this.storage.fontStyle = a;
         },
 
-        get fontSize(){return this.storage.fontSize || 14;},
+        get fontSize(){
+            return this.storage.fontSize || 14;
+        },
         set fontSize(a){
             this.storage.fontSize = parseInt(a);
         },
 
-        get fontFamily(){return this.storage.fontFamily || "";},
+        get fontFamily(){
+            return this.storage.fontFamily || "Arial";
+        },
         set fontFamily(a){
             this.storage.fontFamily = a.toString();
         }
