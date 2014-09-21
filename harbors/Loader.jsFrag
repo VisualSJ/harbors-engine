@@ -1,0 +1,25 @@
+(function (w) {
+
+    var modules = {};
+    var loadList = [];
+
+    var define = function (id, arr, task) {
+
+        if (id === "harbors/Entrance") {
+            Entrance = task;
+        }
+
+        var module = {
+            id: id,
+            exports: {},
+            dependencies: arr,
+            callback: task,
+            require: function (name) {
+                name = readPath(id, name);
+                return modules[name].exports;
+            }
+        };
+
+        modules[id] = module;
+        loadList.push(module);
+    };
