@@ -16,12 +16,14 @@ define(function(require, exports, module){
      * @property {node} parent node元素的父节点
      * @property {style} style 样式存放对象
      * @property {boolean} active 是否活动
+     * @property {boolean} animate 是否正在播放动画
      *
      * @property {function} update 更新block节点的绘制属性
-     * @property {function} css 更改style的快捷方法
-     *
-     * @property {string} innerText node中包含的文字
-     *
+     * @property {function} set 更改style的快捷方法
+     * @property {function} get 获取style的快捷方法
+     * @property {function} to 执行动画
+     * @property {function} frame 帧动画
+     * @property {function} stop 停止动画
      */
     var node = function(){
 
@@ -30,6 +32,7 @@ define(function(require, exports, module){
         this.parent = null;
         this.style = new style(this);
         this.active = false;
+        this.animate = false;
     };
     inherit(node, event);
 
@@ -97,6 +100,52 @@ define(function(require, exports, module){
     };
 
     /**
+     * @param frames 帧列表
+     * @param loop 循环次数
+     */
+    node.prototype.frame = function(frames, loop){
+        var currentNum = 0,
+            length = frames.length,
+            node = this;
+
+        node.animate = true;
+
+        var anim = function(){
+            var frameItem = frames[currentNum++];
+
+            for(var p in frameItem){
+                if(p !== "time")
+                    node.style[p] = frameItem[p];
+            }
+
+            if(node.active && node.animate)
+                h.delay(anim, frameItem.time);
+
+            if(currentNum >= length){
+                currentNum = 0;
+            }
+            node.update();
+        };
+
+        var frameItem = frames[currentNum++];
+
+        for(var p in frameItem){
+            if(p !== "time")
+                node.style[p] = frameItem[p];
+        }
+
+        h.delay(anim, frameItem.time);
+        this.update();
+    };
+
+    /**
+     * 停止to或者frame
+     */
+    node.prototype.stop = function(){
+        this.animate = false;
+    };
+
+    /**
      * 动画支持
      * @param {Object} style 更改的样式参数
      * @param {Number} duration 持续时间
@@ -119,22 +168,24 @@ define(function(require, exports, module){
             }
         }
         var node = this;
+        node.animate = true;
         //记录起始时间
         var start = loop.getLine();
         //添加运动任务
         var anim = function(){
-            //间隔的时间
-            var time = loop.getLine() - start;
-            //间隔的比例（运动进行的百分比）
-            var proportion = time / duration;
 
-            //缓动处理
-            if(easing){
-                proportion = easing(proportion);
-            }
+            //元素处于活动状态
+            if(node.active && node.animate){
 
-            if(node.active){
-                //元素处于活动状态
+                //间隔的时间
+                var time = loop.getLine() - start;
+                //间隔的比例（运动进行的百分比）
+                var proportion = time / duration;
+
+                //缓动处理
+                if(easing){
+                    proportion = easing(proportion);
+                }
 
                 if(proportion >= 1){
                     proportion = 1;
