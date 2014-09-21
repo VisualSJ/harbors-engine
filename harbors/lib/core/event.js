@@ -26,6 +26,8 @@ define(function(require, exports, module){
         var y = e.y;
         for(i=0; i<array.length; i++){
             var node = array[i];
+            if(!node.active)
+                continue;
             //点击点位于node左上角定点右下方向
             if(node.style.left < x && node.style.top < y){
                 //点击点位于node右下角左上方向
@@ -67,6 +69,13 @@ define(function(require, exports, module){
                 }
             }
         });
+        if ( e && e.preventDefault )
+        //阻止默认浏览器动作(W3C)
+            e.preventDefault();
+        else
+        //IE中阻止函数器默认动作的方式
+            window.event.returnValue = false;
+        return false;
     };
 
     /**
@@ -153,7 +162,7 @@ define(function(require, exports, module){
         //循环寻找删除元素
         for(var i=0; i<touchDownList.length; i++){
             if(node.uniqueNumber == touchDownList[i].uniqueNumber){
-                touchDownList.splice(i, 0);
+                touchDownList.splice(i, 1);
                 return;
             }
         }
@@ -167,7 +176,7 @@ define(function(require, exports, module){
         //循环寻找删除元素
         for(var i=0; i<touchMoveList.length; i++){
             if(node.uniqueNumber == touchMoveList[i].uniqueNumber){
-                touchMoveList.splice(i, 0);
+                touchMoveList.splice(i, 1);
                 return;
             }
         }
@@ -181,7 +190,7 @@ define(function(require, exports, module){
         //循环寻找删除元素
         for(var i=0; i<touchUpList.length; i++){
             if(node.uniqueNumber == touchUpList[i].uniqueNumber){
-                touchUpList.splice(i, 0);
+                touchUpList.splice(i, 1);
                 return;
             }
         }

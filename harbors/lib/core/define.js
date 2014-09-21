@@ -111,6 +111,7 @@ define(function(require, exports, module){
     harbors.canvas.style.height = gameCanvas.height;
     harbors.canvas.cache = gameCanvas;
     harbors.canvas.id = "canvas";
+    harbors.canvas.active = true;
 
     /**
      * 自適應屏幕
@@ -129,11 +130,47 @@ define(function(require, exports, module){
         for(var p in style){
             document.body.style[p] = style[p];
         }
-        if(options.adaptive === 1){
+
+        var scaleX, scaleY;
+        if(options.adaptive === 1) {
+            gameCanvas.style.width = options.system.visibleSize.width + "px";
+            gameCanvas.style.height = options.system.visibleSize.height + "px";
+            scaleX = options.system.visibleSize.width / gameCanvas.width;
+            scaleY = options.system.visibleSize.height / gameCanvas.height;
+        }else if(options.adaptive === 2){
+            scaleY = scaleX = options.system.visibleSize.width / gameCanvas.width;
             gameCanvas.style.width =  options.system.visibleSize.width + "px";
-            gameCanvas.style.height =  options.system.visibleSize.height + "px";
+            gameCanvas.style.height = gameCanvas.height * scaleY + "px";
+        }else if(options.adaptive === 3){
+            scaleX = scaleY = options.system.visibleSize.height / gameCanvas.height;
+            gameCanvas.style.width =  gameCanvas.width * scaleX + "px";
+            gameCanvas.style.height = options.system.visibleSize.height + "px";
+        }else if(options.adaptive === 4){
+            scaleX = options.system.visibleSize.width / gameCanvas.width;
+            scaleY = options.system.visibleSize.height / gameCanvas.height;
+            if(scaleX < scaleY){
+                scaleY = scaleX;
+                gameCanvas.style.width =  options.system.visibleSize.width + "px";
+                gameCanvas.style.height = gameCanvas.height * scaleY + "px";
+            }else{
+                scaleX = scaleY;
+                gameCanvas.style.width =  gameCanvas.width * scaleX + "px";
+                gameCanvas.style.height = options.system.visibleSize.height + "px";
+            }
+        }else if(options.adaptive === 5){
+            scaleX = options.system.visibleSize.width / gameCanvas.width;
+            scaleY = options.system.visibleSize.height / gameCanvas.height;
+            if(scaleX > scaleY){
+                scaleY = scaleX;
+                gameCanvas.style.width =  options.system.visibleSize.width + "px";
+                gameCanvas.style.height = gameCanvas.height * scaleY + "px";
+            }else{
+                scaleX = scaleY;
+                gameCanvas.style.width =  gameCanvas.width * scaleX + "px";
+                gameCanvas.style.height = options.system.visibleSize.height + "px";
+            }
         }
-        gameCanvas.changeInit && gameCanvas.changeInit();
+        gameCanvas.changeInit && gameCanvas.changeInit(scaleX, scaleY);
     };
 
     //主循环

@@ -20,11 +20,22 @@ define(function(require, exports, module){
     };
     inherit(block, node);
 
+    var updateActive = function(node, bool){
+        node.active = bool;
+        var children = node.children;
+        if(children){
+            for(var i=0; i<children.length; i++){
+                updateActive(children[i], bool);
+            }
+        }
+    };
+
     /**
      * 在block内部插入一个元素
      * @param node
      */
     block.prototype.append = function(node){
+        updateActive(node, true);
         node.parent = this;
         for(var i=0; i<this.children.length; i++){
             if(this.children[i] === node){
@@ -33,6 +44,7 @@ define(function(require, exports, module){
         }
         this.children.push(node);
         this.waitDrawing = true;
+        this.update();
     };
 
     /**
@@ -43,11 +55,14 @@ define(function(require, exports, module){
         node.parent = this;
         for(var i=0; i<this.children.length; i++){
             if(this.children[i] === node){
+                //更新所有被删除元素的状态
+                updateActive(node, false);
                 this.children.splice(i, 1);
                 break;
             }
         }
         this.waitDrawing = true;
+        this.update();
     };
 
     module.exports = block;

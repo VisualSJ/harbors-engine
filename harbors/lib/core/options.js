@@ -138,7 +138,7 @@ define(function(require, exports, module){
      */
     bwr.margin = {};
 
-    var initParam = function(){
+    var initParam = function(scx, scy){
         bwr.canvasSize.width = canvas.width;
         bwr.canvasSize.height = canvas.height;
         bwr.margin.left = getter.marginLeft(canvas);
@@ -146,8 +146,8 @@ define(function(require, exports, module){
         bwr.visibleSize.width = getter.visibleWidth();
         bwr.visibleSize.height = getter.visibleHeight();
         if(module.exports.adaptive){
-            bwr.scale.x = bwr.visibleSize.width / bwr.canvasSize.width;
-            bwr.scale.y = bwr.visibleSize.height / bwr.canvasSize.height;
+            bwr.scale.x = scx//bwr.visibleSize.width / bwr.canvasSize.width;
+            bwr.scale.y = scy//bwr.visibleSize.height / bwr.canvasSize.height;
         }else{
             bwr.scale.x = 1;
             bwr.scale.y = 1;

@@ -23,7 +23,7 @@ define(function(require, exports, module){
      */
     var drawBGImage = function(x, y, style, ctx){
         var drawElem = style.storage.backgroundImage.canvas || style.storage.backgroundImage.image;
-        canvas.drawImage(drawElem, 0, 0, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
+        canvas.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
     };
 
     /**
@@ -141,8 +141,8 @@ define(function(require, exports, module){
                             tmpWidth = t;
                     });
                     style.storage.innerTextWidth = tmpWidth;
-                    txt = style.storage.innerTextArray;
                 }
+                txt = style.storage.innerTextArray;
             }
         }
 

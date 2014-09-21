@@ -44,19 +44,40 @@ define(function(require, exports, module){
     exports.mouseIn = "mouseover";
     exports.mouseOut = "mouseout";
     exports.mouseUp = "mouseup";
-    exports.touchDown = "touchBegin";
-    exports.touchMove = "touchMove";
-    exports.touchUp = "touchEnd";
+    exports.touchDown = "touchstart";
+    exports.touchMove = "touchmove";
+    exports.touchUp = "touchend";
 
     /**
      * 将鼠标事件对象解析成需要的格式
      * @param {MouseEvent} event
      */
     exports.mouseEvent = function(event){
-        return {
-            x: event.x,
-            y: event.y
+
+        var ev = {
+            point: []
         };
+
+        if(event.changedTouches){
+            ev.x = event.changedTouches[0].clientX;
+            ev.y = event.changedTouches[0].clientY;
+            for(var i=0; i<event.changedTouches.length; i++){
+                var item = event.changedTouches[i]
+                ev.point.push({
+                    x: item.clientX,
+                    y: item.clientY
+                });
+            }
+        }else{
+            ev.x = event.x;
+            ev.y = event.y;
+            ev.point.push({
+                x: event.x,
+                y: event.y
+            });
+        }
+
+        return ev;
     };
 
 });

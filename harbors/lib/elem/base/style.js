@@ -30,6 +30,8 @@ define(function(require, exports, module){
          * @property {string|texture} backgroundImage 元素的背景图片
          * @property {number} backgroundSizeWidth 元素的背景图片缩放宽度
          * @property {number} backgroundSizeHeight 元素的背景图片缩放高度
+         * @property {number} backgroundPositionLeft 元素的背景图片裁剪的左边距
+         * @property {number} backgroundPositionTop 元素的背景图片裁剪的上边距
          *
          * @property {string} align 对齐方式
          * @property {number} lineHeight 对齐方式
@@ -211,6 +213,33 @@ define(function(require, exports, module){
         },
         set backgroundSizeHeight(a){
             this.storage.backgroundSizeHeight = parseInt(a);
+        },
+
+        get backgroundPosition(){
+            return this.backgroundPositionLeft + "px " + this.backgroundPositionTop + "px";
+        },
+        set backgroundPosition(a){
+            var arg = a.split(" ");
+            if(arg.length === 1){
+                this.backgroundPositionLeft = this.backgroundPositionTop = arg[0];
+            }else if(arg.length === 2){
+                this.backgroundPositionLeft = parseInt(arg[0]);
+                this.backgroundPositionTop = parseInt(arg[1]);
+            }
+        },
+
+        get backgroundPositionLeft(){
+            return this.storage.backgroundPositionLeft || 0;
+        },
+        set backgroundPositionLeft(a){
+            this.storage.backgroundPositionLeft = parseInt(a);
+        },
+
+        get backgroundPositionTop(){
+            return this.storage.backgroundPositionTop || 0;
+        },
+        set backgroundPositionTop(a){
+            this.storage.backgroundPositionTop = parseInt(a);
         },
 
         get color(){return this.storage.color || "#000";},

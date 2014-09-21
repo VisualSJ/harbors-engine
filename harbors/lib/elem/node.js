@@ -15,6 +15,7 @@ define(function(require, exports, module){
      * @property {number} uniqueNumber node元素唯一的标示符
      * @property {node} parent node元素的父节点
      * @property {style} style 样式存放对象
+     * @property {boolean} active 是否活动
      *
      * @property {function} update 更新block节点的绘制属性
      * @property {function} css 更改style的快捷方法
@@ -28,6 +29,7 @@ define(function(require, exports, module){
 
         this.parent = null;
         this.style = new style(this);
+        this.active = false;
     };
     inherit(node, event);
 
@@ -63,6 +65,10 @@ define(function(require, exports, module){
         }
     };
 
+    node.prototype.get = function(a){
+        return this.style[a];
+    };
+
     node.prototype.set = function(a, b){
         switch(arguments.length){
             case 2:
@@ -94,9 +100,10 @@ define(function(require, exports, module){
      * 动画支持
      * @param {Object} style 更改的样式参数
      * @param {Number} duration 持续时间
+     * @param {Function} [callback=] 执行完毕的回调
      * @param {Function} [easing=] 缓动处理函数
      */
-    node.prototype.to = function(style, duration, easing){
+    node.prototype.to = function(style, duration, callback, easing, ln){
         var t, p,
             s = this.style;
 
@@ -126,15 +133,21 @@ define(function(require, exports, module){
                 proportion = easing(proportion);
             }
 
-            if(proportion >= 1){
-                proportion = 1;
-            }else{
-                h.delay(anim, 1);
+            if(node.active){
+                //元素处于活动状态
+
+                if(proportion >= 1){
+                    proportion = 1;
+                    typeof callback === "function" && callback();
+                }else{
+                    h.delay(anim, 1);
+                }
+
+                for(p in style){
+                    node.style[p] = cache[p] + style[p] * proportion;
+                }
+                node.update();
             }
-            for(p in style){
-                node.style[p] = cache[p] + style[p] * proportion;
-            }
-            node.update();
         };
         h.delay(anim, 1);
         return this;
