@@ -23,7 +23,8 @@ define(function(require, exports, module){
      */
     var drawBGImage = function(x, y, style, ctx){
         var drawElem = style.storage.backgroundImage.canvas || style.storage.backgroundImage.image;
-        canvas.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
+        if(style.width !=0 || style.height !=0)
+            canvas.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
     };
 
     /**

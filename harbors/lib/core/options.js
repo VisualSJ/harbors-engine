@@ -67,18 +67,27 @@ define(function(require, exports, module){
             tmp = ua.match(/rv:([\d.]+)/);
             bwr.version = tmp ? tmp[1] : undefined;
         }
-    }else if (document.getBoxObjectFor){
+    }else if (ua.indexOf("firefox") > -1){
         bwr.name = browser.firefox;
-        bwr.version = ua.match(/firefox\/([\d.]+)/)[1];
+        tmp = ua.match(/firefox\/([\d.]+)/);
+        if(tmp){
+            bwr.version = tmp[1];
+        }else{
+            tmp = ua.match(/rv:([\d.]+)/);
+            bwr.version = tmp ? tmp[1] : undefined;
+        }
     }else if (window.MessageEvent && !document.getBoxObjectFor){
         bwr.name = browser.chrome;
-        bwr.version =  ua.match(/chrome\/([\d.]+)/)[1];
+        tmp = ua.match(/chrome\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : undefined;
     }else if (window.opera) {
         bwr.name = browser.opera;
-        bwr.version = ua.match(/opera.([\d.]+)/)[1];
+        tmp = ua.match(/opera.([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : undefined;
     }else if (window.openDatabase) {
         bwr.name = browser.safari;
-        bwr.version = ua.match(/version\/([\d.]+)/)[1];
+        tmp = ua.match(/version\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : undefined;
     }
 
     //语言类型
