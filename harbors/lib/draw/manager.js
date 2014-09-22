@@ -87,6 +87,9 @@ define(function(require, exports, module){
         var txt, len;
         var txtArr = style.storage.innerTextArray;
 
+        //透明度
+        ctx.globalAlpha = style.opacity;
+
         //文字存在，判斷是否需要重置width和height
         if(style.storage.innerTextArray){
             txt = [];
@@ -197,7 +200,10 @@ define(function(require, exports, module){
                 }
                 node.waitDrawing = false;
             }
-            node.parent && canvas.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
+            if(node.parent){
+                drawAll(node.style, ctx);
+                canvas.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
+            }
         }else{//node类型元素
             drawAll(node.style, ctx);
         }

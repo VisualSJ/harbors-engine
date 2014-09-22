@@ -43,6 +43,9 @@ define(function(require, exports, module){
         return null;
     };
 
+    //打开debug配置后将被重写
+    harbors.log = function(){};
+
     //延迟运行的数组
     var task = [];
 
@@ -100,6 +103,7 @@ define(function(require, exports, module){
      */
     harbors.setOption = function(opt){
         opt.id && ( options.id = opt.id );
+        opt.debug && ( options.debug = opt.debug );
     };
     //暴露配置信息
     harbors.option = options;

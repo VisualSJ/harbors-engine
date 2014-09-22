@@ -1,7 +1,12 @@
 define(function(require, exports, module){
 
-    var harbors = require('./lib/core/define');
+    const harbors = require('./lib/core/define');
+    const debug = require("./lib/debug/console");
+
+    if(harbors.option.debug)
+        debug.init(harbors);
 
     window.h = harbors;
+
 
 });

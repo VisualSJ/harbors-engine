@@ -22,6 +22,10 @@ define(function(require, exports, module){
          * @property {number} right 元素的右边距
          * @property {number} bottom 元素的下边距
          *
+         * @property {string} color 颜色值
+         * @property {number} opacity 透明度
+         * @property {number} zIndex 层级
+         *
          * @property {number} rotate 元素的旋转角度
          * @property {number} scaleX 元素的缩放比例
          * @property {number} scaleY 元素的缩放比例
@@ -35,7 +39,6 @@ define(function(require, exports, module){
          *
          * @property {string} align 对齐方式
          * @property {number} lineHeight 对齐方式
-         * @property {string} color 颜色值
          * @property {string} fontFamily 文字的字体名
          * @property {string} fontStyle 文字的样式
          * @property {number} fontSize 文字的大小
@@ -66,7 +69,7 @@ define(function(require, exports, module){
 
         get left(){
             if(this.storage.align === "center"){
-                return this.storage.left - this.storage.innerTextWidth / 2;
+                return (this.storage.left || 0)  - this.storage.innerTextWidth/ 2;
             }else if(this.storage.align === "right"){
                 return this.storage.left - this.storage.innerTextWidth;
             }
@@ -172,6 +175,20 @@ define(function(require, exports, module){
             }
         },
 
+        get color(){return this.storage.color || "#000";},
+        set color(a){
+            this.storage.color = a;
+        },
+
+        get opacity(){return this.storage.opacity || 1;},
+        set opacity(a){
+            this.storage.opacity = parseFloat(a);
+        },
+
+        get zIndex(){return this.storage.zIndex || 0;},
+        set zIndex(a){
+            this.storage.zIndex = parseInt(a);
+        },
 
         get backgroundColor(){return this.storage.backgroundColor || "#FFF";},
         set backgroundColor(a){
@@ -240,11 +257,6 @@ define(function(require, exports, module){
         },
         set backgroundPositionTop(a){
             this.storage.backgroundPositionTop = parseInt(a);
-        },
-
-        get color(){return this.storage.color || "#000";},
-        set color(a){
-            this.storage.color = a;
         },
 
         get align(){return this.storage.align || "left";},

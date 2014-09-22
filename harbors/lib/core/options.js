@@ -36,6 +36,7 @@ define(function(require, exports, module){
         id: "gameCanvas",
         fps: 60,
         getter: getter,
+        debug: true,
 
         /**
          * 引擎系統相關的參數

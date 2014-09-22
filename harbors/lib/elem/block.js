@@ -2,6 +2,7 @@ define(function(require, exports, module){
 
     const inherit = require("../tools/inherit");
     const node = require("./node");
+    const childList = require("./base/childList");
 
     /**
      * @class
@@ -16,7 +17,7 @@ define(function(require, exports, module){
         this.cache.width = this.style.width;
         this.cache.height = this.style.height;
         this.waitDrawing = false;
-        this.children = [];
+        this.children = new childList;
     };
     inherit(block, node);
 

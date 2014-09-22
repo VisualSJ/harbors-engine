@@ -15,7 +15,7 @@
                 for(var j=0; j<module.dependencies.length; j++){
                     var depItem = module.dependencies[j];
                     if(readPath(module.id, depItem) === id){
-                        console.log("clear " + id + " of " + module.id);
+                        //console.log("clear " + id + " of " + module.id);
                         module.dependencies.splice(j, 1);
                         break;
                     }
@@ -28,7 +28,7 @@
         for(var i=0; i<loadList.length; i++){
             var deps = loadList[i].dependencies;
             if(deps && deps.length === 0){
-                console.log("delete " + loadList[i].id);
+                //console.log("delete " + loadList[i].id);
                 loadList[i].callback(loadList[i].require, loadList[i].exports, loadList[i]);
                 //清除其他模块中对自己的依赖
                 clearDeps(loadList[i].id);
