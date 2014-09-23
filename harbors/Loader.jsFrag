@@ -4,11 +4,6 @@
     var loadList = [];
 
     var define = function (id, arr, task) {
-
-        if (id === "harbors/Entrance") {
-            Entrance = task;
-        }
-
         var module = {
             id: id,
             exports: {},

@@ -48,6 +48,7 @@ define(function(require, exports){
             //计算下一帧任务的开始时间
             var time = new Date();
             var interval = time - thisTime;
+            exports.getDrawTime(interval);
             if(interval > frameTime){
                 timer = setTimeout(function(){
                     loop();
@@ -62,6 +63,8 @@ define(function(require, exports){
         //启动循环
         loop();
     };
+
+    exports.getDrawTime = function(){};
 
     /**
      * 获取引擎运行时间轴

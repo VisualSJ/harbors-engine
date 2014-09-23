@@ -177,13 +177,16 @@ define(function(require, exports, module){
         gameCanvas.changeInit && gameCanvas.changeInit(scaleX, scaleY);
     };
 
+    harbors._getDebugInfo = function(){};
+
     //主循环
     loop.start(function(dt){
         //查找任务队列
         while(task[0] && task[0].time < loop.getLine()){
             task.shift().callback();
         }
-        drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas));
+        var drawNum = drawManager.parse(harbors.canvas, canvas.ctx(gameCanvas))
+        harbors._getDebugInfo(task.length, drawNum);
     });
 
     event.init();

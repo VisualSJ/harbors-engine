@@ -3,8 +3,9 @@ define(function(require, exports, module){
     const node = require("../elem/node");
     const block = require("../elem/block");
     const options = require("../core/options");
+    const loop = require("../core/loop");
 
-    var console, line1, line2, line3, infoElem,fps, drawTime, info;
+    var console, line1, line2, line3, infoElem,task, time, info, draw;
 
     exports.init = function(harbors){
         console = (new block).set({
@@ -31,7 +32,7 @@ define(function(require, exports, module){
             color: "#fff",
             left: 10,
             top: 45
-        }).text("fps:          draw time:");
+        }).text("time:      draw:         task:");
 
         infoElem = [];
 
@@ -44,24 +45,31 @@ define(function(require, exports, module){
             console.append(infoElem[i]);
         }
 
-        fps = (new node).set({
+        time = (new node).set({
             color: "#fff",
-            left: 40,
+            left: 42,
             top: 45
-        }).text("60");
+        }).text("0");
 
-        drawTime = (new node).set({
+        draw = (new node).set({
             color: "#fff",
-            left: 140,
+            left: 100,
             top: 45
-        }).text("13");
+        }).text("0");
+
+        task = (new node).set({
+            color: "#fff",
+            left: 162,
+            top: 45
+        }).text("0");
 
         console.append(line1);
         console.append(line2);
         console.append(line3);
 
-        console.append(fps);
-        console.append(drawTime);
+        console.append(time);
+        console.append(draw);
+        console.append(task);
 
         harbors("#canvas").append(console);
 
@@ -88,14 +96,23 @@ define(function(require, exports, module){
                 infoElem[i].text(info[i]);
             }
         };
-    };
 
-    exports.showFPS = function(num){
-        fps.text(num);
-    };
 
-    exports.showDrawTime = function(num){
-        drawTime.text(num)
+
+        var cacheTime = 0;
+        loop.getDrawTime = function(num){
+            if(cacheTime++ < 30) return;
+            cacheTime = 0;
+            time && time.text(num);
+        };
+        var cacheInfo = 0;
+        harbors._getDebugInfo = function(taskLength, drawLength){
+            if(cacheInfo++ < 30) return;
+            cacheInfo = 0;
+            task && task.text(taskLength);
+            draw && draw.text(drawLength);
+        };
+
     };
 
 

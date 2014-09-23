@@ -5,7 +5,12 @@ define(function(require, exports, module){
         firefox: "firefox",
         ie: "ie",
         opera: "opera",
-        safari: "safari"
+        safari: "safari",
+        micromessage: "微信",
+        qqbrowser: "QQ",
+        baidu: "百度",
+        uc: "UC",
+        liebao: "猎豹"
     };
 
     const system = {
@@ -57,7 +62,6 @@ define(function(require, exports, module){
     var up = navigator.appVersion.toLowerCase();
     var uf = navigator.platform.toLowerCase();
     //判断浏览器类型
-    //todo 判断有问题
     var tmp = "";
     if (ua.indexOf("msie") > -1 || ua.indexOf("trident") > -1){
         bwr.name = browser.ie;
@@ -66,7 +70,7 @@ define(function(require, exports, module){
             bwr.version = tmp[1];
         }else{
             tmp = ua.match(/rv:([\d.]+)/);
-            bwr.version = tmp ? tmp[1] : undefined;
+            bwr.version = tmp ? tmp[1] : "";
         }
     }else if (ua.indexOf("firefox") > -1){
         bwr.name = browser.firefox;
@@ -75,22 +79,43 @@ define(function(require, exports, module){
             bwr.version = tmp[1];
         }else{
             tmp = ua.match(/rv:([\d.]+)/);
-            bwr.version = tmp ? tmp[1] : undefined;
+            bwr.version = tmp ? tmp[1] : "";
         }
-    }else if (window.MessageEvent && !document.getBoxObjectFor){
+    }else if(ua.indexOf("micromessenger") > -1){
+        bwr.name = browser.micromessage;
+        tmp = ua.match(/micromessenger\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if(ua.indexOf("mqqbrowser") > -1){
+        bwr.name = browser.qqbrowser;
+        tmp = ua.match(/mqqbrowser\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if(ua.indexOf("baidubrowser") > -1){
+        bwr.name = browser.baidu;
+        tmp = ua.match(/baidubrowser\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if(ua.indexOf("ucbrowser") > -1){
+        bwr.name = browser.uc;
+        tmp = ua.match(/ucbrowser\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if(ua.indexOf("liebaofast") > -1){
+        bwr.name = browser.liebao;
+        tmp = ua.match(/liebaofast\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if (ua.indexOf("chrome") > -1){
         bwr.name = browser.chrome;
         tmp = ua.match(/chrome\/([\d.]+)/);
-        bwr.version = tmp ? tmp[1] : undefined;
-    }else if (window.opera) {
+        bwr.version = tmp ? tmp[1] : "";
+    }else if (ua.indexOf("oupeng") > -1) {
         bwr.name = browser.opera;
-        tmp = ua.match(/opera.([\d.]+)/);
-        bwr.version = tmp ? tmp[1] : undefined;
-    }else if (window.openDatabase) {
+        tmp = ua.match(/oupeng\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
+    }else if (ua.indexOf("safari") > -1) {
         bwr.name = browser.safari;
-        tmp = ua.match(/version\/([\d.]+)/);
-        bwr.version = tmp ? tmp[1] : undefined;
+        tmp = ua.match(/safari\/([\d.]+)/);
+        bwr.version = tmp ? tmp[1] : "";
     }
-
+    bwr.version = bwr.version || "";
+    bwr.name = bwr.name || "";
     //语言类型
     bwr.language = (navigator.browserLanguage || navigator.language).toLowerCase();
 

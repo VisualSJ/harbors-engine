@@ -187,6 +187,7 @@ define(function(require, exports, module){
      * @param ctx
      */
     exports.parse = function(node, ctx){
+        var drawNum = 0;
         if(node.cache){//block类型的元素
             if(node.waitDrawing){//等待重新绘制
                 //清除画板
@@ -196,7 +197,7 @@ define(function(require, exports, module){
                 var children = node.children;
                 var length = children.length;
                 for(var i=0; i<length; i++){
-                    exports.parse(children[i], canvas.ctx(node.cache));
+                    drawNum += exports.parse(children[i], canvas.ctx(node.cache));
                 }
                 node.waitDrawing = false;
             }
@@ -207,6 +208,7 @@ define(function(require, exports, module){
         }else{//node类型元素
             drawAll(node.style, ctx);
         }
+        return ++drawNum;
     };
 
     /**
