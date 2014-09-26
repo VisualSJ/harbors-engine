@@ -1,14 +1,12 @@
-define(function(require, exports, module){
+(function(){
 
-    //////////
-    //Chrome//
-    //////////
+    var chrome = function(){};
 
     /**
      * 获取屏幕可见区域的宽度
      * @returns {number}
      */
-    exports.visibleWidth = function(){
+    chrome.prototype.visibleWidth = function(){
         return document.documentElement.clientWidth;
     };
 
@@ -16,7 +14,7 @@ define(function(require, exports, module){
      * 获取屏幕可见区域的高度
      * @returns {number}
      */
-    exports.visibleHeight = function(){
+    chrome.prototype.visibleHeight = function(){
         return document.documentElement.clientHeight;
     };
 
@@ -25,7 +23,7 @@ define(function(require, exports, module){
      * @param elem
      * @returns {*}
      */
-    exports.marginLeft = function(elem){
+    chrome.prototype.marginLeft = function(elem){
         return elem.offsetParent ? arguments.callee(elem.offsetParent)+elem.offsetLeft : elem.offsetLeft;
     };
 
@@ -34,25 +32,25 @@ define(function(require, exports, module){
      * @param elem
      * @returns {*}
      */
-    exports.marginTop = function(elem){
+    chrome.prototype.marginTop = function(elem){
         return elem.offsetParent ? arguments.callee(elem.offsetParent)+elem.offsetTop : elem.offsetTop;
     };
 
     //统一事件命名
-    exports.mouseDown = "mousedown";
-    exports.mouseMove = "mousemove";
-    exports.mouseIn = "mouseover";
-    exports.mouseOut = "mouseout";
-    exports.mouseUp = "mouseup";
-    exports.touchDown = "touchstart";
-    exports.touchMove = "touchmove";
-    exports.touchUp = "touchend";
+    chrome.prototype.mouseDown = "mousedown";
+    chrome.prototype.mouseMove = "mousemove";
+    chrome.prototype.mouseIn = "mouseover";
+    chrome.prototype.mouseOut = "mouseout";
+    chrome.prototype.mouseUp = "mouseup";
+    chrome.prototype.touchDown = "touchstart";
+    chrome.prototype.touchMove = "touchmove";
+    chrome.prototype.touchUp = "touchend";
 
     /**
      * 将鼠标事件对象解析成需要的格式
      * @param {MouseEvent} event
      */
-    exports.mouseEvent = function(event){
+    chrome.prototype.mouseEvent = function(event){
 
         var ev = {
             point: []
@@ -80,4 +78,7 @@ define(function(require, exports, module){
         return ev;
     };
 
-});
+    if(!options.getter){
+        options.getter = new chrome();
+    }
+})();

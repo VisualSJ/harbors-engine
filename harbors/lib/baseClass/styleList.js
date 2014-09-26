@@ -1,7 +1,4 @@
-define(function(require, exports, module){
-
-    const texture = require('../../core/texture');
-
+var styleList = (function(){
     /**
      * node元素中自带的style构造方法
      * @param node
@@ -9,7 +6,7 @@ define(function(require, exports, module){
      * @property {node} node 包含这个style的元素
      * @property {object} storage 存放实际的style属性
      */
-    var style = function(node){
+    var styleList = function(node){
         this.node = node;
 
         /**
@@ -56,15 +53,15 @@ define(function(require, exports, module){
          * @property {string} borderRightStyle 右边框样式
          * @property {string} borderRightColor 右边框颜色
          * @property {number} borderBottomWidth 下边框宽度
-         * @property {string} borderBottomStyle 下边框样式
+         * @property {string} borderBottomstyleList 下边框样式
          * @property {string} borderBottomColor 下边框颜色
          *
          */
         this.storage = {};
     };
 
-    style.prototype = {
-        constructor: style,
+    styleList.prototype = {
+        constructor: styleList,
 
 
         get left(){
@@ -198,7 +195,7 @@ define(function(require, exports, module){
         get backgroundImage(){return this.storage.backgroundImage;},
         set backgroundImage(a){
             if(typeof a === 'string'){
-                a = texture.createImageTexture(a);
+                a = textureManager.createImageTexture(a);
             }
 
             a.nodeList.push(this.node);
@@ -316,5 +313,5 @@ define(function(require, exports, module){
 
     };
 
-    module.exports = style;
-});
+    return styleList;
+})();

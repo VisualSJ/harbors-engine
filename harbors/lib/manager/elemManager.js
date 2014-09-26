@@ -1,11 +1,14 @@
-define(function(require, exports, module){
+var elemManager = (function(){
+
 
     //定义元素元素列表
     var define = {
-        node: require('../elem/node'),
-        block: require('../elem/block'),
-        texture: require('../elem/texture')
+        node: node,
+        block: block,
+        texture: imageTexture
     };
+
+    var manager = {};
 
     /**
      * 元素管理器
@@ -13,14 +16,14 @@ define(function(require, exports, module){
      * 存放id到元素的对应列表，id应该是唯一的，如果重复，则会替换先前的对应关系。
      * @namespace
      */
-    exports.idToElem = {};
+    manager.idToElem = {};
 
     /**
      * 创建一个元素
      * @param {string} name
      * @returns {*}
      */
-    exports.create = function(name){
+    manager.create = function(name){
         var elem = define[name];
 
         if(elem){
@@ -33,13 +36,13 @@ define(function(require, exports, module){
                 a = a.toString();
 
                 //原id存在，则删除管理对象内的元素
-                if(id != "" && exports.idToElem[a]){
-                    delete exports.idToElem[a];
+                if(id != "" && manager.idToElem[a]){
+                    delete manager.idToElem[a];
                 }
 
                 //传入id存在，则在对象内新增id对应元素
                 if(a !== ""){
-                    exports.idToElem[a] = elem;
+                    manager.idToElem[a] = elem;
                 }
                 id = a;
             });
@@ -47,4 +50,6 @@ define(function(require, exports, module){
         }
         return null;
     }
-});
+
+    return manager;
+})();

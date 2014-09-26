@@ -1,11 +1,16 @@
-define(function(require, exports){
-
-    const options = require("./options");
-
-    var timer = null;
+var loop =(function(){
 
     //引擎启动以来的时间轴
-    var line = 0;
+    var lineTime = 0;
+
+    var loop = {
+        get line(){
+            return lineTime;
+        },
+        getDrawTime: function(){}
+    };
+
+    var timer = null;
 
     var frameTime,//每一帧的间隔时间
         delayTime,//当前帧与上一帧的间隔时间
@@ -16,12 +21,12 @@ define(function(require, exports){
      * 初始化loop需要的数值
      * @function
      */
-    exports.init = function(){
+    loop.init = function(){
         delayTime = 0;
         frameTime = 1000 / options.fps;
     };
     //执行初始化（以后如需更改配置等，需要手动执行一次）
-    exports.init();
+    loop.init();
 
     /**
      * 主循环
@@ -29,16 +34,16 @@ define(function(require, exports){
      * @function
      * @param callback
      */
-    exports.start = function(callback){
+    loop.start = function(callback){
         //第一帧，初始化上一帧时间
         prevTime = new Date();
 
-        var loop = function(){
+        var loopFnc = function(){
             //记录当前时间
             thisTime = new Date();
             delayTime = thisTime - prevTime;
             //更新时间轴
-            line += delayTime;
+            lineTime += delayTime;
             //计算当前帧与上一帧的间隔与正常间隔的比例
             var dt = delayTime / frameTime;
             //执行循环任务
@@ -48,30 +53,21 @@ define(function(require, exports){
             //计算下一帧任务的开始时间
             var time = new Date();
             var interval = time - thisTime;
-            exports.getDrawTime(interval);
+            loop.getDrawTime(interval);
             if(interval > frameTime){
                 timer = setTimeout(function(){
-                    loop();
+                    loopFnc();
                 }, 0);
             }else{
                 timer = setTimeout(function(){
-                    loop();
+                    loopFnc();
                 }, frameTime - interval);
             }
         };
 
         //启动循环
-        loop();
+        loopFnc();
     };
 
-    exports.getDrawTime = function(){};
-
-    /**
-     * 获取引擎运行时间轴
-     * @returns {number}
-     */
-    exports.getLine = function(){
-        return line;
-    };
-
-});
+    return loop;
+})();

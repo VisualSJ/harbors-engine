@@ -1,3 +1,4 @@
+const path = require("path");
 
 module.exports = function(grunt) {
 
@@ -5,6 +6,18 @@ module.exports = function(grunt) {
     var style = transport.style.init(grunt);
     var text = transport.text.init(grunt);
     var script = transport.script.init(grunt);
+
+    var loader = require("./harbors/Entrance");
+    var concatList = [];
+    concatList.push('harbors/Loader.jsFrag');
+    loader.list.forEach(function(item){
+        item.forEach(function(file){
+            concatList.push(path.join("./harbors", file));
+        });
+    });
+    concatList.push('harbors/Ending.jsFrag');
+
+    console.log(concatList)
 
     grunt.initConfig({
 
@@ -23,19 +36,21 @@ module.exports = function(grunt) {
 
             }
         },
+
         concat: {
             options: {
                 separator: ';'
             },
             dist: {
-                src: ['harbors/Loader.jsFrag', 'dist/**/*.js', 'harbors/Ending.jsFrag'],
-                dest: 'dist/built.js'
+                src: concatList,
+                dest: 'harbors-debug.js'
             }
         },
+
         uglify: {
             my_target: {
                 files: {
-                    'harbors.min.js': ['dist/built.js']
+                    'harbors.min.js': ['harbors-debug.js']
                 }
             }
         },
@@ -48,9 +63,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('js', function(){
-        grunt.task.run('transport');
+//        grunt.task.run('transport');
         grunt.task.run('concat');
         grunt.task.run('uglify');
-        grunt.task.run('clean');
+//        grunt.task.run('clean');
     });
 };

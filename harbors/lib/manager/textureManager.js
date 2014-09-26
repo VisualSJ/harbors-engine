@@ -1,6 +1,6 @@
-define(function(require, exports, module){
+var textureManager = (function(){
 
-    const texture = require("../elem/texture");
+    var manager = {};
 
     /**
      * image管理对象
@@ -18,7 +18,7 @@ define(function(require, exports, module){
      * @param path
      * @returns {*}
      */
-    exports.getImageTexture = function(path){
+    manager.getImageTexture = function(path){
         if(imageManager[path]){
             return imageManager[path];
         }else{
@@ -31,14 +31,16 @@ define(function(require, exports, module){
      * @param path
      * @returns {*}
      */
-    exports.createImageTexture = function(path){
+    manager.createImageTexture = function(path){
         if(imageManager[path]){
             return imageManager[path];
         }else{
-            var tex = new texture(path);
+            var tex = new imageTexture(path);
             imageManager[path] = tex;
             return tex;
         }
     };
 
-});
+    return manager;
+
+})();

@@ -1,8 +1,4 @@
-define(function(require, exports, module){
-
-    const inherit = require("../tools/inherit");
-    const node = require("./node");
-    const childList = require("./base/childList");
+var block = (function(){
 
     /**
      * @class
@@ -19,7 +15,7 @@ define(function(require, exports, module){
         this.waitDrawing = false;
         this.children = new childList;
     };
-    inherit(block, node);
+    utils.inherit(block, node);
 
     var updateActive = function(node, bool){
         node.active = bool;
@@ -66,5 +62,5 @@ define(function(require, exports, module){
         this.update();
     };
 
-    module.exports = block;
-});
+    return block;
+})();

@@ -1,10 +1,4 @@
-define(function(require, exports, module){
-
-    const inherit = require("../tools/inherit");
-
-    const event = require("./base/event");
-    const style = require("./base/style");
-    const loop = require("../core/loop");
+var node = (function(){
 
     var unique = 0;
 
@@ -30,11 +24,11 @@ define(function(require, exports, module){
         this.uniqueNumber = unique++;
 
         this.parent = null;
-        this.style = new style(this);
+        this.style = new styleList(this);
         this.active = false;
         this.animate = false;
     };
-    inherit(node, event);
+    utils.inherit(node, event);
 
     /**
      * 设置style的方法
@@ -89,7 +83,6 @@ define(function(require, exports, module){
     /**
      * 设置node中的文字对象
      * @param str
-     * todo node应该根据文字自动撑大元素，居中排列应该在元素正中间，而不是以开头为原点
      */
     node.prototype.text = function(str){
         str = str.toString();
@@ -170,7 +163,7 @@ define(function(require, exports, module){
         var node = this;
         node.animate = true;
         //记录起始时间
-        var start = loop.getLine();
+        var start = loop.line;
         //添加运动任务
         var anim = function(){
 
@@ -178,7 +171,7 @@ define(function(require, exports, module){
             if(node.active && node.animate){
 
                 //间隔的时间
-                var time = loop.getLine() - start;
+                var time = loop.line - start;
                 //间隔的比例（运动进行的百分比）
                 var proportion = time / duration;
 
@@ -205,7 +198,7 @@ define(function(require, exports, module){
     };
 
     /*
-    文字支持
+     文字支持
      */
     node.prototype.__defineGetter__("innerText", function(){
         var text = this.style.storage.innerTextArray;
@@ -222,6 +215,5 @@ define(function(require, exports, module){
         this.style.storage.innerTextWidth = 0;
     });
 
-    module.exports = node;
-
-});
+    return node;
+})();

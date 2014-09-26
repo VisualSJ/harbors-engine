@@ -1,9 +1,6 @@
-define(function(require, exports, module){
-
-    const inherit = require("../tools/inherit");
-    const event = require("./base/event");
-
+var imageTexture = (function(){
     /**
+     * 纹理对象
      * @class
      * @extend event
      * @param {string} imagePath
@@ -36,7 +33,7 @@ define(function(require, exports, module){
             });
         });
     };
-    inherit(imageTexture, event);
+    utils.inherit(imageTexture, event);
 
     imageTexture.prototype.loaded = false;
     imageTexture.prototype.imagePath = "";
@@ -55,5 +52,5 @@ define(function(require, exports, module){
         return this;
     };
 
-    module.exports = imageTexture;
-});
+    return imageTexture;
+})();

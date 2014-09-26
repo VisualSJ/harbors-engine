@@ -1,7 +1,6 @@
-define(function(require, exports, module){
+var drawManager = (function(){
 
-    const canvas = require('./canvas');
-    canvas.init();
+    var manager = {};
 
     /**
      * 绘制背景颜色
@@ -11,7 +10,7 @@ define(function(require, exports, module){
      * @param ctx
      */
     var drawBGColor = function(x, y, style, ctx){
-        canvas.drawRect(style.storage.backgroundColor, x, y, style.width, style.height, ctx);
+        manager.drawer.drawRect(style.storage.backgroundColor, x, y, style.width, style.height, ctx);
     };
 
     /**
@@ -24,7 +23,7 @@ define(function(require, exports, module){
     var drawBGImage = function(x, y, style, ctx){
         var drawElem = style.storage.backgroundImage.canvas || style.storage.backgroundImage.image;
         if(style.width !=0 || style.height !=0)
-            canvas.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
+            manager.drawer.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
     };
 
     /**
@@ -62,7 +61,7 @@ define(function(require, exports, module){
 
         for(i = 0; i < len; i ++){
             txt = txtArr[i];
-            canvas.drawFont(txt, size, style.color, x, y + i * style.lineHeight + tmp, ctx);
+            manager.drawer.drawFont(txt, size, style.color, x, y + i * style.lineHeight + tmp, ctx);
         }
     };
 
@@ -72,7 +71,7 @@ define(function(require, exports, module){
      * @param ctx
      */
     var setFont = function(style, ctx){
-        canvas.setFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, ctx);
+        manager.drawer.setFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, ctx);
     };
 
     /**
@@ -186,24 +185,24 @@ define(function(require, exports, module){
      * @param node
      * @param ctx
      */
-    exports.parse = function(node, ctx){
+    manager.parse = function(node, ctx){
         var drawNum = 0;
         if(node.cache){//block类型的元素
             if(node.waitDrawing){//等待重新绘制
                 //清除画板
-                canvas.ctx(node.cache).clearRect(0, 0, node.style.width, node.style.height);
+                manager.drawer.ctx(node.cache).clearRect(0, 0, node.style.width, node.style.height);
 
                 //循环子元素
                 var children = node.children;
                 var length = children.length;
                 for(var i=0; i<length; i++){
-                    drawNum += exports.parse(children[i], canvas.ctx(node.cache));
+                    drawNum += manager.parse(children[i], manager.drawer.ctx(node.cache));
                 }
                 node.waitDrawing = false;
             }
             if(node.parent){
                 drawAll(node.style, ctx);
-                canvas.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
+                manager.drawer.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
             }
         }else{//node类型元素
             drawAll(node.style, ctx);
@@ -211,20 +210,6 @@ define(function(require, exports, module){
         return ++drawNum;
     };
 
-    /**
-     * 返回绘制的上下文对象
-     * @param canvas
-     * @returns {*|CanvasRenderingContext2D}
-     */
-    exports.ctx = function(canvas){
-        return canvas.ctx(canvas);
-    };
+    return manager;
 
-    /**
-     * 返回绘制封装
-     * @returns {*|exports}
-     */
-    exports.drawCTX = function(){
-        return canvas;
-    };
-});
+})();

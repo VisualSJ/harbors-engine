@@ -1,9 +1,11 @@
-define(function(require, exports, module){
-
-    const inherit = require("../../tools/inherit");
-
+var childList = (function(){
+    /**
+     * 子元素列表
+     * 拥有原生数组的一些方法
+     */
     var childList = function(){};
-    inherit(childList, Array);
+
+    childList.prototype.splice = Array.prototype.splice;
 
     /**
      * 在子元素列表中插入元素
@@ -38,6 +40,6 @@ define(function(require, exports, module){
         }
     };
 
-    module.exports = childList;
+    return childList;
+})();
 
-});

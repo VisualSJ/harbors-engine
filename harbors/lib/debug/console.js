@@ -1,13 +1,11 @@
-define(function(require, exports, module){
-
-    const node = require("../elem/node");
-    const block = require("../elem/block");
-    const options = require("../core/options");
-    const loop = require("../core/loop");
+(function(block, node, loop){
 
     var console, line1, line2, line3, infoElem,task, time, info, draw;
 
-    exports.init = function(harbors){
+    var init = function(harbors){
+        if(!options.debug){
+            return false;
+        }
         console = (new block).set({
             width: 200,
             height: 195,
@@ -26,7 +24,7 @@ define(function(require, exports, module){
             color: "#fff",
             left: 10,
             top: 25
-        }).text(harbors.option.system.os + "  " + harbors.option.system.name + "  " + (harbors.option.system.version).substr(0, 8) + "...");
+        }).text(options.system.os + "  " + options.system.name + "  " + (options.system.version).substr(0, 8) + "...");
 
         line3 = (new node).set({
             color: "#fff",
@@ -71,11 +69,11 @@ define(function(require, exports, module){
         console.append(draw);
         console.append(task);
 
-        harbors("#canvas").append(console);
+        h("#canvas").append(console);
 
         info = [];
 
-        harbors.log = function(str){
+        h.log = function(str){
             for(var i=1; i<arguments.length; i++){
                 switch(typeof arguments[i]){
                     case "string":
@@ -106,7 +104,7 @@ define(function(require, exports, module){
             time && time.text(num);
         };
         var cacheInfo = 0;
-        harbors._getDebugInfo = function(taskLength, drawLength){
+        h._getDebugInfo = function(taskLength, drawLength){
             if(cacheInfo++ < 30) return;
             cacheInfo = 0;
             task && task.text(taskLength);
@@ -115,5 +113,6 @@ define(function(require, exports, module){
 
     };
 
+    h.addInitTask(init);
 
-});
+})(block, node, loop);

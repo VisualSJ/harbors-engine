@@ -1,13 +1,7 @@
-define(function(require, exports, module){
-
+var event = (function(){
     /**
-     * TODO
-     * 检查元素是否在node树中，不存在则删除。
-     * 插入树的同时在添加回来
-     */
-    const ev = require("../../core/event");
-
-    /**
+     * 基础事件类
+     * 所有的node都继承自这个类
      * @class
      * @property {Function} on 绑定事件
      * @property {Function} off 解绑事件
@@ -29,7 +23,7 @@ define(function(require, exports, module){
                 this.touchDownEventList = [];
             }
             if(on){
-                ev.addTouchDown(this);
+                eventManager.addTouchDown(this);
                 this.touchDownEventList.push(event);
             }else{
                 for(var i=0; i<this.touchDownEventList.length; i++){
@@ -39,7 +33,7 @@ define(function(require, exports, module){
                     }
                 }
                 if(this.touchDownEventList.length === 0){
-                    ev.removeTouchDown(this);
+                    eventManager.removeTouchDown(this);
                 }
             }
         },
@@ -48,7 +42,7 @@ define(function(require, exports, module){
                 this.touchMoveEventList = [];
             }
             if(on){
-                ev.addTouchMove(this);
+                eventManager.addTouchMove(this);
                 this.touchMoveEventList.push(event);
             }else{
                 for(var i=0; i<this.touchMoveEventList.length; i++){
@@ -58,7 +52,7 @@ define(function(require, exports, module){
                     }
                 }
                 if(this.touchMoveEventList.length === 0){
-                    ev.removeTouchMove(this);
+                    eventManager.removeTouchMove(this);
                 }
             }
         },
@@ -67,7 +61,7 @@ define(function(require, exports, module){
                 this.touchUpEventList = [];
             }
             if(on){
-                ev.addTouchUp(this);
+                eventManager.addTouchUp(this);
                 this.touchUpEventList.push(event);
             }else{
                 for(var i=0; i<this.touchUpEventList.length; i++){
@@ -77,7 +71,7 @@ define(function(require, exports, module){
                     }
                 }
                 if(this.touchUpEventList.length === 0){
-                    ev.removeTouchUp(this);
+                    eventManager.removeTouchUp(this);
                 }
             }
         },
@@ -176,6 +170,5 @@ define(function(require, exports, module){
     };
     event.prototype.loadEventList = null;
 
-
-    module.exports = event;
-});
+    return event;
+})();

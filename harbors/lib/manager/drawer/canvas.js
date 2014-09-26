@@ -1,11 +1,11 @@
-define(function(require, exports, module){
+(function(){
 
-    const options = require("../core/options");
+    var canvas = function(){};
 
     /**
      * 执行canvas初始化
      */
-    exports.init = function(){
+    canvas.prototype.init = function(){
 
     };
 
@@ -14,7 +14,7 @@ define(function(require, exports, module){
      * @param canvas
      * @returns {CanvasRenderingContext2D}
      */
-    exports.ctx = function(canvas){
+    canvas.prototype.ctx = function(canvas){
         return canvas.getContext('2d');
     };
 
@@ -27,7 +27,7 @@ define(function(require, exports, module){
      * @param height
      * @param ctx
      */
-    exports.drawRect = function(color, left, top, width, height, ctx){
+    canvas.prototype.drawRect = function(color, left, top, width, height, ctx){
         ctx.fillStyle = color;
         ctx.fillRect(left, top, width, height);
     };
@@ -41,7 +41,7 @@ define(function(require, exports, module){
      * @param endY
      * @param ctx
      */
-    exports.drawLine = function(color, startX, startY, endX, endY, ctx){
+    canvas.prototype.drawLine = function(color, startX, startY, endX, endY, ctx){
 
     };
 
@@ -58,7 +58,7 @@ define(function(require, exports, module){
      * @param height
      * @param ctx
      */
-    exports.drawImage = function(image, sx, sy, swidth, sheight, x, y, width, height, ctx){
+    canvas.prototype.drawImage = function(image, sx, sy, swidth, sheight, x, y, width, height, ctx){
         ctx.drawImage(image, sx, sy, swidth, sheight, x, y, width, height);
     };
 
@@ -70,7 +70,7 @@ define(function(require, exports, module){
      * @param align
      * @param ctx
      */
-    exports.setFont = function(style, size, family, align, ctx){
+    canvas.prototype.setFont = function(style, size, family, align, ctx){
         // 设置字体
         ctx.font = style + " " + size + "px " + family;//"Bold 20px Arial"
         // 设置对齐方式
@@ -85,7 +85,7 @@ define(function(require, exports, module){
      * @param y
      * @param ctx
      */
-    exports.drawFont = function(string, size, color, x, y, ctx){
+    canvas.prototype.drawFont = function(string, size, color, x, y, ctx){
         // 设置填充颜色
         ctx.fillStyle = color;
         // 设置字体内容，以及在画布上的位置
@@ -93,4 +93,10 @@ define(function(require, exports, module){
         // 绘制空心字
         //ctx.strokeText("Hello!", 10, 100);
     };
-});
+
+
+
+    if(!drawManager.drawer){
+        drawManager.drawer = new canvas();
+    }
+})();
