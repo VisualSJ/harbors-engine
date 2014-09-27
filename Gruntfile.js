@@ -17,44 +17,33 @@ module.exports = function(grunt) {
     });
     concatList.push('harbors/Ending.jsFrag');
 
-    console.log(concatList)
-
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
-
-        transport: {
-            options:{
-                debug: false
-            },
-            handlebars: {
-                files: [{
-                    expand:true,
-                    src : ['harbors/**/*.js', '!harbors/sea.js', '!harbors/Loader.jsFrag', '!harbors/Ending.jsFrag'],
-                    dest: 'dist'
-                }]
-
-            }
-        },
 
         concat: {
             options: {
                 separator: ';'
             },
-            dist: {
+            core: {
                 src: concatList,
                 dest: 'harbors-debug.js'
             }
         },
 
         uglify: {
-            my_target: {
+            core: {
                 files: {
                     'harbors.min.js': ['harbors-debug.js']
                 }
+            },
+            define: {
+                files: {
+                    'harbors-cmd.js': ['./harbors/extension/cmd.js']
+                }
             }
         },
-        clean: ["dist/"]
+        clean: ["harbors-debug.js"]
     });
 
     grunt.loadNpmTasks('grunt-cmd-transport');
@@ -62,10 +51,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    grunt.registerTask('js', function(){
-//        grunt.task.run('transport');
+    grunt.registerTask('default', function(){
         grunt.task.run('concat');
         grunt.task.run('uglify');
-//        grunt.task.run('clean');
+        grunt.task.run('clean');
     });
 };

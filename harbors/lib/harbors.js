@@ -160,7 +160,7 @@ window.h = (function(){
         eventManager.init();
 
         customInit.forEach(function(item){
-            item();
+            item(callback);
         });
 
         typeof callback === "function" && callback();
