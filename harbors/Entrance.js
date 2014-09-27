@@ -19,22 +19,26 @@ loader.list = [
     [
         "lib/loop.js",
         "lib/baseNode/texture.js",
-        "lib/baseNode/node.js"
+        "lib/baseNode/node.js",
+        "lib/baseNode/audio.js"
     ],
     [
         "lib/baseNode/block.js",
         "lib/manager/viewManager.js",
         "lib/manager/drawManager.js",
-        "lib/manager/elemManager.js",
         "lib/manager/eventManager.js",
-        "lib/manager/textureManager.js"
+        "lib/manager/textureManager.js",
+        "lib/manager/audioManager.js"
     ],
     [
+        "lib/manager/elemManager.js",
         "lib/manager/adaptation/chrome.js",
         "lib/manager/drawer/canvas.js"
     ],
     [
-        "lib/harbors.js",
+        "lib/harbors.js"
+    ],
+    [
         "lib/debug/console.js"
     ]
 ];

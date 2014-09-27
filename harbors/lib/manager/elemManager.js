@@ -1,11 +1,25 @@
 var elemManager = (function(){
 
+    //定义显示元素元素列表
+    var defineNode = {
+        node: {
+            ctor: node
+        },
+        block: {
+            ctor: block
+        }
+    };
 
-    //定义元素元素列表
-    var define = {
-        node: node,
-        block: block,
-        texture: imageTexture
+    //定义非现实元素列表
+    var defineElem = {
+        texture: {
+            create: textureManager.createImageTexture,
+            ctor: imageTexture
+        },
+        audio: {
+            create: audioManager.createAudio,
+            ctor: audio
+        }
     };
 
     var manager = {};
@@ -19,16 +33,21 @@ var elemManager = (function(){
     manager.idToElem = {};
 
     /**
-     * 创建一个元素
+     * 创建一个显示元素
      * @param {string} name
      * @returns {*}
      */
-    manager.create = function(name){
-        var elem = define[name];
+    manager.createNode = function(name){
+        var elem = defineNode[name];
 
         if(elem){
             var id = "";
-            elem = new elem();
+
+            if(elem.create)
+                elem = elem.create();
+            else
+                elem = new elem.ctor();
+
             elem.__defineGetter__("id", function(){
                 return id;
             });
@@ -49,7 +68,43 @@ var elemManager = (function(){
             return elem;
         }
         return null;
-    }
+    };
+
+    /**
+     * 创建一个非显示元素
+     * @param name
+     * @returns {*}
+     */
+    manager.createElem = function(name){
+        var elem = defineElem[name];
+
+        if(elem){
+
+            if(elem.create)
+                elem = elem.create();
+            else
+                elem = new elem.ctor();
+
+            return elem;
+        }
+        return null;
+    };
+
+    /**
+     * 自定义一个可显示的节点
+     */
+    manager.defineNode = function(name, ctor){
+        defineNode[name] = ctor;
+    };
+
+    /**
+     * 自定义一个不可可显示的元素
+     * @param name 名字
+     * @param create
+     */
+    manager.defineElem = function(name, create){
+        defineElem[name] = create;
+    };
 
     return manager;
 })();

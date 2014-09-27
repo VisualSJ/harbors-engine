@@ -19,26 +19,21 @@ window.h = (function(){
      * @return {*}
      */
     var harbors = function(selector){
+        if(!selector)
+            return harbors.canvas;
 
         var str = selector.substr(0, 1);
         var name = selector.substr(1);
 
-        switch(str){
-            case "#"://id选择器
-                return elemManager.idToElem[name];
-                break;
+        if(baseSelect[str])
+            return baseSelect[str](name);
 
-            case "."://class选择器
-                break;
-
-            case "@"://创建元素
-                return elemManager.create(name);
-                break;
-
-            case "$": //name选择器
-                break;
-        }
         return null;
+    };
+    var baseSelect = {
+        "#": function(name){  return elemManager.idToElem[name]; },
+        "@": function(name){ return elemManager.createNode(name); },
+        "!": function(name){ return elemManager.createElem(name); }
     };
 
     /**
