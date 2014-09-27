@@ -43,6 +43,10 @@ loader.list = [
     ]
 ];
 
+loader.extension = [
+    "extension/cmd.js"
+];
+
 loader.baseDir = "../harbors/";
 
 loader.getFile = function(modules, callback){
@@ -74,6 +78,7 @@ loader.begin = function(){
 };
 
 try{
+    loader.list.push(loader.extension);
     loader.begin();
 }catch(e){
     module.exports = loader;
