@@ -24,7 +24,7 @@
             color: "#fff",
             left: 10,
             top: 25
-        }).text(options.system.os + "  " + options.system.name + "  " + (options.system.version).substr(0, 8) + "...");
+        }).text(options.system.os + "  " + options.system.browser + "  " + (options.system.version).substr(0, 8) + "...");
 
         line3 = (new node).set({
             color: "#fff",
