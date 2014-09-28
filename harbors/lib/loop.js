@@ -23,7 +23,7 @@ var loop =(function(){
      */
     loop.init = function(){
         delayTime = 0;
-        frameTime = 1000 / options.fps;
+        frameTime = 1000 / harbors.options.fps;
     };
     //执行初始化（以后如需更改配置等，需要手动执行一次）
     loop.init();

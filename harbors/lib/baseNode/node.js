@@ -1,8 +1,9 @@
-var node = (function(){
+harbors.BASENODE.node = (function(){
 
     var unique = 0;
 
     /**
+     * NODE节点，最基础的显示元素
      * @class
      * @extend event
      *
@@ -24,11 +25,12 @@ var node = (function(){
         this.uniqueNumber = unique++;
 
         this.parent = null;
-        this.style = new styleList(this);
+        this.style = new harbors.BASECLASS.styleList(this);
         this.active = false;
         this.animate = false;
+        this.__managerId__ = "";
     };
-    utils.inherit(node, event);
+    harbors.utils.inherit(node, harbors.BASECLASS.event);
 
     /**
      * 设置style的方法
@@ -53,6 +55,10 @@ var node = (function(){
         node.style[key] = value;
     };
 
+    /**
+     * 更新绘制状态
+     * 在更改节点的样式后需要调用的函数
+     */
     node.prototype.update = function(){
         //更新需要重新绘制的block状态
         var prevBlock = this.parent;
@@ -62,10 +68,21 @@ var node = (function(){
         }
     };
 
+    /**
+     * 获取一个style样式
+     * @param a
+     * @returns {*}
+     */
     node.prototype.get = function(a){
         return this.style[a];
     };
 
+    /**
+     * 设置一个style样式
+     * @param a 样式名字
+     * @param b 样式的值
+     * @returns {harbors.BASENODE.node}
+     */
     node.prototype.set = function(a, b){
         switch(arguments.length){
             case 2:
@@ -93,6 +110,7 @@ var node = (function(){
     };
 
     /**
+     * 帧动画
      * @param frames 帧列表
      * @param loop 循环次数
      */
@@ -139,7 +157,7 @@ var node = (function(){
     };
 
     /**
-     * 动画支持
+     * 基础动画支持
      * @param {Object} style 更改的样式参数
      * @param {Number} duration 持续时间
      * @param {Function} [callback=] 执行完毕的回调
@@ -197,8 +215,9 @@ var node = (function(){
         return this;
     };
 
-    /*
-     文字支持
+
+    /**
+     * 设置innerText，转换为style.storage.innerTextArray数组
      */
     node.prototype.__defineGetter__("innerText", function(){
         var text = this.style.storage.innerTextArray;
@@ -213,6 +232,33 @@ var node = (function(){
         else
             this.style.storage.innerTextArray = undefined;
         this.style.storage.innerTextWidth = 0;
+    });
+
+    ///////////////////////////////
+    //node节点的自我管理对象//
+    ///////////////////////////////
+    var manager = {
+        idToElem: {},
+        create: function(){
+            return new node();
+        }
+    };
+    node.manager  = manager;
+
+    node.prototype.__defineGetter__("id", function(){return this.__managerId__; });
+    node.prototype.__defineSetter__("id", function(a){
+        a = a.toString();
+
+        //原id存在，则删除管理对象内的元素
+        if(this.__managerId__ != "" && manager.idToElem[a]){
+            delete manager.idToElem[a];
+        }
+
+        //传入id存在，则在对象内新增id对应元素
+        if(a !== ""){
+            manager.idToElem[a] = this;
+        }
+        this.__managerId__ = a;
     });
 
     return node;

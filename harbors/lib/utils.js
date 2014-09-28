@@ -5,9 +5,7 @@
  * @property pathJoin 拼接两个路径
  *
  */
-var utils = {};
-
-utils.inherit = function(ctor, superCtor){
+harbors.utils.inherit = function(ctor, superCtor){
     ctor.super_ = superCtor;
     ctor.prototype = Object.create(superCtor.prototype, {
         constructor: {
@@ -19,7 +17,7 @@ utils.inherit = function(ctor, superCtor){
     });
 };
 
-utils.pathJoin = function(a, b){
+harbors.utils.pathJoin = function(a, b){
     var path = a + b;
     path = path.replace(/([^\/]+\/[^\/]+\/[^\/]+)\.\.\/\.\.\//g, "");
     path = path.replace(/([^\/]+\/[^\/]+)\.\.\//g, "");

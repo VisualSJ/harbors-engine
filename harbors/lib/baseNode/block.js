@@ -1,6 +1,10 @@
-var block = (function(){
+harbors.BASENODE.block = (function(){
+
+    var node = harbors.BASENODE.node;
+    var childList = harbors.BASECLASS.childList;
 
     /**
+     * 一个块元素
      * @class
      * @extend node
      *
@@ -15,8 +19,14 @@ var block = (function(){
         this.waitDrawing = false;
         this.children = new childList;
     };
-    utils.inherit(block, node);
+    harbors.utils.inherit(block, node);
 
+    /**
+     * 更新元素的活动状态
+     * 在执行插入删除子元素后会调用
+     * @param node
+     * @param bool
+     */
     var updateActive = function(node, bool){
         node.active = bool;
         var children = node.children;
@@ -61,6 +71,33 @@ var block = (function(){
         this.waitDrawing = true;
         this.update();
     };
+
+    ///////////////////////////////
+    //block节点的自我管理对象//
+    ///////////////////////////////
+    var manager = {
+        idToElem: {},
+        create: function(){
+            return new block();
+        }
+    };
+    block.manager  = manager;
+
+    block.prototype.__defineGetter__("id", function(){return this.__managerId__; });
+    block.prototype.__defineSetter__("id", function(a){
+        a = a.toString();
+
+        //原id存在，则删除管理对象内的元素
+        if(this.__managerId__ != "" && manager.idToElem[a]){
+            delete manager.idToElem[a];
+        }
+
+        //传入id存在，则在对象内新增id对应元素
+        if(a !== ""){
+            manager.idToElem[a] = this;
+        }
+        this.__managerId__ = a;
+    });
 
     return block;
 })();

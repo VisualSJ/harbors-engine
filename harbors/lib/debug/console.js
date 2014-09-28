@@ -3,7 +3,7 @@
     var console, line1, line2, line3, infoElem,task, time, info, draw;
 
     var init = function(harbors){
-        if(!options.debug){
+        if(!h.options.debug){
             return false;
         }
         console = (new block).set({
@@ -24,7 +24,7 @@
             color: "#fff",
             left: 10,
             top: 25
-        }).text(options.system.os + "  " + options.system.browser + "  " + (options.system.version).substr(0, 8) + "...");
+        }).text(h.options.system.os + "  " + h.options.system.browser + "  " + (h.options.system.version).substr(0, 8) + "...");
 
         line3 = (new node).set({
             color: "#fff",
@@ -115,4 +115,4 @@
 
     h.addInitTask(init);
 
-})(block, node, loop);
+})(harbors.BASENODE.block, harbors.BASENODE.node, loop);

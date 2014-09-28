@@ -1,4 +1,5 @@
-var event = (function(){
+harbors.BASECLASS.event = (function(){
+
     /**
      * 基础事件类
      * 所有的node都继承自这个类
@@ -23,7 +24,7 @@ var event = (function(){
                 this.touchDownEventList = [];
             }
             if(on){
-                eventManager.addTouchDown(this);
+                harbors.eventManager.addTouchDown(this);
                 this.touchDownEventList.push(event);
             }else{
                 for(var i=0; i<this.touchDownEventList.length; i++){
@@ -33,7 +34,7 @@ var event = (function(){
                     }
                 }
                 if(this.touchDownEventList.length === 0){
-                    eventManager.removeTouchDown(this);
+                    harbors.eventManager.removeTouchDown(this);
                 }
             }
         },
@@ -42,7 +43,7 @@ var event = (function(){
                 this.touchMoveEventList = [];
             }
             if(on){
-                eventManager.addTouchMove(this);
+                harbors.eventManager.addTouchMove(this);
                 this.touchMoveEventList.push(event);
             }else{
                 for(var i=0; i<this.touchMoveEventList.length; i++){
@@ -52,7 +53,7 @@ var event = (function(){
                     }
                 }
                 if(this.touchMoveEventList.length === 0){
-                    eventManager.removeTouchMove(this);
+                    harbors.eventManager.removeTouchMove(this);
                 }
             }
         },
@@ -61,7 +62,7 @@ var event = (function(){
                 this.touchUpEventList = [];
             }
             if(on){
-                eventManager.addTouchUp(this);
+                harbors.eventManager.addTouchUp(this);
                 this.touchUpEventList.push(event);
             }else{
                 for(var i=0; i<this.touchUpEventList.length; i++){
@@ -71,7 +72,7 @@ var event = (function(){
                     }
                 }
                 if(this.touchUpEventList.length === 0){
-                    eventManager.removeTouchUp(this);
+                    harbors.eventManager.removeTouchUp(this);
                 }
             }
         },

@@ -1,4 +1,4 @@
-var drawManager = (function(){
+harbors.drawManager = (function(){
 
     var manager = {};
 

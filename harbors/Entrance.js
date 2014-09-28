@@ -7,8 +7,10 @@ var loader = {};
 
 loader.list = [
     [
-        "lib/utils.js",
         "lib/static.js"
+    ],
+    [
+        "lib/utils.js"
     ],
     [
         "lib/options.js",
@@ -26,9 +28,7 @@ loader.list = [
         "lib/baseNode/block.js",
         "lib/manager/viewManager.js",
         "lib/manager/drawManager.js",
-        "lib/manager/eventManager.js",
-        "lib/manager/textureManager.js",
-        "lib/manager/audioManager.js"
+        "lib/manager/eventManager.js"
     ],
     [
         "lib/manager/elemManager.js",

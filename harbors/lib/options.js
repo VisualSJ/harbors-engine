@@ -1,4 +1,4 @@
-var options = (function(){
+harbors.options = (function(){
 
     /**
      * 所有配置的常量
@@ -42,7 +42,7 @@ var options = (function(){
     ////////////////////
     var tmp = "";
     if (ua.indexOf("msie") > -1 || ua.indexOf("trident") > -1){
-        sys.browser = browser.ie;
+        sys.browser = harbors.BROWSER.ie;
         tmp = ua.match(/msie ([\d.]+)/);
         if(tmp){
             sys.version = tmp[1];
@@ -51,7 +51,7 @@ var options = (function(){
             sys.version = tmp ? tmp[1] : "";
         }
     }else if (ua.indexOf("firefox") > -1){
-        sys.browser = browser.firefox;
+        sys.browser = harbors.BROWSER.firefox;
         tmp = ua.match(/firefox\/([\d.]+)/);
         if(tmp){
             sys.version = tmp[1];
@@ -60,35 +60,35 @@ var options = (function(){
             sys.version = tmp ? tmp[1] : "";
         }
     }else if(ua.indexOf("micromessenger") > -1){
-        sys.browser = browser.micromessage;
+        sys.browser = harbors.BROWSER.micromessage;
         tmp = ua.match(/micromessenger\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if(ua.indexOf("mqqbrowser") > -1){
-        sys.browser = browser.qqbrowser;
+        sys.browser = harbors.BROWSER.qqbrowser;
         tmp = ua.match(/mqqbrowser\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if(ua.indexOf("baidubrowser") > -1){
-        sys.browser = browser.baidu;
+        sys.browser = harbors.BROWSER.baidu;
         tmp = ua.match(/baidubrowser\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if(ua.indexOf("ucbrowser") > -1){
-        sys.browser = browser.uc;
+        sys.browser = harbors.BROWSER.uc;
         tmp = ua.match(/ucbrowser\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if(ua.indexOf("liebaofast") > -1){
-        sys.browser = browser.liebao;
+        sys.browser = harbors.BROWSER.liebao;
         tmp = ua.match(/liebaofast\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if (ua.indexOf("chrome") > -1){
-        sys.browser = browser.chrome;
+        sys.browser = harbors.BROWSER.chrome;
         tmp = ua.match(/chrome\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if (ua.indexOf("oupeng") > -1) {
-        sys.browser = browser.opera;
+        sys.browser = harbors.BROWSER.opera;
         tmp = ua.match(/oupeng\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }else if (ua.indexOf("safari") > -1) {
-        sys.browser = browser.safari;
+        sys.browser = harbors.BROWSER.safari;
         tmp = ua.match(/safari\/([\d.]+)/);
         sys.version = tmp ? tmp[1] : "";
     }
@@ -109,17 +109,17 @@ var options = (function(){
     //操作系统判断//
     //////////////////
     if(ua.match(/(ipad|iphone|ipod)/)){
-        sys.os = system.IOS;
+        sys.os = harbors.SYSTEM.IOS;
     }else if(ua.indexOf('android') > -1 || uf.indexOf('android') > -1){
-        sys.os = system.ANDROID;
+        sys.os = harbors.SYSTEM.ANDROID;
     }else if(up.indexOf('win') > -1){
-        sys.os = system.WINDOWS;
+        sys.os = harbors.SYSTEM.WINDOWS;
     }else if(up.indexOf('mac') > -1){
-        sys.os = system.MAC;
+        sys.os = harbors.SYSTEM.MAC;
     }else if(up.indexOf('x11') > -1){
-        sys.os = system.UNIX;
+        sys.os = harbors.SYSTEM.UNIX;
     }else if(up.indexOf('linux')){
-        sys.os = system.LINUX;
+        sys.os = harbors.SYSTEM.LINUX;
     }
 
     /**

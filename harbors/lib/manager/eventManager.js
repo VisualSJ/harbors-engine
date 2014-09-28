@@ -1,4 +1,4 @@
-var eventManager = (function(){
+harbors.eventManager = (function(){
 
     var manager = {};
 
@@ -13,8 +13,8 @@ var eventManager = (function(){
 
     var event = function(p, type){
         this.type = type || "unknown";
-        this.x = (p.x - options.system.margin.left) / options.system.scale.x;
-        this.y = (p.y - options.system.margin.top) / options.system.scale.y;
+        this.x = (p.x - harbors.options.system.margin.left) / harbors.options.system.scale.x;
+        this.y = (p.y - harbors.options.system.margin.top) / harbors.options.system.scale.y;
     };
 
     var findNode = function(e, array, callback){
@@ -44,7 +44,7 @@ var eventManager = (function(){
      * @param e
      */
     var mouseDown = function(e){
-        var ev = new event(options.getter.mouseEvent(e), "touchDown");
+        var ev = new event(harbors.options.getter.mouseEvent(e), "touchDown");
         findNode(ev, touchDownList, function(result){
             for(var i=0; i<result.length; i++){
                 if(!result[i].touchDown(null, ev)){
@@ -59,7 +59,7 @@ var eventManager = (function(){
      * @param e
      */
     var mouseMove = function(e){
-        var ev = new event(options.getter.mouseEvent(e), "touchMove");
+        var ev = new event(harbors.options.getter.mouseEvent(e), "touchMove");
         findNode(ev, touchMoveList, function(result){
             for(var i=0; i<result.length; i++){
                 if(!result[i].touchMove(null, ev)){
@@ -81,7 +81,7 @@ var eventManager = (function(){
      * @param e
      */
     var mouseUp =  function(e){
-        var ev = new event(options.getter.mouseEvent(e), "touchUp");
+        var ev = new event(harbors.options.getter.mouseEvent(e), "touchUp");
         findNode(ev, touchUpList, function(result){
             for(var i=0; i<result.length; i++){
                 if(!result[i].touchUp(null, ev)){
@@ -92,15 +92,15 @@ var eventManager = (function(){
     };
 
     manager.init = function(){
-        canvas = document.getElementById(options.id);
-        if(options.system.isMobile){
-            canvas.addEventListener(options.getter.touchDown, mouseDown);
-            canvas.addEventListener(options.getter.touchMove, mouseMove);
-            canvas.addEventListener(options.getter.touchUp, mouseUp);
+        canvas = document.getElementById(harbors.options.id);
+        if(harbors.options.system.isMobile){
+            canvas.addEventListener(harbors.options.getter.touchDown, mouseDown);
+            canvas.addEventListener(harbors.options.getter.touchMove, mouseMove);
+            canvas.addEventListener(harbors.options.getter.touchUp, mouseUp);
         }else{
-            canvas.addEventListener(options.getter.mouseDown, mouseDown);
-            canvas.addEventListener(options.getter.mouseMove, mouseMove);
-            canvas.addEventListener(options.getter.mouseUp, mouseUp);
+            canvas.addEventListener(harbors.options.getter.mouseDown, mouseDown);
+            canvas.addEventListener(harbors.options.getter.mouseMove, mouseMove);
+            canvas.addEventListener(harbors.options.getter.mouseUp, mouseUp);
         }
     };
 

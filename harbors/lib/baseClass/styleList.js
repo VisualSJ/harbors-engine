@@ -1,4 +1,4 @@
-var styleList = (function(){
+harbors.BASECLASS.styleList = (function(){
     /**
      * node元素中自带的style构造方法
      * @param node
@@ -195,7 +195,7 @@ var styleList = (function(){
         get backgroundImage(){return this.storage.backgroundImage;},
         set backgroundImage(a){
             if(typeof a === 'string'){
-                a = textureManager.createImageTexture(a);
+                a = harbors.BASENODE.texture.manager.create(a);
             }
 
             a.nodeList.push(this.node);

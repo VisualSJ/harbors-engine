@@ -1,5 +1,9 @@
 window.h = (function(){
 
+    var viewManager = harbors.viewManager;
+    var drawManager = harbors.drawManager;
+    var eventManager = harbors.eventManager;
+
     var gameCanvas;
     //延迟运行的数组
     var task = [];
@@ -18,9 +22,9 @@ window.h = (function(){
      *
      * @return {*}
      */
-    var harbors = function(selector){
+    var define = function(selector){
         if(!selector)
-            return harbors.canvas;
+            return define.canvas;
 
         var str = selector.substr(0, 1);
         var name = selector.substr(1);
@@ -31,22 +35,26 @@ window.h = (function(){
         return null;
     };
     var baseSelect = {
-        "#": function(name){  return elemManager.idToElem[name]; },
-        "@": function(name){ return elemManager.createNode(name); },
-        "!": function(name){ return elemManager.createElem(name); }
+        "#": function(name){  return harbors.elemManager.getNodeWithId(name); },
+        "@": function(name){ return harbors.elemManager.createNode(name); }
     };
+
+    //复制对象
+    for(var p in harbors){
+        define[p] = harbors[p];
+    }
 
     /**
      * 打印log信息到页面上
      */
-    harbors.log = function(){};
+    define.log = function(){};
 
     /**
      * 延迟运行函数，传入单位为毫秒
      * @param {Function} callback
      * @param {Number} delayTime
      */
-    harbors.delay = function(callback, delayTime){
+    define.delay = function(callback, delayTime){
         var delayItem = {
             time: loop.line + delayTime,
             callback: callback
@@ -66,13 +74,13 @@ window.h = (function(){
      * @param {Function} callback
      * @param {Number} delayTime
      */
-    harbors.interval = function(callback, delayTime){
+    define.interval = function(callback, delayTime){
         var fn = function(){
             callback();
-            harbors.interval(callback, delayTime);
+            define.interval(callback, delayTime);
         };
         fn.ctor = callback;
-        harbors.delay(fn, delayTime);
+        define.delay(fn, delayTime);
     };
 
     /**
@@ -80,7 +88,7 @@ window.h = (function(){
      * 將他從隊列中刪除
      * @param {Function} callback
      */
-    harbors.clearDelay = function(callback){
+    define.clearDelay = function(callback){
         for(var i=0; i<task.length; i++){
             if((task[i].callback.ctor || task[i].callback) === callback){
                 task.splice(i, 1);
@@ -93,40 +101,38 @@ window.h = (function(){
      * 重置设置选项等
      * @param opt
      */
-    harbors.setOption = function(opt){
-        opt.id && ( options.id = opt.id );
-        opt.debug && ( options.debug = opt.debug );
+    define.setOption = function(opt){
+        opt.id && ( harbors.options.id = opt.id );
+        opt.debug && ( harbors.options.debug = opt.debug );
     };
-
-    harbors.option = options;
 
     /**
      * 自適應屏幕
      * @param {Number} mode
      */
-    harbors.adaptive = function(mode){
+    define.adaptive = function(mode){
         if(mode != null)
-            options.adaptive = mode;
+            harbors.options.adaptive = mode;
         var style = {
             padding: 0,
             margin: 0,
             overflow: "hidden",
-            height: options.system.visibleSize.height + "px",
-            width: options.system.visibleSize.width + "px"
+            height: harbors.options.system.visibleSize.height + "px",
+            width: harbors.options.system.visibleSize.width + "px"
         };
         for(var p in style){
             document.body.style[p] = style[p];
         }
 
-        if(options.adaptive === 1) {
+        if(harbors.options.adaptive === 1) {
             viewManager.full(gameCanvas);
-        }else if(options.adaptive === 2){
+        }else if(harbors.options.adaptive === 2){
             viewManager.width(gameCanvas);
-        }else if(options.adaptive === 3){
+        }else if(harbors.options.adaptive === 3){
             viewManager.height(gameCanvas);
-        }else if(options.adaptive === 4){
+        }else if(harbors.options.adaptive === 4){
             viewManager.min(gameCanvas);
-        }else if(options.adaptive === 5){
+        }else if(harbors.options.adaptive === 5){
             viewManager.max(gameCanvas);
         }
     };
@@ -134,18 +140,18 @@ window.h = (function(){
     /**
      * 初始化引擎
      */
-    harbors.init = function(callback){
+    define.init = function(callback){
         //定义h.canvas画板对象
-        gameCanvas = document.getElementById(options.id);
-        harbors.canvas = harbors("@block");
-        harbors.canvas.style.width = gameCanvas.width;
-        harbors.canvas.style.height = gameCanvas.height;
-        harbors.canvas.cache = gameCanvas;
-        harbors.canvas.id = "canvas";
-        harbors.canvas.active = true;
+        gameCanvas = document.getElementById(harbors.options.id);
+        define.canvas = define("@block");
+        define.canvas.style.width = gameCanvas.width;
+        define.canvas.style.height = gameCanvas.height;
+        define.canvas.cache = gameCanvas;
+        define.canvas.id = "canvas";
+        define.canvas.active = true;
 
         //初始化配置
-        options.initOption();
+        harbors.options.initOption();
 
         //开始主循环
         loop.start(function(dt){
@@ -153,8 +159,8 @@ window.h = (function(){
             while(task[0] && task[0].time < loop.line){
                 task.shift().callback();
             }
-            var drawNum = drawManager.parse(harbors.canvas, drawManager.drawer.ctx(gameCanvas));
-            harbors._getDebugInfo(task.length, drawNum);
+            var drawNum = drawManager.parse(define.canvas, drawManager.drawer.ctx(gameCanvas));
+            define._getDebugInfo(task.length, drawNum);
         });
 
         eventManager.init();
@@ -166,7 +172,7 @@ window.h = (function(){
         typeof callback === "function" && callback();
     };
 
-    harbors.addInitTask = function(func){
+    define.addInitTask = function(func){
         if(typeof func === 'function')
             customInit.push(func);
     };
@@ -176,7 +182,7 @@ window.h = (function(){
     ////////////////////
 
     //传递每次循环的具体信息的hack接口
-    harbors._getDebugInfo = function(){};
+    define._getDebugInfo = function(){};
 
-    return harbors;
+    return define;
 })();

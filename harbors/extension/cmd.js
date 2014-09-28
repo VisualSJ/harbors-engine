@@ -3,7 +3,6 @@
     w.__defineModuleName = null;
 
     var module = {};
-    w.module = module;
 
     var loadList = [];
     var loadNum = 0;

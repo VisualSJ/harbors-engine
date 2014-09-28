@@ -1,4 +1,4 @@
-var imageTexture = (function(){
+harbors.BASENODE.texture = (function(){
     /**
      * 纹理对象
      * @class
@@ -14,7 +14,7 @@ var imageTexture = (function(){
      * @property {function} onLoad 加载完成后执行的回调（更新所有包含了这个texture的node）
      *
      */
-    var imageTexture = function(imagePath){
+    var texture = function(imagePath){
         if(imagePath)
             this.setImage(imagePath);
 
@@ -33,24 +33,41 @@ var imageTexture = (function(){
             });
         });
     };
-    utils.inherit(imageTexture, event);
+    harbors.utils.inherit(texture, harbors.BASECLASS.event);
 
-    imageTexture.prototype.loaded = false;
-    imageTexture.prototype.imagePath = "";
-    imageTexture.prototype.image = null;
-    imageTexture.prototype.width = 0;
-    imageTexture.prototype.height = 0;
+    texture.prototype.loaded = false;
+    texture.prototype.imagePath = "";
+    texture.prototype.image = null;
+    texture.prototype.width = 0;
+    texture.prototype.height = 0;
 
-    imageTexture.prototype.setImage = function(imagePath){
-        this.imagePath = imagePath;
+    texture.prototype.setImage = function(path){
+        this.path = path;
         this.image = document.createElement("img");
         var self = this;
         this.image.addEventListener("load", function(){
             self.load();
         });
-        this.image.src = imagePath;
+        this.image.src = path;
         return this;
     };
 
-    return imageTexture;
+    ///////////////////////////////
+    //node节点的自我管理对象//
+    ///////////////////////////////
+    var manager = {
+        pathToElem: {},
+        create: function(path){
+            if(manager.pathToElem[path])
+                return manager.pathToElem[path];
+
+            var node = new texture(path);
+            manager.pathToElem[path] = node;
+            return node;
+        }
+    };
+
+    texture.manager  = manager;
+
+    return texture;
 })();

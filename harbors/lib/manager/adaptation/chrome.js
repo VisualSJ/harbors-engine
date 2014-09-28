@@ -78,7 +78,7 @@
         return ev;
     };
 
-    if(!options.getter){
-        options.getter = new chrome();
+    if(!harbors.options.getter){
+        harbors.options.getter = new chrome();
     }
 })();
