@@ -148,6 +148,10 @@ harbors.options = (function(){
      */
     sys.margin = {};
 
+    option.setCanvas = function(HTMLELEMENT){
+        canvas = HTMLELEMENT;
+    };
+
     option.initOption = function(scx, scy){
         sys.canvasSize.width = canvas.width;
         sys.canvasSize.height = canvas.height;

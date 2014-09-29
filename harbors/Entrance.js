@@ -78,8 +78,8 @@ loader.begin = function(){
 };
 
 try{
-    loader.list.push(loader.extension);
     loader.begin();
+    loader.list.push(loader.extension);
 }catch(e){
     module.exports = loader;
 }

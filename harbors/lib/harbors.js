@@ -27,22 +27,22 @@ window.h = (function(){
             return define.canvas;
 
         var str = selector.substr(0, 1);
-        var name = selector.substr(1);
+        arguments[0] = selector.substr(1);
 
         if(baseSelect[str])
-            return baseSelect[str](name);
+            return baseSelect[str].apply(this, arguments);
 
         return null;
     };
     var baseSelect = {
-        "#": function(name){  return harbors.elemManager.getNodeWithId(name); },
-        "@": function(name){ return harbors.elemManager.createNode(name); }
+        "#": function(){  return harbors.elemManager.getNodeWithId.apply(this, arguments); },
+        "@": function(){ return harbors.elemManager.createNode.apply(this, arguments); }
     };
 
     //复制对象
-    for(var p in harbors){
-        define[p] = harbors[p];
-    }
+    define.engine = harbors;
+    define.utils = harbors.utils;
+    define.options = harbors.options;
 
     /**
      * 打印log信息到页面上
@@ -151,6 +151,7 @@ window.h = (function(){
         define.canvas.active = true;
 
         //初始化配置
+        harbors.options.setCanvas(gameCanvas);
         harbors.options.initOption();
 
         //开始主循环

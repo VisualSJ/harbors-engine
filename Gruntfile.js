@@ -3,9 +3,6 @@ const path = require("path");
 module.exports = function(grunt) {
 
     var transport = require('grunt-cmd-transport');
-    var style = transport.style.init(grunt);
-    var text = transport.text.init(grunt);
-    var script = transport.script.init(grunt);
 
     var loader = require("./harbors/Entrance");
     var concatList = [];
@@ -46,7 +43,6 @@ module.exports = function(grunt) {
         clean: ["harbors-debug.js"]
     });
 
-    grunt.loadNpmTasks('grunt-cmd-transport');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
