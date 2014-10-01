@@ -65,12 +65,15 @@ var HSStyleListClass = (function(){
 
 
         get left(){
-            if(this.storage.align === "center"){
-                return (this.storage.left || 0)  - this.storage.innerTextWidth/ 2;
-            }else if(this.storage.align === "right"){
-                return this.storage.left - this.storage.innerTextWidth;
+            var storage = this.storage;
+            if(storage.innerTextArray){
+                if(storage.align === "center"){
+                    return (storage.left || 0)  - storage.innerTextWidth/ 2;
+                }else if(storage.align === "right"){
+                    return storage.left - storage.innerTextWidth;
+                }
             }
-            return this.storage.left || 0;
+            return storage.left || 0;
         },
         set left(a){
             this.storage.left = a;
@@ -102,19 +105,21 @@ var HSStyleListClass = (function(){
         },
 
         get scale(){
-            if(this.storage.scaleX === this.storage.scaleY){
-                return this.storage.scaleX || 1;
+            var storage = this.storage;
+            if(storage.scaleX === storage.scaleY){
+                return storage.scaleX || 1;
             }else{
-                return this.storage.scaleX || 1 + " " + this.storage.scaleY || 1;
+                return storage.scaleX || 1 + " " + storage.scaleY || 1;
             }
         },
         set scale(a){
+            var storage = this.storage;
             var arg = a.toString().split(" ");
             if(arg.length === 1){
-                this.storage.scaleX = this.storage.scaleY = arg[0];
+                storage.scaleX = storage.scaleY = arg[0];
             }else{
-                this.storage.scaleX  = arg[0];
-                this.storage.scaleY  = arg[1];
+                storage.scaleX  = arg[0];
+                storage.scaleY  = arg[1];
             }
         },
 
@@ -133,42 +138,46 @@ var HSStyleListClass = (function(){
         },
 
         get width(){
-            if(this.storage.width)
-                return this.storage.width;
-            if(this.storage.image)
-                return this.storage.image.width;
-            if(this.storage.innerTextWidth)
-                return this.storage.innerTextWidth;
+            var storage = this.storage;
+            if(storage.width)
+                return storage.width;
+            if(storage.image)
+                return storage.image.width;
+            if(storage.innerTextWidth)
+                return storage.innerTextWidth;
             return 0;
         },
         set width(a){
+            var node = this.node;
             this.storage.width = a;
             //如果为block对象，则一起更改cache画布的大小
-            if(this.node.cache){
-                this.node.cache.width = a;
-                this.node.waitDrawing = true;
-                this.node.update();
+            if(node.cache){
+                node.cache.width = a;
+                node.waitDrawing = true;
+                node.update();
             }
         },
 
 
         get height(){
-            if(this.storage.height)
-                return this.storage.height;
-            if(this.storage.image)
-                return this.storage.image.height;
-            if(this.storage.innerTextArray)
-                return this.lineHeight * (this.storage.innerTextRow || this.storage.innerTextArray.length) + 4;
+            var storage = this.storage;
+            if(storage.height)
+                return storage.height;
+            if(storage.image)
+                return storage.image.height;
+            if(storage.innerTextArray)
+                return this.lineHeight * (storage.innerTextRow || storage.innerTextArray.length) + 4;
 
             return 0;
         },
         set height(a){
+            var node = this.node;
             this.storage.height = a;
             //如果为block对象，则一起更改cache画布的大小
-            if(this.node.cache){
-                this.node.cache.height = a;
-                this.node.waitDrawing = true;
-                this.node.update();
+            if(node.cache){
+                node.cache.height = a;
+                node.waitDrawing = true;
+                node.update();
             }
         },
 
