@@ -122,9 +122,13 @@ var HSEventClass = (function(){
             return this;
         }
 
-        this.touchDownEventList && this.touchDownEventList.forEach(function(eventItem){
-            eventItem(ev);
-        });
+        var touchDownEventList = this.touchDownEventList;
+        if(touchDownEventList){
+            var i, len;
+            for(i=0, len=touchDownEventList.length; i<len; i++){
+                touchDownEventList[i](ev);
+            }
+        }
         return this;
     };
     event.prototype.touchDownEventList = null;
@@ -136,9 +140,13 @@ var HSEventClass = (function(){
             return this;
         }
 
-        this.touchMoveEventList && this.touchMoveEventList.forEach(function(eventItem){
-            eventItem(ev);
-        });
+        var touchMoveEventList = this.touchMoveEventList;
+        if(touchMoveEventList){
+            var i, len;
+            for(i=0, len=touchMoveEventList.length; i<len; i++){
+                touchMoveEventList[i](ev);
+            }
+        }
         return this;
     };
     event.prototype.touchMoveEventList = null;
@@ -150,9 +158,13 @@ var HSEventClass = (function(){
             return this;
         }
 
-        this.touchUpEventList && this.touchUpEventList.forEach(function(eventItem){
-            eventItem(ev);
-        });
+        var touchUpEventList = this.touchUpEventList;
+        if(touchUpEventList){
+            var i, len;
+            for(i=0, len=touchUpEventList.length; i<len; i++){
+                touchUpEventList[i](ev);
+            }
+        }
         return this;
     };
     event.prototype.touchUpEventList = null;
@@ -164,9 +176,13 @@ var HSEventClass = (function(){
             return this;
         }
 
-        this.loadEventList && this.loadEventList.forEach(function(eventItem){
-            eventItem();
-        });
+        var loadEventList = this.loadEventList;
+        if(loadEventList){
+            var i, len;
+            for(i=0, len=loadEventList.length; i<len; i++){
+                loadEventList[i]();
+            }
+        }
         return this;
     };
     event.prototype.loadEventList = null;

@@ -1,6 +1,7 @@
 var HSDrawManager = (function(){
 
     var manager = {};
+    var piToRe = Math.PI / 180;
 
     /**
      * 绘制背景颜色
@@ -132,9 +133,10 @@ var HSDrawManager = (function(){
             len = txtArr.length;
             setFont(style, ctx);
 
+            var i;
             if(storage.width){
                 //限定宽度
-                var i, j, tmpTxt, totalIndex, currentWidth, strIndex,
+                var j, tmpTxt, totalIndex, currentWidth, strIndex,
                     width = storage.width;
                 for(i = 0, j = 0; i < len; i ++){
                     tmpTxt = txtArr[i];//需要分段的文字
@@ -175,11 +177,12 @@ var HSDrawManager = (function(){
                 //没有限定宽度
                 if(!storage.innerTextWidth){
                     var tmpWidth = 0;
-                    storage.innerTextArray.forEach(function(text){
-                        var t = ctx.measureText(text).width;
+                    var t;
+                    for(i=0, len=storage.innerTextArray.length; i<len; i++){
+                        t = ctx.measureText(storage.innerTextArray[i]).width;
                         if(t > tmpWidth)
                             tmpWidth = t;
-                    });
+                    }
                     storage.innerTextWidth = tmpWidth;
                 }
                 txt = storage.innerTextArray;
@@ -196,15 +199,15 @@ var HSDrawManager = (function(){
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
-            Cos = Math.cos(rotate * Math.PI / 180) * style.scaleX;
-            Sin = Math.sin(rotate * Math.PI / 180) * style.scaleY;
+            Cos = Math.cos(rotate * piToRe) * style.scaleX;
+            Sin = Math.sin(rotate * piToRe) * style.scaleY;
             ctx.transform(
                 Cos,
                 Sin,
                 -Sin,
                 Cos,
-                left + style.width/2,
-                top + style.height/2
+                left - x,//left + style.width/2
+                top - y
             );
         }else{
             x = left;
@@ -246,15 +249,15 @@ var HSDrawManager = (function(){
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
-            Cos = Math.cos(rotate * Math.PI / 180) * style.scaleX;
-            Sin = Math.sin(rotate * Math.PI / 180) * style.scaleY;
+            Cos = Math.cos(rotate * piToRe) * style.scaleX;
+            Sin = Math.sin(rotate * piToRe) * style.scaleY;
             ctx.transform(
                 Cos,
                 Sin,
                 -Sin,
                 Cos,
-                style.left + style.width/2,
-                style.top + style.height/2
+                style.left - x,//style.left + style.width / 2
+                style.top - y
             );
         }else{
             x = style.left;

@@ -28,9 +28,10 @@ var HSTextureElement = (function(){
             //更新是否已经加载完成的标志
             self.loaded = true;
             //更新所有引用了这个texture的元素
-            self.nodeList.forEach(function(node){
-                node.update();
-            });
+            var i, len;
+            for(i=0,len=self.nodeList.length; i<len; i++){
+                self.nodeList[i].update();
+            }
         });
     };
     HSUtils.inherit(texture, HSEventClass);
