@@ -10,7 +10,14 @@ var HSDrawManager = (function(){
      * @param ctx
      */
     var drawBGColor = function(x, y, style, ctx){
-        manager.drawer.drawRect(style.storage.background, x, y, style.width, style.height, ctx);
+        manager.drawer.drawRect(
+            style.storage.background,
+            x,
+            y,
+            style.width,
+            style.height,
+            ctx
+        );
     };
 
     /**
@@ -21,9 +28,23 @@ var HSDrawManager = (function(){
      * @param ctx
      */
     var drawBGImage = function(x, y, style, ctx){
+        var width = style.width,
+               height = style.height;
+
         var drawElem = style.storage.image.canvas || style.storage.image.image;
-        if(style.width !=0 || style.height !=0)
-            manager.drawer.drawImage(drawElem, style.imagePositionLeft, style.imagePositionTop, style.width, style.height, x, y, style.imageSizeWidth, style.imageSizeHeight,  ctx);
+        if(width !=0 || height !=0)
+            manager.drawer.drawImage(
+                drawElem,
+                style.imagePositionLeft,
+                style.imagePositionTop,
+                width,
+                height,
+                x,
+                y,
+                style.imageSizeWidth,
+                style.imageSizeHeight,
+                ctx
+            );
     };
 
     /**
@@ -35,16 +56,18 @@ var HSDrawManager = (function(){
      * @param ctx
      */
     var drawText  = function(txtArr, x, y, style, ctx){
+        var storage = style.storage;
         var i, txt,
             len = txtArr.length,
 
             width = style.width,
             size = style.fontSize,
-            align = style.storage.align;
+            align = storage.align,
+            lineHeight = style.lineHeight;
 
-        var tmp = (style.lineHeight - style.fontSize) / 2;
+        var tmp = (lineHeight - size) / 2;
 
-        if(style.storage.width){
+        if(storage.width){
             //宽度被限定，自动换行
             if(align === "right")
                 x += width;
@@ -53,14 +76,21 @@ var HSDrawManager = (function(){
         }else{
             //宽度自动撑大
             if(align === "right")
-                x += style.storage.innerTextWidth;
+                x += storage.innerTextWidth;
             if(align === "center")
-                x += style.storage.innerTextWidth / 2;
+                x += storage.innerTextWidth / 2;
         }
 
         for(i = 0; i < len; i ++){
             txt = txtArr[i];
-            manager.drawer.drawFont(txt, size, style.color, x, y + i * style.lineHeight + tmp, ctx);
+            manager.drawer.drawFont(
+                txt,
+                size,
+                style.color,
+                x,
+                y + i * lineHeight + tmp,
+                ctx
+            );
         }
     };
 
@@ -70,7 +100,13 @@ var HSDrawManager = (function(){
      * @param ctx
      */
     var setFont = function(style, ctx){
-        manager.drawer.setFont(style.fontStyle, style.fontSize, style.fontFamily, style.align, ctx);
+        manager.drawer.setFont(
+            style.fontStyle,
+            style.fontSize,
+            style.fontFamily,
+            style.align,
+            ctx
+        );
     };
 
     /**
@@ -81,23 +117,25 @@ var HSDrawManager = (function(){
     var drawAll = function(style, ctx){
         if(!style)
             return;
+        var storage = style.storage;
 
         var txt, len;
-        var txtArr = style.storage.innerTextArray;
+        var txtArr = storage.innerTextArray;
 
         //透明度
-        ctx.globalAlpha = style.opacity;
+        if(ctx.globalAlpha !== style.opacity)
+            ctx.globalAlpha = style.opacity;
 
         //文字存在，判斷是否需要重置width和height
-        if(style.storage.innerTextArray){
+        if(storage.innerTextArray){
             txt = [];
             len = txtArr.length;
             setFont(style, ctx);
 
-            if(style.storage.width){
+            if(storage.width){
                 //限定宽度
                 var i, j, tmpTxt, totalIndex, currentWidth, strIndex,
-                    width = style.storage.width;
+                    width = storage.width;
                 for(i = 0, j = 0; i < len; i ++){
                     tmpTxt = txtArr[i];//需要分段的文字
                     totalIndex = 0;
@@ -130,51 +168,62 @@ var HSDrawManager = (function(){
 
                 }
 
-                if(style.storage.innerTextRow !== j){
-                    style.storage.innerTextRow = j;
+                if(storage.innerTextRow !== j){
+                    storage.innerTextRow = j;
                 }
             }else{
                 //没有限定宽度
-                if(!style.storage.innerTextWidth){
+                if(!storage.innerTextWidth){
                     var tmpWidth = 0;
-                    style.storage.innerTextArray.forEach(function(text){
+                    storage.innerTextArray.forEach(function(text){
                         var t = ctx.measureText(text).width;
                         if(t > tmpWidth)
                             tmpWidth = t;
                     });
-                    style.storage.innerTextWidth = tmpWidth;
+                    storage.innerTextWidth = tmpWidth;
                 }
-                txt = style.storage.innerTextArray;
+                txt = storage.innerTextArray;
             }
         }
+        var left = style.left,
+            top = style.top;
 
         var x, y;
         var Cos = 1, Sin = 0;
-        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+        if(storage.rotate || storage.scaleX || storage.scaleY){
+            var rotate = style.rotate;
+
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
-            Cos = Math.cos(style.rotate * Math.PI / 180) * style.scaleX;
-            Sin = Math.sin(style.rotate * Math.PI / 180) * style.scaleY;
-            ctx.transform(Cos, Sin, -Sin, Cos, style.left + style.width/2, style.top + style.height/2);
+            Cos = Math.cos(rotate * Math.PI / 180) * style.scaleX;
+            Sin = Math.sin(rotate * Math.PI / 180) * style.scaleY;
+            ctx.transform(
+                Cos,
+                Sin,
+                -Sin,
+                Cos,
+                left + style.width/2,
+                top + style.height/2
+            );
         }else{
-            x = style.left;
-            y = style.top;
+            x = left;
+            y = top;
         }
 
         //绘制背景
-        if(style.storage.image){
+        if(storage.image){
             drawBGImage(x, y, style, ctx);
-        }else if(style.storage.backgroundColor){
+        }else if(storage.background){
             drawBGColor(x, y, style, ctx);
         }
 
         //绘制文字
-        if(style.storage.innerTextArray){
+        if(storage.innerTextArray){
             drawText(txt, x, y, style, ctx);
         }
 
-        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+        if(storage.rotate || storage.scaleX || storage.scaleY){
             ctx.restore();
         }
     };
@@ -186,28 +235,38 @@ var HSDrawManager = (function(){
      */
     var drawBlock = function(style, ctx){
 
+        var storage = style.storage;
+
         //透明度
         ctx.globalAlpha = style.opacity;
         var x, y;
         var Cos = 1, Sin = 0;
-        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+        if(storage.rotate || storage.scaleX || storage.scaleY){
+            var rotate = style.rotate;
             ctx.save();
             x = -style.width/2;
             y = -style.height/2;
-            Cos = Math.cos(style.rotate * Math.PI / 180) * style.scaleX;
-            Sin = Math.sin(style.rotate * Math.PI / 180) * style.scaleY;
-            ctx.transform(Cos, Sin, -Sin, Cos, style.left + style.width/2, style.top + style.height/2);
+            Cos = Math.cos(rotate * Math.PI / 180) * style.scaleX;
+            Sin = Math.sin(rotate * Math.PI / 180) * style.scaleY;
+            ctx.transform(
+                Cos,
+                Sin,
+                -Sin,
+                Cos,
+                style.left + style.width/2,
+                style.top + style.height/2
+            );
         }else{
             x = style.left;
             y = style.top;
         }
 
         //绘制背景
-        if(style.storage.background){
+        if(storage.background){
             drawBGColor(x, y, style, ctx);
         }
 
-        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+        if(storage.rotate || storage.scaleX || storage.scaleY){
             ctx.restore();
         }
     };
@@ -219,25 +278,41 @@ var HSDrawManager = (function(){
      */
     manager.parse = function(node, ctx){
         var drawNum = 0;
-        if(node.cache){//block类型的元素
+
+        var style = node.style,
+            cache = node.cache;
+
+        if(cache){//block类型的元素
+            var nodeCtx = manager.drawer.ctx(cache);
             if(node.waitDrawing){//等待重新绘制
                 //清除画板
-                manager.drawer.ctx(node.cache).clearRect(0, 0, node.style.width, node.style.height);
+                nodeCtx.clearRect(0, 0, style.width, style.height);
 
                 //循环子元素
                 var children = node.children;
                 var length = children.length;
                 for(var i=0; i<length; i++){
-                    drawNum += manager.parse(children[i], manager.drawer.ctx(node.cache));
+                    drawNum += manager.parse(children[i], nodeCtx);
                 }
                 node.waitDrawing = false;
             }
             if(node.parent){
-                drawBlock(node.style, ctx);
-                manager.drawer.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
+                drawBlock(style, ctx);
+                manager.drawer.drawImage(
+                    cache,
+                    0,
+                    0,
+                    cache.width,
+                    cache.height,
+                    style.left,
+                    style.top,
+                    cache.width,
+                    cache.height,
+                    ctx
+                );
             }
         }else{//node类型元素
-            drawAll(node.style, ctx);
+            drawAll(style, ctx);
         }
         return ++drawNum;
     };

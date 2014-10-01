@@ -28,7 +28,8 @@
      * @param ctx
      */
     canvas.prototype.drawRect = function(color, left, top, width, height, ctx){
-        ctx.fillStyle = color;
+        if(ctx.fillStyle !== color)
+            ctx.fillStyle = color;
         ctx.fillRect(left, top, width, height);
     };
 
@@ -71,10 +72,14 @@
      * @param ctx
      */
     canvas.prototype.setFont = function(style, size, family, align, ctx){
+        var font = style + " " + size + "px " + family;
+        align = align || "left";
         // 设置字体
-        ctx.font = style + " " + size + "px " + family;//"Bold 20px Arial"
+        if(ctx.font !== font)
+            ctx.font = font;//"Bold 20px Arial"
         // 设置对齐方式
-        ctx.textAlign = align || "left";
+        if(ctx.textAlign !== align)
+            ctx.textAlign = align;
     };
     /**
      * 绘制部分文字
@@ -87,7 +92,8 @@
      */
     canvas.prototype.drawFont = function(string, size, color, x, y, ctx){
         // 设置填充颜色
-        ctx.fillStyle = color;
+        if(ctx.fillStyle !== color)
+            ctx.fillStyle = color;
         // 设置字体内容，以及在画布上的位置
         string && ctx.fillText(string, x, y + size);
         // 绘制空心字
