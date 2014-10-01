@@ -113,6 +113,7 @@ var HSNodeElement = (function(){
      * @param loop 循环次数
      */
     node.prototype.frame = function(frames, loop){
+        loop = loop || Number.MAX_VALUE;
         var currentNum = 0,
             length = frames.length,
             node = this;
@@ -127,11 +128,12 @@ var HSNodeElement = (function(){
                     node.style[p] = frameItem[p];
             }
 
-            if(node.active && node.animate)
+            if(node.active && node.animate && loop > 0)
                 h.delay(anim, frameItem.time);
 
             if(currentNum >= length){
                 currentNum = 0;
+                loop--;
             }
             node.update();
         };
@@ -161,7 +163,7 @@ var HSNodeElement = (function(){
      * @param {Function} [callback=] 执行完毕的回调
      * @param {Function} [easing=] 缓动处理函数
      */
-    node.prototype.to = function(style, duration, callback, easing, ln){
+    node.prototype.to = function(style, duration, callback, easing){
         var t, p,
             s = this.style;
 

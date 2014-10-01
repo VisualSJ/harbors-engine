@@ -7,7 +7,7 @@ var HSTextureElement = (function(){
      *
      * @property {boolean} loaded 是否加载完成
      * @property {Array} nodeList 引用了这个texture的元素
-     * @property {string} imagePath 图片元素地址
+     * @property {string} path 图片元素地址
      * @property {*} image IMAGE元素
      * @property {number} width
      * @property {number} height
@@ -37,7 +37,7 @@ var HSTextureElement = (function(){
     HSUtils.inherit(texture, HSEventClass);
 
     texture.prototype.loaded = false;
-    texture.prototype.imagePath = "";
+    texture.prototype.path = "";
     texture.prototype.image = null;
     texture.prototype.width = 0;
     texture.prototype.height = 0;
@@ -56,19 +56,17 @@ var HSTextureElement = (function(){
     ///////////////////////////////
     //node节点的自我管理对象//
     ///////////////////////////////
-    var manager = {
+    texture.manager = {
         pathToElem: {},
         create: function(path){
-            if(manager.pathToElem[path])
-                return manager.pathToElem[path];
+            if(texture.manager.pathToElem[path])
+                return texture.manager.pathToElem[path];
 
             var node = new texture(path);
-            manager.pathToElem[path] = node;
+            texture.manager.pathToElem[path] = node;
             return node;
         }
     };
-
-    texture.manager  = manager;
 
     return texture;
 })();

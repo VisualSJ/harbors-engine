@@ -2,6 +2,10 @@ var HSChildListClass = (function(){
     /**
      * 子元素列表
      * 拥有原生数组的一些方法
+     *
+     * @property {function} push 插入一个元素到排序位置
+     * @property {function} splice 在指定地点插入一个元素
+     * @property {function} sortIndex 手动排序
      */
     var childList = function(){};
 

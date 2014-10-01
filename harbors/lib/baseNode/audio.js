@@ -41,19 +41,17 @@ var HSAudioElement = (function(){
     ///////////////////////////////
     //audio节点的自我管理对象//
     ///////////////////////////////
-    var manager = {
+    audio.manager = {
         pathToElem: {},
         create: function(path){
-            if(manager.pathToElem[path])
-                return manager.pathToElem[path];
+            if(audio.manager.pathToElem[path])
+                return audio.manager.pathToElem[path];
 
             var node = new audio(path);
-            manager.pathToElem[path] = node;
+            audio.manager.pathToElem[path] = node;
             return node;
         }
     };
-
-    audio.manager  = manager;
 
     return audio;
 

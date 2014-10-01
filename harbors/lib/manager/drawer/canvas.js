@@ -1,5 +1,16 @@
 (function(){
 
+    /**
+     * 绘制模式
+     *
+     * @property {function} init 初始化一些必要的数据
+     * @property {function} ctx 获取一个画布元素的上下文
+     * @property {function} drawRect 绘制一个实体的正方形
+     * @property {function} drawLine 绘制一条直线
+     * @property {function} drawImage 绘制一张图片
+     * @property {function} setFont 设置文字的样式等
+     * @property {function} drawFont 绘制文字
+     */
     var canvas = function(){};
 
     /**
@@ -34,7 +45,7 @@
     };
 
     /**
-     * 绘制一条指向
+     * 绘制一条直线
      * @param color
      * @param startX
      * @param startY
@@ -99,8 +110,6 @@
         // 绘制空心字
         //ctx.strokeText("Hello!", 10, 100);
     };
-
-
 
     if(!HSDrawManager.drawer){
         HSDrawManager.drawer = new canvas();

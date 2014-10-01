@@ -1,4 +1,4 @@
-(function(){
+var HSChromeAdaption = (function(){
 
     var chrome = function(){};
 
@@ -48,7 +48,7 @@
 
     /**
      * 将鼠标事件对象解析成需要的格式
-     * @param {MouseEvent} event
+     * @param {MouseEvent|TouchEvent} event
      */
     chrome.prototype.mouseEvent = function(event){
 
@@ -81,4 +81,6 @@
     if(!HSOption.getter){
         HSOption.getter = new chrome();
     }
+
+    return chrome;
 })();
