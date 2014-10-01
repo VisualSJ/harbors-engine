@@ -1,4 +1,4 @@
-harbors.BASECLASS.event = (function(){
+var HSEventClass = (function(){
 
     /**
      * 基础事件类
@@ -24,7 +24,7 @@ harbors.BASECLASS.event = (function(){
                 this.touchDownEventList = [];
             }
             if(on){
-                harbors.eventManager.addTouchDown(this);
+                HSEventManager.addTouchDown(this);
                 this.touchDownEventList.push(event);
             }else{
                 for(var i=0; i<this.touchDownEventList.length; i++){
@@ -34,7 +34,7 @@ harbors.BASECLASS.event = (function(){
                     }
                 }
                 if(this.touchDownEventList.length === 0){
-                    harbors.eventManager.removeTouchDown(this);
+                    HSEventManager.removeTouchDown(this);
                 }
             }
         },
@@ -43,7 +43,7 @@ harbors.BASECLASS.event = (function(){
                 this.touchMoveEventList = [];
             }
             if(on){
-                harbors.eventManager.addTouchMove(this);
+                HSEventManager.addTouchMove(this);
                 this.touchMoveEventList.push(event);
             }else{
                 for(var i=0; i<this.touchMoveEventList.length; i++){
@@ -53,7 +53,7 @@ harbors.BASECLASS.event = (function(){
                     }
                 }
                 if(this.touchMoveEventList.length === 0){
-                    harbors.eventManager.removeTouchMove(this);
+                    HSEventManager.removeTouchMove(this);
                 }
             }
         },
@@ -62,7 +62,7 @@ harbors.BASECLASS.event = (function(){
                 this.touchUpEventList = [];
             }
             if(on){
-                harbors.eventManager.addTouchUp(this);
+                HSEventManager.addTouchUp(this);
                 this.touchUpEventList.push(event);
             }else{
                 for(var i=0; i<this.touchUpEventList.length; i++){
@@ -72,7 +72,7 @@ harbors.BASECLASS.event = (function(){
                     }
                 }
                 if(this.touchUpEventList.length === 0){
-                    harbors.eventManager.removeTouchUp(this);
+                    HSEventManager.removeTouchUp(this);
                 }
             }
         },

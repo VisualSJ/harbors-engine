@@ -1,4 +1,4 @@
-harbors.BASECLASS.styleList = (function(){
+var HSStyleListClass = (function(){
     /**
      * node元素中自带的style构造方法
      * @param node
@@ -27,12 +27,12 @@ harbors.BASECLASS.styleList = (function(){
          * @property {number} scaleX 元素的缩放比例
          * @property {number} scaleY 元素的缩放比例
          *
-         * @property {string} backgroundColor 元素的背景颜色
-         * @property {string|texture} backgroundImage 元素的背景图片
-         * @property {number} backgroundSizeWidth 元素的背景图片缩放宽度
-         * @property {number} backgroundSizeHeight 元素的背景图片缩放高度
-         * @property {number} backgroundPositionLeft 元素的背景图片裁剪的左边距
-         * @property {number} backgroundPositionTop 元素的背景图片裁剪的上边距
+         * @property {string} background 元素的背景颜色
+         * @property {string|texture} image 元素的背景图片
+         * @property {number} imageSizeWidth 元素的背景图片缩放宽度
+         * @property {number} imageSizeHeight 元素的背景图片缩放高度
+         * @property {number} imagePositionLeft 元素的背景图片裁剪的左边距
+         * @property {number} imagePositionTop 元素的背景图片裁剪的上边距
          *
          * @property {string} align 对齐方式
          * @property {number} lineHeight 对齐方式
@@ -135,8 +135,8 @@ harbors.BASECLASS.styleList = (function(){
         get width(){
             if(this.storage.width)
                 return this.storage.width;
-            if(this.storage.backgroundImage)
-                return this.storage.backgroundImage.width;
+            if(this.storage.image)
+                return this.storage.image.width;
             if(this.storage.innerTextWidth)
                 return this.storage.innerTextWidth;
             return 0;
@@ -155,8 +155,8 @@ harbors.BASECLASS.styleList = (function(){
         get height(){
             if(this.storage.height)
                 return this.storage.height;
-            if(this.storage.backgroundImage)
-                return this.storage.backgroundImage.height;
+            if(this.storage.image)
+                return this.storage.image.height;
             if(this.storage.innerTextArray)
                 return this.lineHeight * (this.storage.innerTextRow || this.storage.innerTextArray.length) + 4;
 
@@ -187,73 +187,73 @@ harbors.BASECLASS.styleList = (function(){
             this.storage.zIndex = parseInt(a);
         },
 
-        get backgroundColor(){return this.storage.backgroundColor || "#FFF";},
-        set backgroundColor(a){
-            this.storage.backgroundColor = a;
+        get background(){return this.storage.background || "#FFF";},
+        set background(a){
+            this.storage.background = a;
         },
 
-        get backgroundImage(){return this.storage.backgroundImage;},
-        set backgroundImage(a){
+        get image(){return this.storage.image;},
+        set image(a){
             if(typeof a === 'string'){
-                a = harbors.BASENODE.texture.manager.create(a);
+                a = HSTextureElement.manager.create(a);
             }
 
             a.nodeList.push(this.node);
-            this.storage.backgroundImage = a;
+            this.storage.image = a;
         },
 
-        get backgroundSize(){
-            return this.backgroundSizeWidth + "px " + this.backgroundSizeHeight + "px";
+        get imageSize(){
+            return this.imageSizeWidth + "px " + this.imageSizeHeight + "px";
         },
-        set backgroundSize(a){
+        set imageSize(a){
             var arg = a.split(" ");
             if(arg.length === 1){
-                this.backgroundSizeWidth = this.backgroundSizeHeight = arg[0];
+                this.imageSizeWidth = this.imageSizeHeight = arg[0];
             }else if(arg.length === 2){
-                this.backgroundSizeWidth = arg[0];
-                this.backgroundSizeHeight = arg[1];
+                this.imageSizeWidth = arg[0];
+                this.imageSizeHeight = arg[1];
             }
         },
 
-        get backgroundSizeWidth(){
-            return this.storage.backgroundSizeWidth || this.width;
+        get imageSizeWidth(){
+            return this.storage.imageSizeWidth || this.width;
         },
-        set backgroundSizeWidth(a){
-            this.storage.backgroundSizeWidth = parseInt(a);
+        set imageSizeWidth(a){
+            this.storage.imageSizeWidth = parseInt(a);
         },
 
-        get backgroundSizeHeight(){
-            return this.storage.backgroundSizeHeight || this.height;
+        get imageSizeHeight(){
+            return this.storage.imageSizeHeight || this.height;
         },
-        set backgroundSizeHeight(a){
-            this.storage.backgroundSizeHeight = parseInt(a);
+        set imageSizeHeight(a){
+            this.storage.imageSizeHeight = parseInt(a);
         },
 
         get backgroundPosition(){
-            return this.backgroundPositionLeft + "px " + this.backgroundPositionTop + "px";
+            return this.imagePositionLeft + "px " + this.imagePositionTop + "px";
         },
         set backgroundPosition(a){
             var arg = a.split(" ");
             if(arg.length === 1){
-                this.backgroundPositionLeft = this.backgroundPositionTop = arg[0];
+                this.imagePositionLeft = this.imagePositionTop = arg[0];
             }else if(arg.length === 2){
-                this.backgroundPositionLeft = parseInt(arg[0]);
-                this.backgroundPositionTop = parseInt(arg[1]);
+                this.imagePositionLeft = parseInt(arg[0]);
+                this.imagePositionTop = parseInt(arg[1]);
             }
         },
 
-        get backgroundPositionLeft(){
-            return this.storage.backgroundPositionLeft || 0;
+        get imagePositionLeft(){
+            return this.storage.imagePositionLeft || 0;
         },
-        set backgroundPositionLeft(a){
-            this.storage.backgroundPositionLeft = parseInt(a);
+        set imagePositionLeft(a){
+            this.storage.imagePositionLeft = parseInt(a);
         },
 
-        get backgroundPositionTop(){
-            return this.storage.backgroundPositionTop || 0;
+        get imagePositionTop(){
+            return this.storage.imagePositionTop || 0;
         },
-        set backgroundPositionTop(a){
-            this.storage.backgroundPositionTop = parseInt(a);
+        set imagePositionTop(a){
+            this.storage.imagePositionTop = parseInt(a);
         },
 
         get align(){return this.storage.align || "left";},

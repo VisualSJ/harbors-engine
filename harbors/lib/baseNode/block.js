@@ -1,7 +1,4 @@
-harbors.BASENODE.block = (function(){
-
-    var node = harbors.BASENODE.node;
-    var childList = harbors.BASECLASS.childList;
+var HSBlockElement = (function(){
 
     /**
      * 一个块元素
@@ -12,14 +9,14 @@ harbors.BASENODE.block = (function(){
      * @property remove 删除一个子元素
      */
     var block = function(){
-        node.call(this);
+        HSNodeElement.call(this);
         this.cache = document.createElement("canvas");
         this.cache.width = this.style.width;
         this.cache.height = this.style.height;
         this.waitDrawing = false;
-        this.children = new childList;
+        this.children = new HSChildListClass;
     };
-    harbors.utils.inherit(block, node);
+    HSUtils.inherit(block, HSNodeElement);
 
     /**
      * 更新元素的活动状态

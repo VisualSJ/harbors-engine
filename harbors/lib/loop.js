@@ -1,4 +1,4 @@
-var loop =(function(){
+var HSLoop =(function(){
 
     //引擎启动以来的时间轴
     var lineTime = 0;
@@ -23,7 +23,7 @@ var loop =(function(){
      */
     loop.init = function(){
         delayTime = 0;
-        frameTime = 1000 / harbors.options.fps;
+        frameTime = 1000 / HSOption.fps;
     };
     //执行初始化（以后如需更改配置等，需要手动执行一次）
     loop.init();

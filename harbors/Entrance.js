@@ -39,6 +39,7 @@ loader.list = [
         "lib/harbors.js"
     ],
     [
+        "lib/namespace.js",
         "lib/debug/console.js"
     ]
 ];

@@ -1,11 +1,11 @@
-harbors.elemManager = (function(){
+var HSElementManager = (function(){
 
     //定义显示元素元素列表
     var defineNode = {
-        node: harbors.BASENODE.node,
-        block: harbors.BASENODE.block,
-        texture: harbors.BASENODE.texture,
-        audio: harbors.BASENODE.audio
+        node: HSNodeElement,
+        block: HSBlockElement,
+        texture: HSTextureElement,
+        audio: HSAudioElement
     };
 
     var manager = {};

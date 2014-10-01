@@ -78,7 +78,7 @@
         return ev;
     };
 
-    if(!harbors.options.getter){
-        harbors.options.getter = new chrome();
+    if(!HSOption.getter){
+        HSOption.getter = new chrome();
     }
 })();

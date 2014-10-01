@@ -1,4 +1,4 @@
-harbors.BASENODE.audio = (function(){
+var HSAudioElement = (function(){
 
     var audioID = 0;
 

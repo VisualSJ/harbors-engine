@@ -1,9 +1,5 @@
 window.h = (function(){
 
-    var viewManager = harbors.viewManager;
-    var drawManager = harbors.drawManager;
-    var eventManager = harbors.eventManager;
-
     var gameCanvas;
     //延迟运行的数组
     var task = [];
@@ -27,22 +23,24 @@ window.h = (function(){
             return define.canvas;
 
         var str = selector.substr(0, 1);
-        arguments[0] = selector.substr(1);
 
-        if(baseSelect[str])
+        if(baseSelect[str]){
+            arguments[0] = selector.substr(1);
             return baseSelect[str].apply(this, arguments);
+        }else if(selector === 'canvas'){
+            return define.canvas;
+        }
 
         return null;
     };
     var baseSelect = {
-        "#": function(){  return harbors.elemManager.getNodeWithId.apply(this, arguments); },
-        "@": function(){ return harbors.elemManager.createNode.apply(this, arguments); }
+        "#": function(){  return HSElementManager.getNodeWithId.apply(this, arguments); },
+        "@": function(){ return HSElementManager.createNode.apply(this, arguments); }
     };
 
     //复制对象
-    define.engine = harbors;
-    define.utils = harbors.utils;
-    define.options = harbors.options;
+    define.utils = HSUtils;
+    define.options = HSOption;
 
     /**
      * 打印log信息到页面上
@@ -56,7 +54,7 @@ window.h = (function(){
      */
     define.delay = function(callback, delayTime){
         var delayItem = {
-            time: loop.line + delayTime,
+            time: HSLoop.line + delayTime,
             callback: callback
         };
         var length = task.length;
@@ -102,8 +100,8 @@ window.h = (function(){
      * @param opt
      */
     define.setOption = function(opt){
-        opt.id && ( harbors.options.id = opt.id );
-        opt.debug && ( harbors.options.debug = opt.debug );
+        opt.id && ( HSOption.id = opt.id );
+        opt.debug && ( HSOption.debug = opt.debug );
     };
 
     /**
@@ -112,28 +110,28 @@ window.h = (function(){
      */
     define.adaptive = function(mode){
         if(mode != null)
-            harbors.options.adaptive = mode;
+            HSOption.adaptive = mode;
         var style = {
             padding: 0,
             margin: 0,
             overflow: "hidden",
-            height: harbors.options.system.visibleSize.height + "px",
-            width: harbors.options.system.visibleSize.width + "px"
+            height: HSOption.system.visibleSize.height + "px",
+            width: HSOption.system.visibleSize.width + "px"
         };
         for(var p in style){
             document.body.style[p] = style[p];
         }
 
-        if(harbors.options.adaptive === 1) {
-            viewManager.full(gameCanvas);
-        }else if(harbors.options.adaptive === 2){
-            viewManager.width(gameCanvas);
-        }else if(harbors.options.adaptive === 3){
-            viewManager.height(gameCanvas);
-        }else if(harbors.options.adaptive === 4){
-            viewManager.min(gameCanvas);
-        }else if(harbors.options.adaptive === 5){
-            viewManager.max(gameCanvas);
+        if(HSOption.adaptive === 1) {
+            HSViewManager.full(gameCanvas);
+        }else if(HSOption.adaptive === 2){
+            HSViewManager.width(gameCanvas);
+        }else if(HSOption.adaptive === 3){
+            HSViewManager.height(gameCanvas);
+        }else if(HSOption.adaptive === 4){
+            HSViewManager.min(gameCanvas);
+        }else if(HSOption.adaptive === 5){
+            HSViewManager.max(gameCanvas);
         }
     };
 
@@ -142,29 +140,28 @@ window.h = (function(){
      */
     define.init = function(callback){
         //定义h.canvas画板对象
-        gameCanvas = document.getElementById(harbors.options.id);
-        define.canvas = define("@block");
+        gameCanvas = document.getElementById(HSOption.id);
+        define.canvas = new HSBlockElement();
         define.canvas.style.width = gameCanvas.width;
         define.canvas.style.height = gameCanvas.height;
         define.canvas.cache = gameCanvas;
-        define.canvas.id = "canvas";
         define.canvas.active = true;
 
         //初始化配置
-        harbors.options.setCanvas(gameCanvas);
-        harbors.options.initOption();
+        HSOption.setCanvas(gameCanvas);
+        HSOption.initOption();
 
         //开始主循环
-        loop.start(function(dt){
+        HSLoop.start(function(dt){
             //查找任务队列
-            while(task[0] && task[0].time < loop.line){
+            while(task[0] && task[0].time < HSLoop.line){
                 task.shift().callback();
             }
-            var drawNum = drawManager.parse(define.canvas, drawManager.drawer.ctx(gameCanvas));
+            var drawNum = HSDrawManager.parse(define.canvas, HSDrawManager.drawer.ctx(gameCanvas));
             define._getDebugInfo(task.length, drawNum);
         });
 
-        eventManager.init();
+        HSEventManager.init();
 
         customInit.forEach(function(item){
             item(callback);

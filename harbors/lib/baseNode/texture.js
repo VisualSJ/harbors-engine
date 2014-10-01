@@ -1,4 +1,4 @@
-harbors.BASENODE.texture = (function(){
+var HSTextureElement = (function(){
     /**
      * 纹理对象
      * @class
@@ -33,7 +33,7 @@ harbors.BASENODE.texture = (function(){
             });
         });
     };
-    harbors.utils.inherit(texture, harbors.BASECLASS.event);
+    HSUtils.inherit(texture, HSEventClass);
 
     texture.prototype.loaded = false;
     texture.prototype.imagePath = "";

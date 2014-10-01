@@ -1,4 +1,4 @@
-harbors.BASECLASS.childList = (function(){
+var HSChildListClass = (function(){
     /**
      * 子元素列表
      * 拥有原生数组的一些方法

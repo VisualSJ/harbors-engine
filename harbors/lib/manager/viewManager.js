@@ -1,4 +1,4 @@
-harbors.viewManager = (function(){
+var HSViewManager = (function(){
 
     /**
      * 屏幕适配方案
@@ -7,11 +7,11 @@ harbors.viewManager = (function(){
     var ViewManager = function(){};
 
     ViewManager.prototype.full = function(canvas){
-        canvas.style.width = harbors.options.system.visibleSize.width + "px";
-        canvas.style.height = harbors.options.system.visibleSize.height + "px";
-        var scaleX = harbors.options.system.visibleSize.width / canvas.width;
-        var scaleY = harbors.options.system.visibleSize.height / canvas.height;
-        harbors.options.initOption(scaleX, scaleY);
+        canvas.style.width = HSOption.system.visibleSize.width + "px";
+        canvas.style.height = HSOption.system.visibleSize.height + "px";
+        var scaleX = HSOption.system.visibleSize.width / canvas.width;
+        var scaleY = HSOption.system.visibleSize.height / canvas.height;
+        HSOption.initOption(scaleX, scaleY);
     };
 
     /**
@@ -19,10 +19,10 @@ harbors.viewManager = (function(){
      * @param canvas
      */
     ViewManager.prototype.width = function(canvas){
-        var scale = harbors.options.system.visibleSize.width / canvas.width;
-        canvas.style.width =  harbors.options.system.visibleSize.width + "px";
+        var scale = HSOption.system.visibleSize.width / canvas.width;
+        canvas.style.width =  HSOption.system.visibleSize.width + "px";
         canvas.style.height = canvas.height * scale + "px";
-        harbors.options.initOption(scale, scale);
+        HSOption.initOption(scale, scale);
     };
 
     /**
@@ -30,10 +30,10 @@ harbors.viewManager = (function(){
      * @param canvas
      */
     ViewManager.prototype.height = function(canvas){
-        var scale = harbors.options.system.visibleSize.height / canvas.height;
+        var scale = HSOption.system.visibleSize.height / canvas.height;
         canvas.style.width =  canvas.width * scale + "px";
-        canvas.style.height = harbors.options.system.visibleSize.height + "px";
-        harbors.options.initOption(scale, scale);
+        canvas.style.height = HSOption.system.visibleSize.height + "px";
+        HSOption.initOption(scale, scale);
     };
 
     /**
@@ -41,16 +41,16 @@ harbors.viewManager = (function(){
      * @param canvas
      */
     ViewManager.prototype.min = function(canvas){
-        var scaleX = harbors.options.system.visibleSize.width / canvas.width;
-        var scaleY = harbors.options.system.visibleSize.height / canvas.height;
+        var scaleX = HSOption.system.visibleSize.width / canvas.width;
+        var scaleY = HSOption.system.visibleSize.height / canvas.height;
         if(scaleX < scaleY){
-            canvas.style.width =  harbors.options.system.visibleSize.width + "px";
+            canvas.style.width =  HSOption.system.visibleSize.width + "px";
             canvas.style.height = canvas.height * scaleX + "px";
-            harbors.options.initOption(scaleX, scaleX);
+            HSOption.initOption(scaleX, scaleX);
         }else{
             canvas.style.width =  canvas.width * scaleY + "px";
-            canvas.style.height = harbors.options.system.visibleSize.height + "px";
-            harbors.options.initOption(scaleY, scaleY);
+            canvas.style.height = HSOption.system.visibleSize.height + "px";
+            HSOption.initOption(scaleY, scaleY);
         }
     };
 
@@ -59,16 +59,16 @@ harbors.viewManager = (function(){
      * @param canvas
      */
     ViewManager.prototype.max = function(canvas){
-        var scaleX = harbors.options.system.visibleSize.width / canvas.width;
-        var scaleY = harbors.options.system.visibleSize.height / canvas.height;
+        var scaleX = HSOption.system.visibleSize.width / canvas.width;
+        var scaleY = HSOption.system.visibleSize.height / canvas.height;
         if(scaleX > scaleY){
-            canvas.style.width =  harbors.options.system.visibleSize.width + "px";
+            canvas.style.width =  HSOption.system.visibleSize.width + "px";
             canvas.style.height = canvas.height * scaleX + "px";
-            harbors.options.initOption(scaleX, scaleX);
+            HSOption.initOption(scaleX, scaleX);
         }else{
             canvas.style.width =  canvas.width * scaleY + "px";
-            canvas.style.height = harbors.options.system.visibleSize.height + "px";
-            harbors.options.initOption(scaleY, scaleY);
+            canvas.style.height = HSOption.system.visibleSize.height + "px";
+            HSOption.initOption(scaleY, scaleY);
         }
     };
 

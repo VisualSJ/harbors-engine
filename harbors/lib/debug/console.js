@@ -9,7 +9,7 @@
         console = (new block).set({
             width: 200,
             height: 195,
-            backgroundColor: "#222",
+            background: "#222",
             opacity: 0.3,
             zIndex: Number.MAX_VALUE
         });
@@ -69,7 +69,7 @@
         console.append(draw);
         console.append(task);
 
-        h("#canvas").append(console);
+        h("canvas").append(console);
 
         info = [];
 
@@ -115,4 +115,4 @@
 
     h.addInitTask(init);
 
-})(harbors.BASENODE.block, harbors.BASENODE.node, loop);
+})(HSBlockElement, HSNodeElement, HSLoop);

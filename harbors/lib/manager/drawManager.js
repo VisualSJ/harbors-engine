@@ -1,4 +1,4 @@
-harbors.drawManager = (function(){
+var HSDrawManager = (function(){
 
     var manager = {};
 
@@ -10,7 +10,7 @@ harbors.drawManager = (function(){
      * @param ctx
      */
     var drawBGColor = function(x, y, style, ctx){
-        manager.drawer.drawRect(style.storage.backgroundColor, x, y, style.width, style.height, ctx);
+        manager.drawer.drawRect(style.storage.background, x, y, style.width, style.height, ctx);
     };
 
     /**
@@ -21,9 +21,9 @@ harbors.drawManager = (function(){
      * @param ctx
      */
     var drawBGImage = function(x, y, style, ctx){
-        var drawElem = style.storage.backgroundImage.canvas || style.storage.backgroundImage.image;
+        var drawElem = style.storage.image.canvas || style.storage.image.image;
         if(style.width !=0 || style.height !=0)
-            manager.drawer.drawImage(drawElem, style.backgroundPositionLeft, style.backgroundPositionTop, style.width, style.height, x, y, style.backgroundSizeWidth, style.backgroundSizeHeight,  ctx);
+            manager.drawer.drawImage(drawElem, style.imagePositionLeft, style.imagePositionTop, style.width, style.height, x, y, style.imageSizeWidth, style.imageSizeHeight,  ctx);
     };
 
     /**
@@ -35,7 +35,7 @@ harbors.drawManager = (function(){
      * @param ctx
      */
     var drawText  = function(txtArr, x, y, style, ctx){
-        var i, j, txt,
+        var i, txt,
             len = txtArr.length,
 
             width = style.width,
@@ -45,7 +45,6 @@ harbors.drawManager = (function(){
         var tmp = (style.lineHeight - style.fontSize) / 2;
 
         if(style.storage.width){
-            var currentWidth, totalIndex, strIndex;
             //宽度被限定，自动换行
             if(align === "right")
                 x += width;
@@ -164,7 +163,7 @@ harbors.drawManager = (function(){
         }
 
         //绘制背景
-        if(style.storage.backgroundImage){
+        if(style.storage.image){
             drawBGImage(x, y, style, ctx);
         }else if(style.storage.backgroundColor){
             drawBGColor(x, y, style, ctx);
@@ -173,6 +172,39 @@ harbors.drawManager = (function(){
         //绘制文字
         if(style.storage.innerTextArray){
             drawText(txt, x, y, style, ctx);
+        }
+
+        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+            ctx.restore();
+        }
+    };
+
+    /**
+     * 绘制block
+     * @param style
+     * @param ctx
+     */
+    var drawBlock = function(style, ctx){
+
+        //透明度
+        ctx.globalAlpha = style.opacity;
+        var x, y;
+        var Cos = 1, Sin = 0;
+        if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
+            ctx.save();
+            x = -style.width/2;
+            y = -style.height/2;
+            Cos = Math.cos(style.rotate * Math.PI / 180) * style.scaleX;
+            Sin = Math.sin(style.rotate * Math.PI / 180) * style.scaleY;
+            ctx.transform(Cos, Sin, -Sin, Cos, style.left + style.width/2, style.top + style.height/2);
+        }else{
+            x = style.left;
+            y = style.top;
+        }
+
+        //绘制背景
+        if(style.storage.background){
+            drawBGColor(x, y, style, ctx);
         }
 
         if(style.storage.rotate || style.storage.scaleX || style.storage.scaleY){
@@ -201,7 +233,7 @@ harbors.drawManager = (function(){
                 node.waitDrawing = false;
             }
             if(node.parent){
-                drawAll(node.style, ctx);
+                drawBlock(node.style, ctx);
                 manager.drawer.drawImage(node.cache, 0, 0, node.cache.width, node.cache.height, node.style.left, node.style.top, node.cache.width, node.cache.height,  ctx);
             }
         }else{//node类型元素

@@ -1,4 +1,4 @@
-harbors.BASENODE.node = (function(){
+var HSNodeElement = (function(){
 
     var unique = 0;
 
@@ -25,34 +25,32 @@ harbors.BASENODE.node = (function(){
         this.uniqueNumber = unique++;
 
         this.parent = null;
-        this.style = new harbors.BASECLASS.styleList(this);
+        this.style = new HSStyleListClass(this);
         this.active = false;
         this.animate = false;
         this.__managerId__ = "";
     };
-    harbors.utils.inherit(node, harbors.BASECLASS.event);
+    HSUtils.inherit(node, HSEventClass);
 
     /**
      * 设置style的方法
-     * @param {node} node
      * @param {object} obj
      * @private
      */
-    var css1Argument = function(node, obj){
+    var css1Argument = function(obj){
         for(var p in obj){
-            css2Argument(node, p, obj[p]);
+            css2Argument.call(this, p, obj[p]);
         }
     };
 
     /**
      * 设置style的方法
-     * @param {node} node
      * @param {string} key
      * @param {string} value
      * @private
      */
-    var css2Argument = function(node, key, value){
-        node.style[key] = value;
+    var css2Argument = function(key, value){
+        this.style[key] = value;
     };
 
     /**
@@ -81,15 +79,15 @@ harbors.BASENODE.node = (function(){
      * 设置一个style样式
      * @param a 样式名字
      * @param b 样式的值
-     * @returns {harbors.BASENODE.node}
+     * @returns {HSNodeElement}
      */
     node.prototype.set = function(a, b){
         switch(arguments.length){
             case 2:
-                css2Argument(this, a, b);
+                css2Argument.call(this, a, b);
                 break;
             case 1:
-                css1Argument(this, a);
+                css1Argument.call(this, a);
                 break;
         }
 
@@ -181,7 +179,7 @@ harbors.BASENODE.node = (function(){
         var node = this;
         node.animate = true;
         //记录起始时间
-        var start = loop.line;
+        var start = HSLoop.line;
         //添加运动任务
         var anim = function(){
 
@@ -189,7 +187,7 @@ harbors.BASENODE.node = (function(){
             if(node.active && node.animate){
 
                 //间隔的时间
-                var time = loop.line - start;
+                var time = HSLoop.line - start;
                 //间隔的比例（运动进行的百分比）
                 var proportion = time / duration;
 

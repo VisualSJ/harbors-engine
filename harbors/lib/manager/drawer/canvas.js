@@ -96,7 +96,7 @@
 
 
 
-    if(!harbors.drawManager.drawer){
-        harbors.drawManager.drawer = new canvas();
+    if(!HSDrawManager.drawer){
+        HSDrawManager.drawer = new canvas();
     }
 })();
