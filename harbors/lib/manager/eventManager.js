@@ -27,9 +27,9 @@ var HSEventManager = (function(){
             if(!node.active)
                 continue;
             //点击点位于node左上角定点右下方向
-            if(node.style.left < x && node.style.top < y){
+            if(node.style.coordinateX < x && node.style.coordinateY < y){
                 //点击点位于node右下角左上方向
-                if(x < node.style.left + node.style.width && y < node.style.top + node.style.height){
+                if(x < node.style.coordinateX + node.style.width && y < node.style.coordinateY + node.style.height){
                     result.push(node);
                 }
             }

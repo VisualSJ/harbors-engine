@@ -63,6 +63,24 @@ var HSStyleListClass = (function(){
     styleList.prototype = {
         constructor: styleList,
 
+        get coordinateX(){
+            var x = 0,
+                node = this.node;
+            while(node){
+                x += node.style.x;
+                node = node.parent;
+            }
+            return x;
+        },
+        get coordinateY(){
+            var y = 0,
+                node = this.node;
+            while(node){
+                y += node.style.y;
+                node = node.parent;
+            }
+            return y;
+        },
 
         get left(){
             var storage = this.storage;
@@ -238,7 +256,7 @@ var HSStyleListClass = (function(){
             this.storage.imageSizeHeight = parseInt(a);
         },
 
-        get backgroundPosition(){
+        get imagePosition(){
             return this.imagePositionLeft + "px " + this.imagePositionTop + "px";
         },
         set backgroundPosition(a){
