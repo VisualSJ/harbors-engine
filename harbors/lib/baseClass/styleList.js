@@ -64,8 +64,8 @@ var HSStyleListClass = (function(){
         constructor: styleList,
 
         get coordinateX(){
-            var x = 0,
-                node = this.node;
+            var x = this.left,
+                node = this.node.parent;
             while(node){
                 x += node.style.x;
                 node = node.parent;
@@ -73,8 +73,8 @@ var HSStyleListClass = (function(){
             return x;
         },
         get coordinateY(){
-            var y = 0,
-                node = this.node;
+            var y = this.top,
+                node = this.node.parent;
             while(node){
                 y += node.style.y;
                 node = node.parent;
