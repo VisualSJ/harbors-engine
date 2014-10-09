@@ -26,6 +26,8 @@ var HSStyleListClass = (function(){
          * @property {number} rotate 元素的旋转角度
          * @property {number} scaleX 元素的缩放比例
          * @property {number} scaleY 元素的缩放比例
+         * @property {number} anchorX
+         * @property {number} anchorY
          *
          * @property {string} background 元素的背景颜色
          * @property {string|texture} image 元素的背景图片
@@ -153,6 +155,20 @@ var HSStyleListClass = (function(){
         },
         set scaleY(a){
             this.storage.scaleY = parseFloat(a);
+        },
+
+        get anchorX(){
+            return this.storage.anchorX || 0.5;
+        },
+        set anchorX(a){
+            this.storage.anchorX = parseFloat(a);
+        },
+
+        get anchorY(){
+            return this.storage.anchorY || 0.5;
+        },
+        set anchorY(a){
+            this.storage.anchorY = parseFloat(a);
         },
 
         get width(){

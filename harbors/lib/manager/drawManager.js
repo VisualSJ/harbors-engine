@@ -197,8 +197,8 @@ var HSDrawManager = (function(){
             var rotate = style.rotate;
 
             ctx.save();
-            x = -style.width/2;
-            y = -style.height/2;
+            x = -style.width * style.anchorX;
+            y = -style.height * style.anchorY;
             Cos = Math.cos(rotate * piToRe) * style.scaleX;
             Sin = Math.sin(rotate * piToRe) * style.scaleY;
             ctx.transform(

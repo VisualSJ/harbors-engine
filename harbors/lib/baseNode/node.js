@@ -225,7 +225,7 @@ var HSNodeElement = (function(){
     node.prototype.__defineGetter__("innerText", function(){
         var text = this.style.storage.innerTextArray;
         if(text)
-            return text.split("\n");
+            return text.join("\n");
         else
             return "";
     });
