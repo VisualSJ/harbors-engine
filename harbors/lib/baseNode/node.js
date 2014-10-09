@@ -199,6 +199,8 @@ var HSNodeElement = (function(){
                 //缓动处理
                 if(easing){
                     proportion = easing(proportion);
+                    if(proportion < 0)
+                        proportion = -proportion;
                 }
 
                 if(proportion >= 1){

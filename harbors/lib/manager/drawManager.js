@@ -194,11 +194,13 @@ var HSDrawManager = (function(){
         var x, y;
         var Cos = 1, Sin = 0;
         if(storage.rotate || storage.scaleX || storage.scaleY){
-            var rotate = style.rotate;
+            var rotate = style.rotate,
+                width = style.width,
+                height = style.height;
 
             ctx.save();
-            x = -style.width * style.anchorX;
-            y = -style.height * style.anchorY;
+            x = -width * style.anchorX;
+            y = -height * style.anchorY;
             Cos = Math.cos(rotate * piToRe) * style.scaleX;
             Sin = Math.sin(rotate * piToRe) * style.scaleY;
             ctx.transform(
@@ -206,8 +208,8 @@ var HSDrawManager = (function(){
                 Sin,
                 -Sin,
                 Cos,
-                left - x,//left + style.width/2
-                top - y
+                left - x - width * (1-style.scaleX)/2,//left + style.width/2
+                top - y - height * (1-style.scaleY)/2
             );
         }else{
             x = left;
@@ -215,10 +217,11 @@ var HSDrawManager = (function(){
         }
 
         //绘制背景
+        if(storage.background){
+            drawBGColor(x, y, style, ctx);
+        }
         if(storage.image){
             drawBGImage(x, y, style, ctx);
-        }else if(storage.background){
-            drawBGColor(x, y, style, ctx);
         }
 
         //绘制文字

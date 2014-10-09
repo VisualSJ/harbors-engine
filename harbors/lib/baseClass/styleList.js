@@ -60,6 +60,7 @@ var HSStyleListClass = (function(){
          *
          */
         this.storage = {};
+        this.cache = {};
     };
 
     styleList.prototype = {
@@ -99,12 +100,25 @@ var HSStyleListClass = (function(){
             this.storage.left = a;
         },
 
+        get right(){
+            return h.canvas.cache.width - this.storage.left - this.width;
+        },
+        set right(a){
+            this.storage.top = h.canvas.cache.width - this.width - a;
+        },
+
 
         get top(){return this.storage.top || 0;},
         set top(a){
             this.storage.top = a;
         },
 
+        get bottom(){
+            return h.canvas.cache.height - this.storage.top - this.height;
+        },
+        set bottom(a){
+            this.storage.top = h.canvas.cache.height - this.height - a;
+        },
 
         get x(){return this.storage.left || 0;},
         set x(a){
@@ -158,14 +172,14 @@ var HSStyleListClass = (function(){
         },
 
         get anchorX(){
-            return this.storage.anchorX || 0.5;
+            return this.storage.anchorX === undefined ? 0.5 : this.storage.anchorX;
         },
         set anchorX(a){
             this.storage.anchorX = parseFloat(a);
         },
 
         get anchorY(){
-            return this.storage.anchorY || 0.5;
+            return this.storage.anchorY === undefined ? 0.5: this.storage.anchorY;
         },
         set anchorY(a){
             this.storage.anchorY = parseFloat(a);
