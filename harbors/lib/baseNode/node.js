@@ -110,6 +110,7 @@ var HSNodeElement = (function(){
     /**
      * 帧动画
      * @param frames 帧列表
+     *
      * @param loop 循环次数
      */
     node.prototype.frame = function(frames, loop){
@@ -128,8 +129,10 @@ var HSNodeElement = (function(){
                     node.style[p] = frameItem[p];
             }
 
-            if(node.active && node.animate && loop > 0)
+            if(node.active && frameItem.time && node.animate && loop > 0)
                 h.delay(anim, frameItem.time);
+            else
+                node.animate = false;
 
             if(currentNum >= length){
                 currentNum = 0;
