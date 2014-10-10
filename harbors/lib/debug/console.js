@@ -1,4 +1,4 @@
-(function(block, node, loop){
+(function(block, node, font, loop){
 
     var console, line1, line2, line3, infoElem,task, time, info, draw;
 
@@ -14,19 +14,19 @@
             zIndex: Number.MAX_VALUE
         });
 
-        line1 = (new node).set({
+        line1 = (new font).set({
             color: "#fff",
             left: 10,
             top: 5
         }).text("harbors 0.0.1");
 
-        line2 = (new node).set({
+        line2 = (new font).set({
             color: "#fff",
             left: 10,
             top: 25
         }).text(h.options.system.os + "  " + h.options.system.browser + "  " + (h.options.system.version).substr(0, 8) + "...");
 
-        line3 = (new node).set({
+        line3 = (new font).set({
             color: "#fff",
             left: 10,
             top: 45
@@ -35,7 +35,7 @@
         infoElem = [];
 
         for(var i=0; i<6; i++){
-            infoElem.push((new node).set({
+            infoElem.push((new font).set({
                 color: "#fff",
                 left: 10,
                 top: 65 + i * 20
@@ -43,19 +43,19 @@
             console.append(infoElem[i]);
         }
 
-        time = (new node).set({
+        time = (new font).set({
             color: "#fff",
             left: 42,
             top: 45
         }).text("0");
 
-        draw = (new node).set({
+        draw = (new font).set({
             color: "#fff",
             left: 100,
             top: 45
         }).text("0");
 
-        task = (new node).set({
+        task = (new font).set({
             color: "#fff",
             left: 162,
             top: 45
@@ -115,4 +115,4 @@
 
     h.addInitTask(init);
 
-})(HSBlockElement, HSNodeElement, HSLoop);
+})(HSBlockElement, HSNodeElement, HSFontElement, HSLoop);

@@ -9,7 +9,14 @@ var HSBlockElement = (function(){
      * @property remove 删除一个子元素
      */
     var block = function(){
-        HSNodeElement.call(this);
+
+        this.uniqueNumber = HSuniqueId++;
+
+        this.parent = null;
+        this.style = new HSNodeStyleClass(this);
+        this.active = false;
+        this.animate = false;
+
         this.cache = document.createElement("canvas");
         this.cache.width = this.style.width;
         this.cache.height = this.style.height;

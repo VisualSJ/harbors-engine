@@ -23,3 +23,5 @@ var HSSYSTEM =  {
     LINUX: "linux",
     UNIX: "unix"
 };
+
+var HSuniqueId = 0;

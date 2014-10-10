@@ -5,7 +5,8 @@ var HSElementManager = (function(){
         node: HSNodeElement,
         block: HSBlockElement,
         texture: HSTextureElement,
-        audio: HSAudioElement
+        audio: HSAudioElement,
+        font: HSFontElement
     };
 
     var manager = {};

@@ -1,7 +1,5 @@
 var HSNodeElement = (function(){
 
-    var unique = 0;
-
     /**
      * NODE节点，最基础的显示元素
      * @class
@@ -21,14 +19,12 @@ var HSNodeElement = (function(){
      * @property {function} stop 停止动画
      */
     var node = function(){
-
-        this.uniqueNumber = unique++;
+        this.uniqueNumber = HSuniqueId++;
 
         this.parent = null;
         this.style = new HSNodeStyleClass(this);
         this.active = false;
         this.animate = false;
-        this.__managerId__ = "";
     };
     HSUtils.inherit(node, HSEventClass);
 
@@ -90,18 +86,6 @@ var HSNodeElement = (function(){
                 css1Argument.call(this, a);
                 break;
         }
-
-        this.update();
-        return this;
-    };
-
-    /**
-     * 设置node中的文字对象
-     * @param str
-     */
-    node.prototype.text = function(str){
-        str = str.toString();
-        this.innerText = str;
 
         this.update();
         return this;
@@ -219,25 +203,6 @@ var HSNodeElement = (function(){
         h.delay(anim, 1);
         return this;
     };
-
-
-    /**
-     * 设置innerText，转换为style.storage.innerTextArray数组
-     */
-    node.prototype.__defineGetter__("innerText", function(){
-        var text = this.style.storage.innerTextArray;
-        if(text)
-            return text.join("\n");
-        else
-            return "";
-    });
-    node.prototype.__defineSetter__("innerText", function(a){
-        if(a)
-            this.style.storage.innerTextArray = a.toString().split("\n");
-        else
-            this.style.storage.innerTextArray = undefined;
-        this.style.storage.innerTextWidth = 0;
-    });
 
     return node;
 })();

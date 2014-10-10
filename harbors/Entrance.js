@@ -19,11 +19,13 @@ loader.list = [
     ],
     [
         "lib/loop.js",
+        "lib/baseClass/fontStyle.js",
         "lib/baseNode/texture.js",
         "lib/baseNode/node.js",
         "lib/baseNode/audio.js"
     ],
     [
+        "lib/baseNode/font.js",
         "lib/baseNode/block.js",
         "lib/manager/viewManager.js",
         "lib/manager/drawManager.js",
