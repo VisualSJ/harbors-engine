@@ -14,9 +14,8 @@ loader.list = [
     ],
     [
         "lib/options.js",
-        "lib/baseClass/childList.js",
         "lib/baseClass/event.js",
-        "lib/baseClass/styleList.js"
+        "lib/baseClass/nodeStyle.js"
     ],
     [
         "lib/loop.js",

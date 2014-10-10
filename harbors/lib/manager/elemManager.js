@@ -18,11 +18,7 @@ var HSElementManager = (function(){
     manager.createNode = function(name){
         var elem = defineNode[name];
         if(elem){
-            if(elem.manager.create)
-                elem = elem.manager.create.apply(elem.manager, Array.prototype.splice.call(arguments, 1));
-            else
-                elem = new elem();
-            return elem;
+            return new elem();
         }
         return null;
     };
@@ -33,15 +29,22 @@ var HSElementManager = (function(){
      * @returns {*}
      */
     manager.getNodeWithId = function(id){
-        var p, ElemM;
-
-        for(p in defineNode){
-            ElemM = defineNode[p].manager;
-            if(ElemM && ElemM.idToElem && ElemM.idToElem[id]){
-                return ElemM.idToElem[id];
-            }
+        return findId(h.canvas, id);
+    };
+    var findId = function(node, id){
+        if(node.id === id){
+            return node;
         }
-
+        var i, len , elem;
+        var children = node.children;
+        if(!children || children.length === 0){
+            return null;
+        }
+        for(i=0, len=children.length; i<len; i++){
+            elem = findId(children[i], id);
+            if(elem)
+                return elem;
+        }
         return null;
     };
 

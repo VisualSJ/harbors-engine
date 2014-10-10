@@ -1,4 +1,4 @@
-var HSStyleListClass = (function(){
+var HSNodeStyleClass = (function(){
     /**
      * node元素中自带的style构造方法
      * @param node
@@ -6,7 +6,7 @@ var HSStyleListClass = (function(){
      * @property {node} node 包含这个style的元素
      * @property {object} storage 存放实际的style属性
      */
-    var styleList = function(node){
+    var nodeStyle = function(node){
         this.node = node;
 
         /**
@@ -36,15 +36,6 @@ var HSStyleListClass = (function(){
          * @property {number} imagePositionLeft 元素的背景图片裁剪的左边距
          * @property {number} imagePositionTop 元素的背景图片裁剪的上边距
          *
-         * @property {string} align 对齐方式
-         * @property {number} lineHeight 对齐方式
-         * @property {string} fontFamily 文字的字体名
-         * @property {string} fontStyle 文字的样式
-         * @property {number} fontSize 文字的大小
-         * @property {number} innerTextWidth 文字的寬度（在draw的時候自動填充的值）(没有接口调用)
-         * @property {Array} innerTextArray 需要绘制的文字（按行为单位存放）(没有接口调用)
-         * @property {Array} innerTextRow 文字的行数（在限定宽度的情况下自动填写）(没有接口调用)
-         *
          * @property {number} borderLeftWidth 左边框宽度
          * @property {string} borderLeftStyle 左边框样式
          * @property {string} borderLeftColor 左边框颜色
@@ -60,11 +51,10 @@ var HSStyleListClass = (function(){
          *
          */
         this.storage = {};
-        this.cache = {};
     };
 
-    styleList.prototype = {
-        constructor: styleList,
+    nodeStyle.prototype = {
+        constructor: nodeStyle,
 
         get coordinateX(){
             var x = this.left,
@@ -370,5 +360,5 @@ var HSStyleListClass = (function(){
 
     };
 
-    return styleList;
+    return nodeStyle;
 })();

@@ -38,21 +38,6 @@ var HSAudioElement = (function(){
         this.audio.load();
     };
 
-    ///////////////////////////////
-    //audio节点的自我管理对象//
-    ///////////////////////////////
-    audio.manager = {
-        pathToElem: {},
-        create: function(path){
-            if(audio.manager.pathToElem[path])
-                return audio.manager.pathToElem[path];
-
-            var node = new audio(path);
-            audio.manager.pathToElem[path] = node;
-            return node;
-        }
-    };
-
     return audio;
 
 })();

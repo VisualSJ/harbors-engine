@@ -14,7 +14,7 @@ var HSBlockElement = (function(){
         this.cache.width = this.style.width;
         this.cache.height = this.style.height;
         this.waitDrawing = false;
-        this.children = new HSChildListClass;
+        this.children = [];
     };
     HSUtils.inherit(block, HSNodeElement);
 
@@ -41,12 +41,20 @@ var HSBlockElement = (function(){
     block.prototype.append = function(node){
         updateActive(node, true);
         node.parent = this;
-        for(var i=0; i<this.children.length; i++){
+        var i, len;
+        var children = this.children;
+        for(i=0, len=children.length; i<len; i++){
             if(this.children[i] === node){
                 return;
             }
         }
-        this.children.push(node);
+        var zIndex = node.style.zIndex;
+        for(i=children.length; i>0; i--){
+            if(children[i - 1].style.zIndex <= zIndex){
+                break;
+            }
+        }
+        children.splice(i, 0, node);
         this.waitDrawing = true;
         this.update();
     };
@@ -57,44 +65,19 @@ var HSBlockElement = (function(){
      */
     block.prototype.remove = function(node){
         node.parent = this;
-        for(var i=0; i<this.children.length; i++){
-            if(this.children[i] === node){
+        var i, len;
+        var children = this.children;
+        for(i=0, len=children.length; i<len; i++){
+            if(children[i] === node){
                 //更新所有被删除元素的状态
                 updateActive(node, false);
-                this.children.splice(i, 1);
+                children.splice(i, 1);
                 break;
             }
         }
         this.waitDrawing = true;
         this.update();
     };
-
-    ///////////////////////////////
-    //block节点的自我管理对象//
-    ///////////////////////////////
-    var manager = {
-        idToElem: {},
-        create: function(){
-            return new block();
-        }
-    };
-    block.manager  = manager;
-
-    block.prototype.__defineGetter__("id", function(){return this.__managerId__; });
-    block.prototype.__defineSetter__("id", function(a){
-        a = a.toString();
-
-        //原id存在，则删除管理对象内的元素
-        if(this.__managerId__ != "" && manager.idToElem[a]){
-            delete manager.idToElem[a];
-        }
-
-        //传入id存在，则在对象内新增id对应元素
-        if(a !== ""){
-            manager.idToElem[a] = this;
-        }
-        this.__managerId__ = a;
-    });
 
     return block;
 })();

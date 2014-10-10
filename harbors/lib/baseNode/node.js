@@ -25,7 +25,7 @@ var HSNodeElement = (function(){
         this.uniqueNumber = unique++;
 
         this.parent = null;
-        this.style = new HSStyleListClass(this);
+        this.style = new HSNodeStyleClass(this);
         this.active = false;
         this.animate = false;
         this.__managerId__ = "";
@@ -237,33 +237,6 @@ var HSNodeElement = (function(){
         else
             this.style.storage.innerTextArray = undefined;
         this.style.storage.innerTextWidth = 0;
-    });
-
-    ///////////////////////////////
-    //node节点的自我管理对象//
-    ///////////////////////////////
-    var manager = {
-        idToElem: {},
-        create: function(){
-            return new node();
-        }
-    };
-    node.manager  = manager;
-
-    node.prototype.__defineGetter__("id", function(){return this.__managerId__; });
-    node.prototype.__defineSetter__("id", function(a){
-        a = a.toString();
-
-        //原id存在，则删除管理对象内的元素
-        if(this.__managerId__ != "" && manager.idToElem[a]){
-            delete manager.idToElem[a];
-        }
-
-        //传入id存在，则在对象内新增id对应元素
-        if(a !== ""){
-            manager.idToElem[a] = this;
-        }
-        this.__managerId__ = a;
     });
 
     return node;
