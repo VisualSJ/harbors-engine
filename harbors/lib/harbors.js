@@ -53,18 +53,25 @@ window.h = (function(){
      * @param {Number} delayTime
      */
     define.delay = function(callback, delayTime){
-        var delayItem = {
-            time: HSLoop.line + delayTime,
-            callback: callback
-        };
+        var time = HSLoop.line + delayTime;
+
         var length = task.length;
         for(var i=0; i<length; i++){
-            if(task[i].time > delayItem.time){
-                task.splice(i, 0, delayItem);
+            if(task[i].time > time){
+                task.splice(i, 0, {
+                    time: time,
+                    list: [callback]
+                });
+                return;
+            }else if(task[i].time === time){
+                task[i].list.push(callback);
                 return;
             }
         }
-        task.push(delayItem);
+        task.push({
+            time: time,
+            list: [callback]
+        });
     };
 
     /**
@@ -142,8 +149,8 @@ window.h = (function(){
         //定义h.canvas画板对象
         gameCanvas = document.getElementById(HSOption.id);
         define.canvas = new HSBlockElement();
-        define.canvas.style.width = gameCanvas.width;
-        define.canvas.style.height = gameCanvas.height;
+        define.canvas.style.width(gameCanvas.width);
+        define.canvas.style.height(gameCanvas.height);
         define.canvas.cache = gameCanvas;
         define.canvas.active = true;
 
@@ -155,7 +162,10 @@ window.h = (function(){
         HSLoop.start(function(dt){
             //查找任务队列
             while(task[0] && task[0].time < HSLoop.line){
-                task.shift().callback();
+                var tlist = task.shift().list;
+                for(var i=0;i<tlist.length;i++){
+                    tlist[i]();
+                }
             }
             var drawNum = HSDrawManager.parse(define.canvas, HSDrawManager.drawer.ctx(gameCanvas));
             define._getDebugInfo(task.length, drawNum);

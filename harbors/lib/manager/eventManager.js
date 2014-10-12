@@ -27,9 +27,15 @@ var HSEventManager = (function(){
             if(!node.active)
                 continue;
             //点击点位于node左上角定点右下方向
-            if(node.style.coordinateX < x && node.style.coordinateY < y){
+            var st = node.style;
+            var ca = st.cache;
+            var tx = ca.coordinateX !== null ? ca.coordinateX : st.getCoordinateX();
+            var ty = ca.coordinateY !== null ? ca.coordinateY : st.getCoordinateY();
+            var w = ca.width !== null ? ca.width : st.getWidth();
+            var h = ca.height !== null ? ca.height : st.getHeight();
+            if(tx < x && ty < y){
                 //点击点位于node右下角左上方向
-                if(x < node.style.coordinateX + node.style.width && y < node.style.coordinateY + node.style.height){
+                if(x < tx + w && y < ty + h){
                     result.push(node);
                 }
             }

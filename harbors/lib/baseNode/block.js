@@ -13,7 +13,7 @@ var HSBlockElement = (function(){
         this.uniqueNumber = HSuniqueId++;
 
         this.parent = null;
-        this.style = new HSNodeStyleClass(this);
+        this.style = new HSBlockStyleClass(this);
         this.active = false;
         this.animate = false;
 
@@ -55,9 +55,9 @@ var HSBlockElement = (function(){
                 return;
             }
         }
-        var zIndex = node.style.zIndex;
+        var zIndex = node.style.storage.zIndex;
         for(i=children.length; i>0; i--){
-            if(children[i - 1].style.zIndex <= zIndex){
+            if(children[i - 1].style.storage.zIndex <= zIndex){
                 break;
             }
         }

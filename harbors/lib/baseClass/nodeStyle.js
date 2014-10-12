@@ -9,355 +9,300 @@ var HSNodeStyleClass = (function(){
     var nodeStyle = function(node){
         this.node = node;
 
-        /**
-         * 样式支持列表
-         * @namespace
-         * @property {number} width 元素的宽度
-         * @property {number} height 元素的高度
-         * @property {number} left 元素的左边距，存在时会覆盖右边距
-         * @property {number} top 元素的上边距，存在时会覆盖下边距
-         * @property {number} right 元素的右边距
-         * @property {number} bottom 元素的下边距
-         *
-         * @property {string} color 颜色值
-         * @property {number} opacity 透明度
-         * @property {number} zIndex 层级
-         *
-         * @property {number} rotate 元素的旋转角度
-         * @property {number} scaleX 元素的缩放比例
-         * @property {number} scaleY 元素的缩放比例
-         * @property {number} anchorX
-         * @property {number} anchorY
-         *
-         * @property {string} background 元素的背景颜色
-         * @property {string|texture} image 元素的背景图片
-         * @property {number} imageSizeWidth 元素的背景图片缩放宽度
-         * @property {number} imageSizeHeight 元素的背景图片缩放高度
-         * @property {number} imagePositionLeft 元素的背景图片裁剪的左边距
-         * @property {number} imagePositionTop 元素的背景图片裁剪的上边距
-         *
-         * @property {number} borderLeftWidth 左边框宽度
-         * @property {string} borderLeftStyle 左边框样式
-         * @property {string} borderLeftColor 左边框颜色
-         * @property {number} borderTopWidth 上边框宽度
-         * @property {string} borderTopStyle 上边框样式
-         * @property {string} borderTopColor 上边框颜色
-         * @property {number} borderRightWidth 右边框宽度
-         * @property {string} borderRightStyle 右边框样式
-         * @property {string} borderRightColor 右边框颜色
-         * @property {number} borderBottomWidth 下边框宽度
-         * @property {string} borderBottomstyleList 下边框样式
-         * @property {string} borderBottomColor 下边框颜色
-         *
-         */
-        this.storage = {};
+        this.storage = {
+            left: 0,
+            top: 0,
+            get x(){return this.left},
+            get y(){return this.top},
+            right: null,
+            bottom: null,
+            width: null,
+            height: null,
+            zIndex: 1,
+
+            rotate: 0,
+            scaleX: 1,
+            scaleY: 1,
+            scale: 1,
+            anchorX: 0.5,
+            anchorY: 0.5,
+            color: "#000",
+            opacity: 1,
+
+            image: null,
+            imageSizeWidth: 0,
+            imageSizeHeight: 0,
+            imagePositionLeft: 0,
+            imagePositionTop: 0
+        };
+        this.cache = {
+            coordinateX: null,
+            coordinateY: null,
+
+            left: null,
+            top: null,
+            width: null,
+            height: null,
+
+            rotate: null,
+            scale: null,
+            color: null,
+
+            imageSizeWidth: null,
+            imageSizeHeight: null
+
+        };
     };
 
-    nodeStyle.prototype = {
-        constructor: nodeStyle,
+    nodeStyle.prototype.getCoordinateX = function(){
+        var cache = this.cache,
+            node = this.node.parent;
+        var x = cache.left !== null ? cache.left : this.getLeft();
+        while(node){
+            var nodeCache = node.style.cache;
+            x += nodeCache.left !== null ? nodeCache.left : node.style.getLeft();
+            node = node.parent;
+        }
+        return cache.coordinateX = x;
+    };
 
-        get coordinateX(){
-            var x = this.left,
-                node = this.node.parent;
-            while(node){
-                x += node.style.x;
-                node = node.parent;
-            }
-            return x;
-        },
-        get coordinateY(){
-            var y = this.top,
-                node = this.node.parent;
-            while(node){
-                y += node.style.y;
-                node = node.parent;
-            }
-            return y;
-        },
+    nodeStyle.prototype.getCoordinateY = function(){
+        var cache = this.cache,
+            node = this.node.parent;
+        var y = cache.top ? cache.top : this.getTop();
+        while(node){
+            var nodeCache = node.style.cache;
+            y += nodeCache.top !== null ? nodeCache.top : node.style.getTop();
+            node = node.parent;
+        }
+        return cache.coordinateY = y;
+    };
 
-        get left(){
-            var storage = this.storage;
-            if(storage.innerTextArray){
-                if(storage.align === "center"){
-                    return (storage.left || 0)  - storage.innerTextWidth/ 2;
-                }else if(storage.align === "right"){
-                    return storage.left - storage.innerTextWidth;
-                }
-            }
-            return storage.left || 0;
-        },
-        set left(a){
-            this.storage.left = a;
-        },
+    nodeStyle.prototype.getLeft = function(){
+        var cache = this.cache;
+        var storage = this.storage;
+        if(storage.right !== null){
+            var width = cache.width !== null ? cache.width : this.getWidth();
+            return cache.left =  h.canvas.cache.width - storage.right - width;
+        }else{
+            return cache.left = storage.left;
+        }
+    };
+    nodeStyle.prototype.left = function(val){
+        var cache = this.cache;
+        cache.left = null;
+        cache.coordinateX = null;
+        this.storage.left = val;
+    };
+    nodeStyle.prototype.x = function(val){
+        this.left(val);
+    };
 
-        get right(){
-            return h.canvas.cache.width - this.storage.left - this.width;
-        },
-        set right(a){
-            this.storage.top = h.canvas.cache.width - this.width - a;
-        },
+    nodeStyle.prototype.getTop = function(){
+        var cache = this.cache;
+        var storage = this.storage;
+        if(storage.bottom !== null){
+            var height = cache.height !== null ? cache.height : this.getHeight();
+            return  cache.top = h.canvas.cache.height - storage.bottom - height;
+        }else{
+            return cache.top = storage.top;
+        }
+    };
+    nodeStyle.prototype.top = function(val){
+        var cache = this.cache;
+        cache.top = null;
+        cache.coordinateY = null;
+        this.storage.top = val;
+    };
+    nodeStyle.prototype.y = function(val){
+        this.top(val);
+    };
 
+    nodeStyle.prototype.right = function(){
+        var cache = this.cache;
+        cache.left = null;
+        cache.coordinateX = null;
+        this.storage.right = val;
+    };
 
-        get top(){return this.storage.top || 0;},
-        set top(a){
-            this.storage.top = a;
-        },
+    nodeStyle.prototype.bottom = function(){
+        var cache = this.cache;
+        cache.top = null;
+        cache.coordinateY = null;
+        this.storage.bottom = val;
+    };
 
-        get bottom(){
-            return h.canvas.cache.height - this.storage.top - this.height;
-        },
-        set bottom(a){
-            this.storage.top = h.canvas.cache.height - this.height - a;
-        },
+    nodeStyle.prototype.getWidth = function(){
+        var storage = this.storage;
+        if(storage.width !== null)
+            return this.cache.width = storage.width;
+        if(storage.image)
+            return this.cache.width = storage.image.width;
+        return this.cache.width = 0;
+    };
+    nodeStyle.prototype.width = function(val){
+        //如果为block对象，则一起更改cache画布的大小
+        var node = this.node;
+        if(node.cache){
+            node.cache.width = val;
+            node.waitDrawing = true;
+            node.update();
+        }
+        this.cache.width = null;
+        if(this.storage.right !== null){
+            this.cache.left = null;
+        }
+        this.storage.width = val;
+    };
 
-        get x(){return this.storage.left || 0;},
-        set x(a){
-            return this.storage.left = a;
-        },
+    nodeStyle.prototype.getHeight = function(){
+        var storage = this.storage;
+        if(storage.height)
+            return this.cache.height = storage.height;
+        if(storage.image)
+            return this.cache.height = storage.image.height;
+        return this.cache.height = 0;
+    };
+    nodeStyle.prototype.height = function(val){
+        //如果为block对象，则一起更改cache画布的大小
+        var node = this.node;
+        if(node.cache){
+            node.cache.height = val;
+            node.waitDrawing = true;
+            node.update();
+        }
+        this.cache.height = null;
+        if(this.storage.bottom !== null){
+            this.cache.top = null;
+        }
+        this.storage.height = val;
+    };
 
+    nodeStyle.prototype.zIndex = function(val){
+        this.storage.zIndex = val;
+    };
 
-        get y(){return this.storage.top || 0;},
-        set y(a){
-            this.storage.top = a;
-        },
+    nodeStyle.prototype.rotate = function(val){
+        this.storage.rotate = val;
+    };
 
-        get rotate(){
-            return this.storage.rotate || 0;
-        },
-        set rotate(a){
-            this.storage.rotate = parseFloat(a);
-        },
+    nodeStyle.prototype.scaleX = function(){
+        this.storage.scaleX = val;
+    };
 
-        get scale(){
-            var storage = this.storage;
-            if(storage.scaleX === storage.scaleY){
-                return storage.scaleX || 1;
-            }else{
-                return storage.scaleX || 1 + " " + storage.scaleY || 1;
-            }
-        },
-        set scale(a){
-            var storage = this.storage;
-            var arg = a.toString().split(" ");
-            if(arg.length === 1){
-                storage.scaleX = storage.scaleY = arg[0];
-            }else{
-                storage.scaleX  = arg[0];
-                storage.scaleY  = arg[1];
-            }
-        },
+    nodeStyle.prototype.scaleY = function(){
+        this.storage.scaleY = val;
+    };
 
-        get scaleX (){
-            return this.storage.scaleX || 1;
-        },
-        set scaleX(a){
-            this.storage.scaleX = parseFloat(a);
-        },
+    nodeStyle.prototype.scale = function(val){
+        var x = 1,
+            y = 1;
+        switch(typeof val){
+            case "number":
+                x = y = val;
+                break;
+            case "string":
+                var arg = val.split(" ");
+                x = arg[0];
+                y = arg[1] || arg[0];
+                break
+        }
+        this.scaleX(x);
+        this.scaleY(y);
+        this.storage.scale = val;
+    };
 
-        get scaleY(){
-            return this.storage.scaleY || 1;
-        },
-        set scaleY(a){
-            this.storage.scaleY = parseFloat(a);
-        },
+    nodeStyle.prototype.anchorX = function(){
+        this.storage.anchorX = val;
+    };
 
-        get anchorX(){
-            return this.storage.anchorX === undefined ? 0.5 : this.storage.anchorX;
-        },
-        set anchorX(a){
-            this.storage.anchorX = parseFloat(a);
-        },
+    nodeStyle.prototype.anchorY = function(){
+        this.storage.anchorY = val;
+    };
 
-        get anchorY(){
-            return this.storage.anchorY === undefined ? 0.5: this.storage.anchorY;
-        },
-        set anchorY(a){
-            this.storage.anchorY = parseFloat(a);
-        },
+    nodeStyle.prototype.color = function(val){
+        this.storage.color = val;
+    };
 
-        get width(){
-            var storage = this.storage;
-            if(storage.width)
-                return storage.width;
-            if(storage.image)
-                return storage.image.width;
-            if(storage.innerTextWidth)
-                return storage.innerTextWidth;
-            return 0;
-        },
-        set width(a){
-            var node = this.node;
-            this.storage.width = a;
-            //如果为block对象，则一起更改cache画布的大小
-            if(node.cache){
-                node.cache.width = a;
-                node.waitDrawing = true;
-                node.update();
-            }
-        },
+    nodeStyle.prototype.opacity = function(val){
+        this.storage.opacity = val;
+    };
 
+    nodeStyle.prototype.background = function(val){
+        this.storage.background = val;
+    };
 
-        get height(){
-            var storage = this.storage;
-            if(storage.height)
-                return storage.height;
-            if(storage.image)
-                return storage.image.height;
-            if(storage.innerTextArray)
-                return this.lineHeight * (storage.innerTextRow || storage.innerTextArray.length) + 4;
-
-            return 0;
-        },
-        set height(a){
-            var node = this.node;
-            this.storage.height = a;
-            //如果为block对象，则一起更改cache画布的大小
-            if(node.cache){
-                node.cache.height = a;
-                node.waitDrawing = true;
-                node.update();
-            }
-        },
-
-        get color(){return this.storage.color || "#000";},
-        set color(a){
-            this.storage.color = a;
-        },
-
-        get opacity(){return this.storage.opacity || 1;},
-        set opacity(a){
-            this.storage.opacity = parseFloat(a);
-        },
-
-        get zIndex(){return this.storage.zIndex || 0;},
-        set zIndex(a){
-            this.storage.zIndex = parseInt(a);
-        },
-
-        get background(){return this.storage.background || "#FFF";},
-        set background(a){
-            this.storage.background = a;
-        },
-
-        get image(){return this.storage.image;},
-        set image(a){
-            if(typeof a === 'string'){
-                a = HSTextureElement.manager.create(a);
-            }
-
-            a.nodeList.push(this.node);
-            this.storage.image = a;
-        },
-
-        get imageSize(){
-            return this.imageSizeWidth + "px " + this.imageSizeHeight + "px";
-        },
-        set imageSize(a){
-            var arg = a.split(" ");
-            if(arg.length === 1){
-                this.imageSizeWidth = this.imageSizeHeight = arg[0];
-            }else if(arg.length === 2){
-                this.imageSizeWidth = arg[0];
-                this.imageSizeHeight = arg[1];
-            }
-        },
-
-        get imageSizeWidth(){
-            return this.storage.imageSizeWidth || this.width;
-        },
-        set imageSizeWidth(a){
-            this.storage.imageSizeWidth = parseInt(a);
-        },
-
-        get imageSizeHeight(){
-            return this.storage.imageSizeHeight || this.height;
-        },
-        set imageSizeHeight(a){
-            this.storage.imageSizeHeight = parseInt(a);
-        },
-
-        get imagePosition(){
-            return this.imagePositionLeft + "px " + this.imagePositionTop + "px";
-        },
-        set backgroundPosition(a){
-            var arg = a.split(" ");
-            if(arg.length === 1){
-                this.imagePositionLeft = this.imagePositionTop = arg[0];
-            }else if(arg.length === 2){
-                this.imagePositionLeft = parseInt(arg[0]);
-                this.imagePositionTop = parseInt(arg[1]);
-            }
-        },
-
-        get imagePositionLeft(){
-            return this.storage.imagePositionLeft || 0;
-        },
-        set imagePositionLeft(a){
-            this.storage.imagePositionLeft = parseInt(a);
-        },
-
-        get imagePositionTop(){
-            return this.storage.imagePositionTop || 0;
-        },
-        set imagePositionTop(a){
-            this.storage.imagePositionTop = parseInt(a);
-        },
-
-        get align(){return this.storage.align || "left";},
-        set align(a){
-            this.storage.align = a;
-        },
-
-        get lineHeight(){
-            return this.storage.lineHeight || this.fontSize;
-        },
-        set lineHeight(a){
-            this.storage.lineHeight = parseInt(a);
-        },
-
-        get font(){
-            return this.fontStyle + " " + this.fontSize + "px " + this.fontFamily;
-        },
-        set font(a){
-            var arg = a.split(" ");
-            switch(arg.length){
-                case 1:
-                    this.fontSize = arg[0];
-                    break;
-                case 2:
-                    this.fontStyle = arg[0];
-                    this.fontSize = arg[1];
-                    break;
-                case 3:
-                    this.fontStyle = arg[0];
-                    this.fontSize = arg[1];
-                    this.fontFamily = arg[2];
-                    break;
-
-            }
-        },
-
-        get fontStyle(){
-            return this.storage.fontStyle || "Normal";
-        },
-        set fontStyle(a){
-            this.storage.fontStyle = a;
-        },
-
-        get fontSize(){
-            return this.storage.fontSize || 14;
-        },
-        set fontSize(a){
-            this.storage.fontSize = parseInt(a);
-        },
-
-        get fontFamily(){
-            return this.storage.fontFamily || "Arial";
-        },
-        set fontFamily(a){
-            this.storage.fontFamily = a.toString();
+    nodeStyle.prototype.image = function(val){
+        if(typeof val === 'string'){
+            val = HSTextureElement.manager.create(val);
         }
 
+        val.nodeList.push(this.node);
+        this.storage.image = val;
+    };
+
+    nodeStyle.prototype.getImageSizeWidth = function(){
+        return this.cache.imageSizeWidth =
+            this.storage.imageSizeWidth ||
+            ( this.cache.width !== null ? this.cache.width : this.getWidth());
+    };
+    nodeStyle.prototype.imageSizeWidth = function(val){
+        this.cache.imageSizeWidth = null;
+        this.storage.imageSizeWidth = val;
+    };
+
+    nodeStyle.prototype.getImageSizeHeight = function(){
+        return this.cache.imageSizeHeight =
+            this.storage.imageSizeHeight ||
+            (this.cache.height !== null ? this.cache.height : this.getHeight());
+    };
+    nodeStyle.prototype.imageSizeHeight = function(val){
+        this.cache.imageSizeHeight = null;
+        this.storage.imageSizeHeight = val;
+    };
+
+    nodeStyle.prototype.imageSize = function(val){
+        var x = 0,
+            y = 0;
+        switch(typeof val){
+            case "number":
+                x = y = val;
+                break;
+            case "string":
+                var arg = val.split(" ");
+                x = arg[0];
+                y = arg[1] || arg[0];
+                break
+        }
+        this.imageSizeWidth(x);
+        this.imageSizeHeight(y);
+        this.storage.imageSize = val;
+    };
+
+    nodeStyle.prototype.imagePositionLeft = function(val){
+        this.storage.imagePositionLeft = val;
+    };
+
+    nodeStyle.prototype.imagePositionTop = function(val){
+        this.storage.imagePositionTop = val;
+    };
+
+    nodeStyle.prototype.imagePosition = function(val){
+        var x = 0,
+            y = 0;
+        switch(typeof val){
+            case "number":
+                x = y = val;
+                break;
+            case "string":
+                var arg = val.split(" ");
+                x = arg[0];
+                y = arg[1] || arg[0];
+                break
+        }
+        this.imagePositionLeft(x);
+        this.imagePositionTop(y);
+        this.storage.imagePosition = val;
     };
 
     return nodeStyle;

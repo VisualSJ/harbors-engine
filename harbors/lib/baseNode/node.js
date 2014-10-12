@@ -46,7 +46,8 @@ var HSNodeElement = (function(){
      * @private
      */
     var css2Argument = function(key, value){
-        this.style[key] = value;
+        if(this.style[key])
+            this.style[key](value);
     };
 
     /**
@@ -68,7 +69,7 @@ var HSNodeElement = (function(){
      * @returns {*}
      */
     node.prototype.get = function(a){
-        return this.style[a];
+        return this.style.storage[a];
     };
 
     /**
@@ -129,7 +130,7 @@ var HSNodeElement = (function(){
 
         for(var p in frameItem){
             if(p !== "time")
-                node.style[p] = frameItem[p];
+                node.style[p](frameItem[p]);
         }
 
         h.delay(anim, frameItem.time);
@@ -157,13 +158,9 @@ var HSNodeElement = (function(){
         var cache = {};
 
         for(p in style){
-            t = style[p] - s[p];
-            if(isNaN(t)){
-                console.log("动画不支持设置 " + p + " 属性");
-            }else{
-                style[p] = t;
-                cache[p] = s[p];
-            }
+            t = style[p] - s.storage[p];
+            style[p] = t;
+            cache[p] = s.storage[p];
         }
         var node = this;
         node.animate = true;
@@ -195,7 +192,7 @@ var HSNodeElement = (function(){
                 }
 
                 for(p in style){
-                    node.style[p] = cache[p] + style[p] * proportion;
+                    node.style[p](cache[p] + style[p] * proportion);
                 }
                 node.update();
             }

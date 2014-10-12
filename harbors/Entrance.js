@@ -20,6 +20,7 @@ loader.list = [
     [
         "lib/loop.js",
         "lib/baseClass/fontStyle.js",
+        "lib/baseClass/blockStyle.js",
         "lib/baseNode/texture.js",
         "lib/baseNode/node.js",
         "lib/baseNode/audio.js"

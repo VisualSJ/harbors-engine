@@ -30,7 +30,13 @@ var HSTextureElement = (function(){
             //更新所有引用了这个texture的元素
             var i, len;
             for(i=0,len=self.nodeList.length; i<len; i++){
-                self.nodeList[i].update();
+                var node = self.nodeList[i];
+                var cache = node.style.cache;
+                cache.imageSizeWidth = null;
+                cache.imageSizeHeight = null;
+                cache.width = null;
+                cache.height = null;
+                node.update();
             }
         });
     };

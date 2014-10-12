@@ -23,14 +23,13 @@ var HSFontElement = (function() {
     font.prototype.text = function(str){
 
         if(str !== undefined) {
-            this.style.storage.innerTextArray = str.toString().split("\n");
-            delete this.style.storage.innerTextWidth;
+            this.style.innerText(str);
             this.update();
             return this;
         }else{
-            return this.style.storage.innerTextArray.join("\n");
+            return this.style.storage.innerText;
         }
-    }
+    };
 
     return font;
 
